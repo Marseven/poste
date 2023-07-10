@@ -27,17 +27,17 @@ use Symfony\Component\Routing\RouteCollection;
 class CompiledUrlMatcherDumper extends MatcherDumper
 {
     private $expressionLanguage;
-    private $signalingException;
+    private ?\Exception $signalingException = null;
 
     /**
      * @var ExpressionFunctionProviderInterface[]
      */
-    private $expressionLanguageProviders = [];
+    private array $expressionLanguageProviders = [];
 
     /**
      * {@inheritdoc}
      */
-    public function dump(array $options = [])
+    public function dump(array $options = []): string
     {
         return <<<EOF
 <?php
@@ -139,8 +139,7 @@ EOF;
         foreach ($staticRoutes as $path => $routes) {
             $code .= sprintf("    %s => [\n", self::export($path));
             foreach ($routes as $route) {
-                $r = array_map([__CLASS__, 'export'], $route);
-                $code .= sprintf("        [%s, %s, %s, %s, %s, %s, %s],\n", $r[0], $r[1], $r[2], $r[3], $r[4], $r[5], $r[6]);
+                $code .= sprintf("        [%s, %s, %s, %s, %s, %s, %s],\n", ...array_map([__CLASS__, 'export'], $route));
             }
             $code .= "    ],\n";
         }
@@ -152,8 +151,7 @@ EOF;
         foreach ($dynamicRoutes as $path => $routes) {
             $code .= sprintf("    %s => [\n", self::export($path));
             foreach ($routes as $route) {
-                $r = array_map([__CLASS__, 'export'], $route);
-                $code .= sprintf("        [%s, %s, %s, %s, %s, %s, %s],\n", $r[0], $r[1], $r[2], $r[3], $r[4], $r[5], $r[6]);
+                $code .= sprintf("        [%s, %s, %s, %s, %s, %s, %s],\n", ...array_map([__CLASS__, 'export'], $route));
             }
             $code .= "    ],\n";
         }
@@ -418,7 +416,7 @@ EOF;
     /**
      * Compiles a single Route to PHP code used to match it against the path info.
      */
-    private function compileRoute(Route $route, string $name, $vars, bool $hasTrailingSlash, bool $hasTrailingVar, array &$conditions): array
+    private function compileRoute(Route $route, string $name, string|array|null $vars, bool $hasTrailingSlash, bool $hasTrailingVar, array &$conditions): array
     {
         $defaults = $route->getDefaults();
 
@@ -447,7 +445,7 @@ EOF;
 
     private function getExpressionLanguage(): ExpressionLanguage
     {
-        if (null === $this->expressionLanguage) {
+        if (!isset($this->expressionLanguage)) {
             if (!class_exists(ExpressionLanguage::class)) {
                 throw new \LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
             }
@@ -465,7 +463,7 @@ EOF;
     /**
      * @internal
      */
-    public static function export($value): string
+    public static function export(mixed $value): string
     {
         if (null === $value) {
             return 'null';
