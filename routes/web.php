@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +27,7 @@ Route::post('/se-connecter', [App\Http\Controllers\SiteController::class, 'conne
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 /* Fin routage du site */
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
 
     ################################################################################################################
     #                                                                                                              #
@@ -132,70 +134,66 @@ Route::middleware(['auth'])->group(function() {
     /* Start Facture */
     Route::get('dashboard/admin/facture/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminFactureExpedition'])->name('adminFactureExpedition');
     /* End Facture */
-
 });
 
 //Clear Cache facade value:
-Route::get('/key', function() {
+Route::get('/key', function () {
     $exitCode = Artisan::call('key:generate');
     return '<h1>Key generated with success !</h1>';
 });
 
 //Clear Cache facade value:
-Route::get('/clear-cache', function() {
+Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     return '<h1>Cache facade value cleared</h1>';
 });
 
 //Reoptimized class loader:
-Route::get('/optimize', function() {
+Route::get('/optimize', function () {
     $exitCode = Artisan::call('optimize');
     return '<h1>Reoptimized class loader</h1>';
 });
 
 //Route cache:
-Route::get('/route-cache', function() {
+Route::get('/route-cache', function () {
     $exitCode = Artisan::call('route:cache');
     return '<h1>Routes cached</h1>';
 });
 
 //Clear Route cache:
-Route::get('/route-clear', function() {
+Route::get('/route-clear', function () {
     $exitCode = Artisan::call('route:clear');
     return '<h1>Route cache cleared</h1>';
 });
 
 //Clear View cache:
-Route::get('/view-clear', function() {
+Route::get('/view-clear', function () {
     $exitCode = Artisan::call('view:clear');
     return '<h1>View cache cleared</h1>';
 });
 
 //Clear Config cache:
-Route::get('/config-cache', function() {
+Route::get('/config-cache', function () {
     $exitCode = Artisan::call('config:cache');
     return '<h1>Clear Config cache cleared</h1>';
 });
 
 //Storage link:
-Route::get('/link-storage', function() {
+Route::get('/link-storage', function () {
     $exitCode = Artisan::call('storage:link');
     return '<h1>Clear Config cache cleared</h1>';
 });
 
 //Clear Config cache:
-Route::get('/proc-open-error', function() {
+Route::get('/proc-open-error', function () {
     $exitCode = Artisan::call('vendor:publish', ['--tag' => 'flare-config']);
     return '<h1>Proc open error resolved -> Think to change parameters in config/flare.php !!!</h1>';
 });
 
 //Storage route link
 Route::get('/any-route', function () {
-	$exitCode = Artisan::call('storage:link');
+    $exitCode = Artisan::call('storage:link');
     echo $exitCode; // 0 exit code for no errors.
 });
 
 Auth::routes();
-
-Auth::routes();
-
