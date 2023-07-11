@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function agence(){
+        return $this->hasOne('App\Models\Agence', 'id', 'agence_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

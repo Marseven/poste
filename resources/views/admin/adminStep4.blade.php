@@ -140,6 +140,17 @@
 				                </div>
 
 				                <div class="col-span-12 sm:col-span-6"> 
+				                 	<label for="modal-form-1" class="form-label">Type*</label> 
+				                 	<select class="form-control" name="modele">
+				                 		<option value="Fragile">Fragile</option>
+				                 		<option value="Sensible">Sensible</option>
+				                 		<option value="Liquide">Liquide</option>
+				                 		<option value="Flammable">Flammable</option>
+				                 		<option value="Non Fragile">Non Fragile</option>
+				                 	</select> 
+				                </div>
+
+				                <div class="col-span-12 sm:col-span-12"> 
 				                 	<label for="modal-form-1" class="form-label">Libelle*</label> 
 				                 	<input type="text" class="form-control" placeholder="Ex. Sac de chaussures" name="libelle" required> 
 				                </div>

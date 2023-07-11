@@ -41,6 +41,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/admin', [App\Http\Controllers\AdminController::class, 'adminHome'])->name('adminHome');
     /* End Tableau de bord */
 
+    /* Start Profil */
+    Route::get('dashboard/admin/profil', [App\Http\Controllers\AdminController::class, 'adminProfil'])->name('adminProfil');
+    Route::post('dashboard/admin/up-profil', [App\Http\Controllers\AdminController::class, 'adminUpProfil'])->name('adminUpProfil');
+    Route::post('dashboard/admin/up-avatar', [App\Http\Controllers\AdminController::class, 'adminUpAvatar'])->name('adminUpAvatar');
+    Route::post('dashboard/admin/up-password', [App\Http\Controllers\AdminController::class, 'adminUpPassword'])->name('adminUpPassword');
+    /* End Profil */
+
+    /* Start Compte */
+    Route::get('dashboard/admin/creer-compte', [App\Http\Controllers\AdminController::class, 'adminNewCompte'])->name('adminNewCompte');
+    Route::post('dashboard/admin/add-compte', [App\Http\Controllers\AdminController::class, 'adminAddCompte'])->name('adminAddCompte');
+    Route::get('dashboard/admin/comptes', [App\Http\Controllers\AdminController::class, 'adminCompte'])->name('adminCompte');
+    Route::post('dashboard/admin/edit-compte', [App\Http\Controllers\AdminController::class, 'adminEditCompte'])->name('adminEditCompte');
+    Route::post('dashboard/admin/avatar-compte', [App\Http\Controllers\AdminController::class, 'adminAvatarCompte'])->name('adminAvatarCompte');
+    Route::get('dashboard/admin/recherche-compte', [App\Http\Controllers\AdminController::class, 'adminSearchCompte'])->name('adminSearchCompte');
+    /* End Compte */
+
     /* Start Pays */
     Route::get('dashboard/admin/liste-des-pays', [App\Http\Controllers\AdminController::class, 'adminPays'])->name('adminPays');
     Route::post('dashboard/admin/add-pays', [App\Http\Controllers\AdminController::class, 'adminAddPays'])->name('adminAddPays');
@@ -133,7 +149,32 @@ Route::middleware(['auth'])->group(function () {
 
     /* Start Facture */
     Route::get('dashboard/admin/facture/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminFactureExpedition'])->name('adminFactureExpedition');
+    Route::get('dashboard/admin/imprimer/facture/{code}', [App\Http\Controllers\AdminController::class, 'adminFacturePrint'])->name('adminFacturePrint');
     /* End Facture */
+
+    /* Start Etiquette */
+    Route::get('dashboard/admin/etiquette/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminEtiquetteExpedition'])->name('adminEtiquetteExpedition');
+    Route::get('dashboard/admin/imprimer/etiquette/{code}', [App\Http\Controllers\AdminController::class, 'adminEtiquettePrint'])->name('adminEtiquettePrint');
+    /* End Etiquette */
+
+    /* Start Suivi */
+    Route::get('dashboard/admin/suivi/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminSuiviExpedition'])->name('adminSuiviExpedition');
+    /* End Suivi */
+
+    /* Start Package */
+    Route::get('dashboard/admin/packages', [App\Http\Controllers\AdminController::class, 'adminPackage'])->name('adminPackage');
+    Route::post('dashboard/admin/add-package', [App\Http\Controllers\AdminController::class, 'adminAddPackage'])->name('adminAddPackage');
+    Route::post('dashboard/admin/edit-package', [App\Http\Controllers\AdminController::class, 'adminEditPackage'])->name('adminEditPackage');
+    Route::get('dashboard/admin/recherche-package', [App\Http\Controllers\AdminController::class, 'adminSearchPackage'])->name('adminSearchPackage');
+    Route::get('dashboard/admin/package/{code}', [App\Http\Controllers\AdminController::class, 'adminDetailPackage'])->name('adminDetailPackage');
+    Route::post('dashboard/admin/assign-package', [App\Http\Controllers\AdminController::class, 'adminPackageAssign'])->name('adminPackageAssign');
+    Route::get('dashboard/admin/suivi/package/{code}', [App\Http\Controllers\AdminController::class, 'adminSuiviPackage'])->name('adminSuiviPackage');
+    /* End Package */
+
+    /* Start Mouchard */
+    Route::get('dashboard/admin/logs', [App\Http\Controllers\AdminController::class, 'adminMouchard'])->name('adminMouchard');
+    Route::get('dashboard/admin/recherche/log', [App\Http\Controllers\AdminController::class, 'adminSearchMouchard'])->name('adminSearchMouchard');
+    /* End Mouchard */
 });
 
 //Clear Cache facade value:

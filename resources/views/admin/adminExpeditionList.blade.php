@@ -55,8 +55,10 @@
 
                             	@foreach($expeditions as $expedition)
 	                                <tr class="intro-x">
-	                                    <td class="text-center">
-	                                    	{{ $expedition->code_aleatoire }}
+	                                    <td class="text-center bg-primary">
+	                                    	<a class="text-primary" href="{{ route('adminSuiviExpedition', ['code' => $expedition->code_aleatoire]) }}" target="_blank">
+		                                    	{{ $expedition->code_aleatoire }}
+		                                    </a>
 	                                    </td>
 	                                    <td class="text-center">
 	                                    	{{ \Carbon\Carbon::parse($expedition->created_at)->translatedFormat('l jS F Y') }}
@@ -108,13 +110,10 @@
 	                                            		<ul class="dropdown-content">
 
 	                                            			<li> 
-	                                            				<a href="" class="dropdown-item">Details</a> 
-	                                            			</li>  
-	                                            			<li> 
-	                                            				<a href="" class="dropdown-item">Facture</a> 
+	                                            				<a href="{{ route('adminFactureExpedition', ['code' => $expedition->code_aleatoire]) }}" class="dropdown-item" target="_blank">Facture</a> 
 	                                            			</li> 
 	                                            			<li> 
-	                                            				<a href="" class="dropdown-item">Etiquette</a> 
+	                                            				<a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code_aleatoire]) }}" class="dropdown-item" target="_blank">Etiquette</a> 
 	                                            			</li> 
 
 	                                            		</ul> 

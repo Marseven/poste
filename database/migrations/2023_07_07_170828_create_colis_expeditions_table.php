@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('code');
+            $table->string('modele');
             $table->string('libelle');
             $table->mediumText('description');
 

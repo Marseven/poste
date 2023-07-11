@@ -90,24 +90,15 @@
                 <h2 class="text-lg font-medium truncate mr-5">
                     Dernieres expeditions
                 </h2>
-                <!--div class="flex items-center sm:ml-auto mt-3 sm:mt-0">
-                    <button class="btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i> Export to Excel </button>
-                    <button class="ml-3 btn box flex items-center text-slate-600 dark:text-slate-300"> <i data-lucide="file-text" class="hidden sm:block w-4 h-4 mr-2"></i> Export to PDF </button>
-                </div-->
             </div>
             <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
-                <table class="table table-report sm:mt-2">
+                <table class="table table-report -mt-2">
                     <thead>
                         <tr>
-                            <th class="whitespace-nowrap">SUIVI</th>
-                            <th class="whitespace-nowrap">DATE</th>
-
-                            <th class="text-center whitespace-nowrap">EXPEDITEUR</th>
-                            <th class="text-center whitespace-nowrap">DESTINATAIRE</th>
-
+                            <th class="whitespace-nowrap text-center">SUIVI</th>
+                            <th class="text-center whitespace-nowrap">DATE</th>
                             <th class="text-center whitespace-nowrap">ORIGINE</th>
                             <th class="text-center whitespace-nowrap">DESTINATION</th>
-
                             <th class="text-center whitespace-nowrap">PAIEMENT</th>
                             <th class="text-center whitespace-nowrap">STATUT</th>
                             <th class="text-center whitespace-nowrap">COUT TOTAL</th>
@@ -117,203 +108,95 @@
                     </thead>
                     <tbody>
 
+                        @if($expeditions)
+
+                        @foreach($expeditions as $expedition)
+                            <tr class="intro-x">
+                                <td class="text-center bg-primary">
+                                    <a class="text-primary" href="{{ route('adminSuiviExpedition', ['code' => $expedition->code_aleatoire]) }}" target="_blank">
+                                        {{ $expedition->code_aleatoire }}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    {{ \Carbon\Carbon::parse($expedition->created_at)->translatedFormat('l jS F Y') }}
+                                </td>
+                                <td class="text-center">
+                                    <a href="" class="font-medium whitespace-nowrap">
+                                        {{ $expedition->name_exp }}
+                                    </a> 
+                                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                                        {{ $expedition->adresse_exp }}
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <a href="" class="font-medium whitespace-nowrap">
+                                        {{ $expedition->name_dest }}
+                                    </a> 
+                                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                                        {{ $expedition->adresse_dest }}
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    
+                                </td>
+                                <td class="text-center">
+                                    
+                                </td>
+                                <td class="text-center">
+                                    {{ $expedition->amount ? $expedition->amount : 0 }} XAF
+                                </td>
+                                <td class="w-40">
+                                    @if($expedition->active == 1)
+                                    <div class="flex items-center justify-center text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> En attente de paiement </div>
+                                    @elseif($expedition->active == 2)
+                                    <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Paye(e) </div>
+                                    @elseif($expedition->active == 3)
+                                    <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> CNT </div>
+                                    @elseif($expedition->active == 2)
+                                    <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Livre(e) </div>
+                                    @else
+                                    <div class="flex items-center justify-center text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Inactive </div>
+                                    @endif
+                                </td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <div class="dropdown"> 
+                                            <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown">Actions
+                                            </button> 
+                                            <div class="dropdown-menu w-40"> 
+                                                <ul class="dropdown-content">
+
+                                                    <li> 
+                                                        <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code_aleatoire]) }}" class="dropdown-item" target="_blank">Facture</a> 
+                                                    </li> 
+                                                    <li> 
+                                                        <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code_aleatoire]) }}" class="dropdown-item" target="_blank">Etiquette</a> 
+                                                    </li> 
+
+                                                </ul> 
+                                            </div> 
+                                        </div> 
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+
+
+                            
+
+                        @else
                         <tr class="intro-x">
-
-                            <td class="text-center text-primary">
-                            	<a href="">AWB9840107860</a>
-                            </td>
-                            <td class="text-center">22/07/2023</td>
-
-                            <td class="text-center">Jolie Becroft</td>
-                            <td class="text-center">Fouad MA</td>
-
-                            <td class="text-center">GA, LBV</td>
-                            <td class="text-center">GA, POG</td>
-
-                            <td class="text-center">PEE</td>
-                            <td class="w-40">
-                                <div class="flex items-center justify-center text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> ENA </div>
-                            </td>
-                            <td class="text-center">12 800 XAF</td>
-                            <td class="w-40">
-                                <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Paye </div>
-                            </td>
-                            <td class="table-report__action w-56">
-                                <div class="dropdown"> 
-                                	<button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown">
-                                		Actions
-                                	</button> 
-                                	<div class="dropdown-menu w-40"> 
-                                		<ul class="dropdown-content"> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="printer" class="w-4 h-4 mr-2"></i> 
-                                					Facture 
-                                				</a> 
-                                			</li> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="printer" class="w-4 h-4 mr-2"></i> 
-                                					Etiquette 
-                                				</a> 
-                                			</li>
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="eye" class="w-4 h-4 mr-2"></i> 
-                                					Details 
-                                				</a> 
-                                			</li> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="edit" class="w-4 h-4 mr-2"></i> 
-                                					Modification 
-                                				</a> 
-                                			</li> 
-                                		</ul> 
-                                	</div> 
-                                </div>
-                            </td>
+                            <td class="text-center">ras</td>
+                            <td class="text-center">ras</td>
+                            <td class="text-center">ras</td>
+                            <td class="text-center">ras</td>
+                            <td class="text-center">ras</td>
                         </tr>
-                        <tr class="intro-x">
+                        @endif
 
-                            <td class="text-center text-primary">
-                            	<a href="">AWB9840107860</a>
-                            </td>
-                            <td class="text-center">22/07/2023</td>
-
-                            <td class="text-center">Jolie Becroft</td>
-                            <td class="text-center">Fouad MA</td>
-
-                            <td class="text-center">GA, LBV</td>
-                            <td class="text-center">GA, POG</td>
-
-                            <td class="text-center">PEE</td>
-                            <td class="w-40">
-                                <div class="flex items-center justify-center text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> ENA </div>
-                            </td>
-                            <td class="text-center">12 800 XAF</td>
-                            <td class="w-40">
-                                <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Paye </div>
-                            </td>
-                            <td class="table-report__action w-56">
-                                <div class="dropdown"> 
-                                	<button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown">
-                                		Actions
-                                	</button> 
-                                	<div class="dropdown-menu w-40"> 
-                                		<ul class="dropdown-content"> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="printer" class="w-4 h-4 mr-2"></i> 
-                                					Facture 
-                                				</a> 
-                                			</li> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="printer" class="w-4 h-4 mr-2"></i> 
-                                					Etiquette 
-                                				</a> 
-                                			</li>
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="eye" class="w-4 h-4 mr-2"></i> 
-                                					Details 
-                                				</a> 
-                                			</li> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="edit" class="w-4 h-4 mr-2"></i> 
-                                					Modification 
-                                				</a> 
-                                			</li> 
-                                		</ul> 
-                                	</div> 
-                                </div> 
-                            </td>
-                        </tr>
-                        <tr class="intro-x">
-
-                            <td class="text-center text-primary">
-                            	<a href="">AWB9840107860</a>
-                            </td>
-                            <td class="text-center">22/07/2023</td>
-
-                            <td class="text-center">Jolie Becroft</td>
-                            <td class="text-center">Fouad MA</td>
-
-                            <td class="text-center">GA, LBV</td>
-                            <td class="text-center">GA, POG</td>
-
-                            <td class="text-center">PEE</td>
-                            <td class="w-40">
-                                <div class="flex items-center justify-center text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> ENA </div>
-                            </td>
-                            <td class="text-center">12 800 XAF</td>
-                            <td class="w-40">
-                                <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Paye </div>
-                            </td>
-                            <td class="table-report__action w-56">
-                                <div class="dropdown"> 
-                                	<button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown">
-                                		Actions
-                                	</button> 
-                                	<div class="dropdown-menu w-40"> 
-                                		<ul class="dropdown-content"> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="printer" class="w-4 h-4 mr-2"></i> 
-                                					Facture 
-                                				</a> 
-                                			</li> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="printer" class="w-4 h-4 mr-2"></i> 
-                                					Etiquette 
-                                				</a> 
-                                			</li>
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="eye" class="w-4 h-4 mr-2"></i> 
-                                					Details 
-                                				</a> 
-                                			</li> 
-                                			<li> 
-                                				<a href="" class="dropdown-item"> 
-                                					<i data-lucide="edit" class="w-4 h-4 mr-2"></i> 
-                                					Modification 
-                                				</a> 
-                                			</li> 
-                                		</ul> 
-                                	</div> 
-                                </div>
-                            </td>
-                        </tr>
                         
                     </tbody>
                 </table>
-            </div>
-            <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-3">
-                <nav class="w-full sm:w-auto sm:mr-auto">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-left"></i> </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-left"></i> </a>
-                        </li>
-                        <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#">1</a> </li>
-                        <li class="page-item active"> <a class="page-link" href="#">2</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#">3</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#">...</a> </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevron-right"></i> </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"> <i class="w-4 h-4" data-lucide="chevrons-right"></i> </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
         <!-- END: Weekly Top Products -->
@@ -324,39 +207,10 @@
         <div class="col-span-12 lg:col-span-12 mt-8">
             <div class="intro-y block sm:flex items-center h-10">
                 <h2 class="text-lg font-medium truncate mr-5">
-                    Rapport Expedition
+                    Rapport Expedition (2023)
                 </h2>
-                <!--div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
-                    <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i> 
-                    <input type="text" class="datepicker form-control sm:w-56 box pl-10">
-                </div-->
             </div>
             <div class="intro-y box p-5 mt-12 sm:mt-5">
-                <!--div class="flex flex-col md:flex-row md:items-center">
-                    <div class="flex">
-                        <div>
-                            <div class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">$15,000</div>
-                            <div class="mt-0.5 text-slate-500">This Month</div>
-                        </div>
-                        <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
-                        <div>
-                            <div class="text-slate-500 text-lg xl:text-xl font-medium">$10,000</div>
-                            <div class="mt-0.5 text-slate-500">Last Month</div>
-                        </div>
-                    </div>
-                    <div class="dropdown md:ml-auto mt-5 md:mt-0">
-                        <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown"> Filter by Category <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i> </button>
-                        <div class="dropdown-menu w-40">
-                            <ul class="dropdown-content overflow-y-auto h-32">
-                                <li><a href="" class="dropdown-item">PC & Laptop</a></li>
-                                <li><a href="" class="dropdown-item">Smartphone</a></li>
-                                <li><a href="" class="dropdown-item">Electronic</a></li>
-                                <li><a href="" class="dropdown-item">Photography</a></li>
-                                <li><a href="" class="dropdown-item">Sport</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div-->
                 <div class="report-chart">
                     <div class="h-[275px]">
                         <canvas id="report-line-chart" class="mt-6 -mb-6"></canvas>

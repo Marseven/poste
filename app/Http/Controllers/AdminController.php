@@ -40,6 +40,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
+use Jenssegers\Agent\Facades\Agent;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator; 
 
@@ -65,30 +67,408 @@ class AdminController extends Controller
     	$app_name = "La Poste";
         $page_title = "Tableau de bord";
 
-        $expeditions = Expedition::all();
+        $expeditions = Expedition::orderBy('id', 'DESC')->limit(5)->get();
         $paiements = Paiement::all();
         $packages = Package::all();
         $clients = User::where('role', 'Client')->get();
-
-    	$stat_expeditions = Expedition::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
-                    ->whereYear('created_at', date('Y'))
-                    ->groupBy(DB::raw("Month(created_at)"))
-                    ->pluck('count', 'month_name');
- 
-        $exp_labels = $stat_expeditions->keys();
-        $exp_data = $stat_expeditions->values();
 
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
+        // Mouchard
+        // $ip_adresse, $os_system, $os_navigator, $action_title, $action_system
+        $this->mouchard(
+            $this->getClientIPaddress($request),
+            $this->getOS(),
+            $this->getBrowser(),
+            "Acces Espace Admin - " . Auth::user()->name . " * ",
+            "L'admin nommé " . Auth::user()->name . " a accede a son espace admin à la date du " . 
+            Carbon::now()->translatedFormat('l jS F Y à H:i:s') . " 
+            avec l'adresse IP suivante : " . 
+            $this->getClientIPaddress($request) . " le navigateur suivant : " . $this->getBrowser() . " 
+            depuis la machine : " . $this->getDevice() . " ayant pour systeme d'exploitation : " . $this->getOS() . "."
+
+        );
+
 
 	    return view('admin.adminHome', compact('page_title', 'app_name', 
-	    	'expeditions', 'paiements', 'packages', 'clients',
-	    	'exp_labels', 'exp_data'
+	    	'expeditions', 'paiements', 'packages', 'clients'
 	    ));
 
     }
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   MON PROFIL                                                                                                 #
+    #                                                                                                              #
+    ################################################################################################################ 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminProfil(Request $request)
+    {
+
+    	$app_name = "LA POSTE";
+        $page_title = "Profil";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $agences = Agence::all();
+
+	    return view('admin.adminProfil', compact('page_title', 'app_name',  
+	    	'admin', 'agences'
+		));
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminUpProfil(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Récupérer les données du formulaire
+        $admin->name = $request->input('noms') . ' ' . $request->input('prenoms');
+        $admin->noms = $request->input('noms');
+        $admin->prenoms = $request->input('prenoms');
+        $admin->email = $request->input('email');
+        $admin->phone = $request->input('phone');
+        $admin->adresse = $request->input('adresse');
+        $admin->agence_id = $request->input('agence_id');
+
+        if($admin->save()){
+
+            // Redirection
+            return redirect()->back()->with('success', 'Profil modifié avec succès !');
+        }
+        return redirect()->back()->with('failed', 'Impossible de modifier votre profil !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminUpAvatar(Request $request)
+    {
+        // Récupérer utilisateur connecté
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+        
+        // Récupérer le logo
+        $image = $request->file('avatar');
+
+        // Vérifier si le fichier n'est pas vide
+        if($image != null){
+
+            // Recuperer l'extension du fichier
+            $ext = $image->getClientOriginalExtension();
+
+            // Renommer le fichier
+            $filename = rand(10000, 50000) . '.' . $ext;
+
+            // Verifier les extensions 
+            if($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg' || $ext == 'jfif'){
+
+                // Upload le fichier
+                if($image->move(public_path('avatars'), $filename)){
+
+                    // Attribuer l'url
+                    $admin->avatar = url('avatars') . '/' . $filename;
+                    
+                    // Sauvegarde
+                    if($admin->save()){
+
+                        // Redirection
+                        return redirect()->back()->with('success', 'Avatar modifiée avec succès !');
+                    }
+                    return redirect()->back()->with('failed', 'Impossible de modifier votre avatar !');
+                }
+                return redirect()->back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
+            }
+            return redirect()->back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
+        }
+        return redirect()->back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminUpPassword(Request $request)
+    {
+        // Récupérer utilisateur connecté
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Verifier si les mots de passe sont identiques
+        if($request->input('new_password') == $request->input('confirm_password')){
+
+            // Récupérer les données du formulaire
+            if (Hash::check($request->input('old_password'), $root->password)) {
+
+                // Preparer le mot de passe
+                $admin->password = Hash::make($request->input('new_password'));
+
+                // Sauvergarder 
+                if($admin->save()){
+
+                    // Redirection
+                    return redirect()->back()->with('success', 'Mot de passe modifié avec succès !');
+                }
+                return redirect()->back()->with('failed', 'Impossible de modifier votre mot de passe !');
+            }
+            return redirect()->back()->with('failed', 'Votre ancien mot de passe semble incorrect. Veuillez saisir le bon svp !');
+
+        }
+        return redirect()->back()->with('failed', 'Les mots de passe ne sont pas identiques. Veuillez réessayer svp !');
+
+    }
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   COMPTE                                                                                                     #
+    #                                                                                                              #
+    ################################################################################################################
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminCompte(Request $request)
+    {
+
+    	$app_name = "LA POSTE";
+        $page_title = "Compte";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $comptes = User::orderBy('id', 'DESC')->paginate(10);
+        $agences = Agence::all();
+
+	    return view('admin.adminCompte', compact('page_title', 'app_name',  
+	    	'admin', 'agences', 'comptes'
+		));
+
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminNewCompte(Request $request)
+    {
+
+    	$app_name = "LA POSTE";
+        $page_title = "Nouveau Compte";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $agences = Agence::all();
+
+	    return view('admin.adminNewCompte', compact('page_title', 'app_name',  
+	    	'admin', 'agences'
+		));
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAddCompte(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $user = new User();
+
+        // Récupérer les données du formulaire
+        $user->name = $request->input('noms') . ' ' . $request->input('prenoms');
+        $user->noms = $request->input('noms');
+        $user->prenoms = $request->input('prenoms');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->agence_id = $request->input('agence_id');
+        $user->adresse = $request->input('adresse');
+        $user->password = Hash::make($request->input('password'));
+        $user->role = $request->input('role');
+        $user->active = $request->input('active');
+        $user->avatar = url('avatars/avatar.jpg');
+        $user->api_token = Str::random(100);
+        $user->abonne = 1;
+
+        if($user->save()){
+
+            // Redirection
+            return redirect()->route('adminCompte')->with('success', 'Nouveau Compte cree avec succès !');
+        }
+        return redirect()->back()->with('failed', 'Impossible de creer ce compte !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAvatarCompte(Request $request)
+    {
+        // Récupérer utilisateur connecté
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get user by id
+        $user = User::find($request->input('compte_id'));
+        if(!empty($user)){
+        
+	        // Récupérer le logo
+	        $image = $request->file('avatar');
+
+	        // Vérifier si le fichier n'est pas vide
+	        if($image != null){
+
+	            // Recuperer l'extension du fichier
+	            $ext = $image->getClientOriginalExtension();
+
+	            // Renommer le fichier
+	            $filename = rand(10000, 50000) . '.' . $ext;
+
+	            // Verifier les extensions 
+	            if($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg' || $ext == 'jfif'){
+
+	                // Upload le fichier
+	                if($image->move(public_path('avatars'), $filename)){
+
+	                    // Attribuer l'url
+	                    $user->avatar = url('avatars') . '/' . $filename;
+	                    
+	                    // Sauvegarde
+	                    if($user->save()){
+
+	                        // Redirection
+	                        return redirect()->back()->with('success', 'Avatar modifiée avec succès !');
+	                    }
+	                    return redirect()->back()->with('failed', 'Impossible de modifier votre avatar !');
+	                }
+	                return redirect()->back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
+	            }
+	            return redirect()->back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
+	        }
+	        return redirect()->back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver ce compte !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEditCompte(Request $request)
+    {
+        $root = Auth::user();
+
+        $root_id = Auth::user()->id;
+
+        // Get user by id
+        $user = User::find($request->input('compte_id'));
+        if(!empty($user)){
+
+        	// Récupérer les données du formulaire
+	        $user->name = $request->input('noms') . ' ' . $request->input('prenoms');
+	        $user->noms = $request->input('noms');
+	        $user->prenoms = $request->input('prenoms');
+	        $user->email = $request->input('email');
+	        $user->phone = $request->input('phone');
+	        $user->agence_id = $request->input('agence_id');
+	        $user->adresse = $request->input('adresse');
+	        $user->password = Hash::make($request->input('password'));
+	        $user->role = $request->input('role');
+	        $user->active = $request->input('active');
+	        $user->api_token = Str::random(100);
+	        $user->abonne = 1;
+
+	        if($user->save()){
+
+	            // Redirection
+	            return redirect()->back()->with('success', 'Compte modifié avec succès !');
+	        }
+	        return redirect()->back()->with('failed', 'Impossible de modifier ce compte !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver ce compte !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchCompte(Request $request)
+    {
+
+    	$app_name = "LA POSTE";
+        $page_title = "Compte";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $comptes = User::where('name', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('noms', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('prenoms', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('phone', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('role', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('adresse', 'LIKE', '%' . $request->input('q') . '%')
+        ->simplePaginate(10);
+        $agences = Agence::all();
+
+    	// Mouchard
+    	// $ip_adresse, $os_system, $os_navigator, $action_title, $action_system
+        $this->mouchard(
+        	$this->getClientIPaddress($request),
+        	$this->getOS(),
+        	$this->getBrowser(),
+            "Recherche Compte Par Mot-Cle - " . $request->input('q') . "*",
+            "L'admin nommé " . Auth::user()->name . " a effectue une recherche de compte avec pour mot-cle
+            " . $request->input('q') . " à la date du " . 
+            Carbon::now()->translatedFormat('l jS F Y à H:i:s') . " 
+            avec l'adresse IP suivante : " . 
+            $this->getClientIPaddress($request) . " le navigateur suivant : " . $this->getBrowser() . " 
+            depuis la machine : " . $this->getDevice() . " ayant pour systeme d'exploitation : " . $this->getOS() . "."
+
+        );
+
+	    return view('admin.adminCompte', compact('page_title', 'app_name',  
+	    	'admin', 'agences', 'comptes'
+		));
+
+    }
+
+
+
 
 	################################################################################################################
     #                                                                                                              #
@@ -1433,7 +1813,7 @@ class AdminController extends Controller
     	$app_name = "La Poste";
         $page_title = "Expeditions";
 
-        $expeditions = Expedition::paginate(10);
+        $expeditions = Expedition::orderBy('id', 'DESC')->paginate(10);
 
 
         $admin = Auth::user();
@@ -1790,6 +2170,7 @@ class AdminController extends Controller
 
         // Récupérer les données du formulaire
         $paquet->code = $request->input('code');
+        $paquet->modele = $request->input('modele');
         $paquet->libelle = $request->input('libelle');
         $paquet->description = $request->input('description');
         $paquet->longeur = $request->input('longeur');
@@ -2051,7 +2432,7 @@ class AdminController extends Controller
 	        $facture->societe_id = 1;
 	        $facture->expedition_id = $expedition_id;
 	        $facture->agent_id = $admin_id;
-	        $facture->active = 1;
+	        $facture->active = 0;
 
 	        if($facture->save()){
 
@@ -2081,12 +2462,18 @@ class AdminController extends Controller
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
+    	$app_name = "La Poste";
+        $page_title = "Facture Expedition";
+
+        $societe = Societe::find(1);
+
         // Get expedition by id
         $expedition = Expedition::where('code_aleatoire', $code)->first();
         if(!empty($expedition)){
 
         	// Récupérer les données
 	        $expedition_id = intval($expedition->id);
+	        $paquets = ColisExpedition::where('code', $code)->get();
 
 	        // Get facture by expedition_id
         	$facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -2094,12 +2481,664 @@ class AdminController extends Controller
 	        if(!empty($facture)){
 
 	            // Redirection
-	            return redirect()->back()->with('success', 'Tarif modifié avec succès !');
+	            return view('admin.adminFactureExpedition', compact('page_title', 'app_name', 
+			    	'facture', 'expedition', 'societe', 'paquets'
+			    ));
 	        }
 	        return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
 
         }
         return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminFacturePrint(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+    	$app_name = "La Poste";
+        $page_title = "Facture Expedition";
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        if(!empty($expedition)){
+
+        	// Récupérer les données
+	        $expedition_id = intval($expedition->id);
+	        $paquets = ColisExpedition::where('code', $code)->get();
+
+	        // Get facture by expedition_id
+        	$facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+	        if(!empty($facture)){
+
+	            // Redirection
+	            return view('admin.adminFacturePrint', compact('page_title', 'app_name', 
+			    	'facture', 'expedition', 'societe', 'paquets'
+			    ));
+	        }
+	        return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+	################################################################################################################
+    #                                                                                                              #
+    #   ETIQUETTE                                                                                                  #
+    #                                                                                                              #
+    ################################################################################################################ 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEtiquetteExpedition(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+    	$app_name = "La Poste";
+        $page_title = "Facture Expedition";
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        if(!empty($expedition)){
+
+        	// Récupérer les données
+	        $expedition_id = intval($expedition->id);
+	        $paquets = ColisExpedition::where('code', $code)->get();
+
+	        // Get facture by expedition_id
+        	$facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+	        if(!empty($facture)){
+
+	            // Redirection
+	            return view('admin.adminEtiquetteExpedition', compact('page_title', 'app_name', 
+			    	'facture', 'expedition', 'societe', 'paquets'
+			    ));
+	        }
+	        return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEtiquettePrint(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+    	$app_name = "La Poste";
+        $page_title = "Etiquette Expedition";
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        if(!empty($expedition)){
+
+        	// Récupérer les données
+	        $expedition_id = intval($expedition->id);
+	        $paquets = ColisExpedition::where('code', $code)->get();
+
+	        // Get facture by expedition_id
+        	$facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+	        if(!empty($facture)){
+
+	            // Redirection
+	            return view('admin.adminEtiquettePrint', compact('page_title', 'app_name', 
+			    	'facture', 'expedition', 'societe', 'paquets'
+			    ));
+	        }
+	        return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+	################################################################################################################
+    #                                                                                                              #
+    #   SUIVI                                                                                                      #
+    #                                                                                                              #
+    ################################################################################################################ 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSuiviExpedition(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+    	$app_name = "La Poste";
+        $page_title = "Suivi Expedition";
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        if(!empty($expedition)){
+
+        	// Récupérer les données
+	        $expedition_id = intval($expedition->id);
+	        $paquets = ColisExpedition::where('code', $code)->get();
+	        $historiques = SuiviExpedition::where('code', $code)->get();
+
+	        // Get facture by expedition_id
+        	$facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+	        if(!empty($facture)){
+
+	            // Redirection
+	            return view('admin.adminSuiviExpedition', compact('page_title', 'app_name', 
+			    	'facture', 'expedition', 'societe', 'paquets', 'historiques'
+			    ));
+	        }
+	        return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+	################################################################################################################
+    #                                                                                                              #
+    #   PACKAGE                                                                                                    #
+    #                                                                                                              #
+    ################################################################################################################ 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminPackage(Request $request)
+    {
+
+    	$app_name = "La Poste";
+        $page_title = "Packages";
+
+        $packages = Package::orderBy('id', 'DESC')->paginate(10);
+        $agences = Agence::all();
+        $villes = Ville::all();
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+	    return view('admin.adminPackage', compact('page_title', 'app_name', 
+	    	'packages', 'agences', 'villes'
+	    ));
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchPackage(Request $request)
+    {
+
+    	$app_name = "La Poste";
+        $page_title = "Packages";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $packages = Package::where('code', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('description', 'LIKE', '%' . $request->input('q') . '%')
+        ->paginate(10);
+        $agences = Agence::all();
+        $villes = Ville::all();
+
+	    return view('admin.adminPackage', compact('page_title', 'app_name', 
+	    	'packages', 'agences', 'villes'
+	    ));
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAddPackage(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $code = Carbon::now()->timestamp;
+        $agence_origine = Agence::find($request->input('agence_origine_id'));
+        $agence_destination = Agence::find($request->input('agence_destination_id'));
+
+        $package = new Package();
+
+        // Récupérer les données du formulaire
+        $package->code = $code . '.' . $agence_origine->code . '.' . $agence_destination->code;
+
+        $package->libelle = $request->input('libelle');
+        $package->description = $request->input('description');
+
+        $package->ville_origine_id = $request->input('ville_origine_id');
+        $package->ville_destination_id = $request->input('ville_destination_id');
+
+        $package->agence_origine_id = $request->input('agence_origine_id');
+        $package->agence_destination_id = $request->input('agence_destination_id');
+
+        
+        $package->agent_id = $admin_id;
+        $package->active = $request->input('active');
+
+        if($package->save()){
+
+            // Redirection
+            return redirect()->back()->with('success', 'Nouveau Package crée avec succès !');
+        }
+        return redirect()->back()->with('failed', 'Impossible de creer ce package !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEditPackage(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get package by id
+        $package = Package::find($request->input('package_id'));
+        if(!empty($package)){
+
+        	// Récupérer les données du formulaire
+	        $package->libelle = $request->input('libelle');
+	        $package->description = $request->input('description');
+
+	        $package->ville_origine_id = $request->input('ville_origine_id');
+	        $package->ville_destination_id = $request->input('ville_destination_id');
+
+	        $package->agence_origine_id = $request->input('agence_origine_id');
+	        $package->agence_destination_id = $request->input('agence_destination_id');
+
+	        
+	        $package->agent_id = $admin_id;
+	        $package->active = $request->input('active');
+
+	        if($package->save()){
+
+	            // Redirection
+	            return redirect()->back()->with('success', 'Package modifié avec succès !');
+	        }
+	        return redirect()->back()->with('failed', 'Impossible de modifier ce package !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver ce package !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminDetailPackage(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+    	$app_name = "La Poste";
+        $page_title = "Detail Package";
+
+        $societe = Societe::find(1);
+
+        // Get package by code
+        $package = Package::where('code', $code)->first();
+        if(!empty($package)){
+
+        	// Get today carbon date
+        	$today = Carbon::today();
+
+	        // Get colis du jours
+        	$today_paquets = ColisExpedition::whereDate('created_at', $today)->paginate(10);
+
+	        if(!empty($today_paquets)){
+
+	            // Redirection
+	            return view('admin.adminDetailPackage', compact('page_title', 'app_name', 
+			    	'today_paquets', 'societe', 'package'
+			    ));
+	        }
+	        return redirect()->back()->with('failed', 'Aucun colis expedie pour le moment !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminPackageAssign(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get package by id
+        $package = Package::find($request->input('package_id'));
+        if(!empty($package)){
+
+        	// Get colis by id
+        	$paquet = ColisExpedition::find($request->input('colis_id'));
+        	if(!empty($paquet)){
+
+        		// Check if this colis is already assigned
+        		$old_assign = PackageExpedition::where('colis_id', $paquet->id)->get();
+        		if(empty($old_assign) || count($old_assign) == 0){
+
+			        $code = Carbon::now()->timestamp;
+			        $code_package = $package->code;
+			        $code_colis = $paquet->code;
+
+	        		$assign = new PackageExpedition();
+
+			        // Récupérer les données du formulaire
+			        $assign->code = $code . '.' . $code_package . '.' . $code_colis;
+
+			        $assign->package_id = $request->input('package_id');
+			        $assign->colis_id = $request->input('colis_id');
+
+			        
+			        $assign->agent_id = $admin_id;
+			        $assign->active = 1;
+
+			        if($assign->save()){
+
+			        	// Update package
+			        	$sac = DB::table('packages')
+			        	->where('id', $package->id)
+			        	->increment('nbre_colis');
+			        	//$paquet->nbre_colis += 1;
+			        	//$paquet->save();
+
+			        	// Update colis
+			        	$colis = DB::table('colis_expeditions')
+			        	->where('id', $paquet->id)
+			        	->update([
+			        		'active' => 2
+			        	]);
+
+
+			            // Redirection
+			            return redirect()->back()->with('success', 'Assignation confirmee avec succès !');
+			        }
+			        return redirect()->back()->with('failed', 'Impossible de confirmer l\'assignation de ce colis !');
+
+		        }
+		        return redirect()->back()->with('failed', 'Ce colis a deja ete assigne !');
+
+
+
+        	}
+        	return redirect()->back()->with('failed', 'Impossible de trouver ce colis !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver ce package !');
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSuiviPackage(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+    	$app_name = "La Poste";
+        $page_title = "Suivi Package";
+
+        $societe = Societe::find(1);
+
+        // Get package by code
+        $package = Package::where('code', $code)->first();
+        if(!empty($package)){
+
+        	// Get today carbon date
+        	$today = Carbon::today();
+
+	        // Get colis du jours
+        	$today_paquets = ColisExpedition::whereDate('created_at', $today)->paginate(10);
+
+	        if(!empty($today_paquets)){
+
+	            // Redirection
+	            return view('admin.adminSuiviPackage', compact('page_title', 'app_name', 
+			    	'today_paquets', 'societe', 'package'
+			    ));
+	        }
+	        return redirect()->back()->with('failed', 'Aucun colis expedie pour le moment !');
+
+        }
+        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+
+    }
+
+	################################################################################################################
+    #                                                                                                              #
+    #   MOUCHARD                                                                                                   #
+    #                                                                                                              #
+    ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminMouchard(Request $request)
+    {
+
+    	$app_name = "La Poste";
+        $page_title = "Logs Systeme";
+
+        
+        $mouchards = Mouchard::paginate(10);
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+	    return view('admin.adminMouchard', compact('page_title', 'app_name', 
+	    	'mouchards'
+	    ));
+
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchMouchard(Request $request)
+    {
+
+    	$app_name = "La Poste";
+        $page_title = "Logs Systeme";
+
+        
+        $mouchards = Mouchard::where('action_author', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('action_title', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('action_system', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('ip_adresse', 'LIKE', '%' . $request->input('q') . '%')
+        ->orWhere('os_navigator', 'LIKE', '%' . $request->input('q') . '%')
+        ->simplePaginate(10);
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+	    return view('admin.adminMouchard', compact('page_title', 'app_name', 
+	    	'mouchards'
+	    ));
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   FONCTIONS UTILES                                                                                           #
+    #                                                                                                              #
+    ################################################################################################################
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function mouchard($ip_adresse, $os_system, $os_navigator, $action_title, $action_system)
+    {
+        // Get user's 
+        $author = Auth::user() ? Auth::user()->name : "Admin Inconnu";
+
+        // Instancier mouchard
+        $mouchard = new Mouchard();
+
+        // Préparer la requete
+        $mouchard->ip_adresse = $ip_adresse;
+        $mouchard->os_system = $os_system;
+        $mouchard->os_navigator = $os_navigator;
+        $mouchard->action_title = $action_title;
+        $mouchard->action_author = $author;
+        $mouchard->action_system = $action_system;
+
+        // Sauvegarder
+        $mouchard->save();
+
+    }
+    
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getClientIPaddress(Request $request) {
+
+        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+            $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+            $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        }
+        $client  = @$_SERVER['HTTP_CLIENT_IP'];
+        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        $remote  = $_SERVER['REMOTE_ADDR'];
+
+        if(filter_var($client, FILTER_VALIDATE_IP)){
+            $clientIp = $client;
+        }
+        elseif(filter_var($forward, FILTER_VALIDATE_IP)){
+            $clientIp = $forward;
+        }
+        else{
+            $clientIp = $remote;
+        }
+
+        return $clientIp;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getDevice() {
+
+        $device = Agent::device();
+
+        return $device;
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getBrowser() {
+
+        $browser = Agent::browser();
+        $version = Agent::version($browser);
+
+        $navigator = $browser . ' (' . $version . ') ';
+
+        return $navigator;
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getOS() {
+
+        $platform = Agent::platform();
+        $version = Agent::version($platform);
+
+        $os_system = $platform . ' (' . $version . ') ';
+
+        return $os_system;
 
     }
 

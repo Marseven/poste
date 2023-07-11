@@ -54,6 +54,7 @@
                         </div>
                     </div>
                     <!-- END: Profile Menu -->
+                    
                     <div class="col-span-12 lg:col-span-8 2xl:col-span-9">
 
                         <div class="grid grid-cols-12 gap-6">
