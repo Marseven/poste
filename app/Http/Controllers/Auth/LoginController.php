@@ -27,9 +27,10 @@ class LoginController extends Controller
      *
      * @var string
      */
-    public function redirectTo() {
+    public function redirectTo()
+    {
 
-        $role = Auth::user()->role; 
+        $role = Auth::user()->role;
 
         switch ($role) {
 
@@ -40,9 +41,9 @@ class LoginController extends Controller
                     return '/dashboard/admin';
                 } else {
                     # code...
-                    return route('accueil')->with('failed', 'Votre compte a été désactivé. Veuillez contacter votre administrateur !');
+                    return redirect('/')->with('failed', 'Votre compte a été désactivé. Veuillez contacter votre administrateur !');
                 }
-                
+
                 break;
 
             default:
@@ -74,7 +75,8 @@ class LoginController extends Controller
         $page_title = "Administration";
 
         // Notice the second argument
-        return view('auth.login', 
+        return view(
+            'auth.login',
             [
                 'app_name' => $app_name,
                 'page_title' => $page_title
