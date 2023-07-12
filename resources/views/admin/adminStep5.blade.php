@@ -304,47 +304,58 @@
 				             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
 				                <div class="col-span-12 sm:col-span-6"> 
-				                 	<label for="modal-form-1" class="form-label">Code*</label> 
-				                 	<input type="text" class="form-control" name="code" readonly value="{{ $code_aleatoire }}"> 
-				                </div>
+                                    <label for="modal-form-1" class="form-label">Code*</label> 
+                                    <input type="text" class="form-control" name="code" readonly value="{{ $code }}"> 
+                                </div>
 
-				                <div class="col-span-12 sm:col-span-6"> 
-				                 	<label for="modal-form-1" class="form-label">Libelle*</label> 
-				                 	<input type="text" class="form-control" placeholder="Ex. Sac de chaussures" name="libelle" required> 
-				                </div>
+                                <div class="col-span-12 sm:col-span-6"> 
+                                    <label for="modal-form-1" class="form-label">Type*</label> 
+                                    <select class="form-control" name="modele">
+                                        <option value="Fragile">Fragile</option>
+                                        <option value="Sensible">Sensible</option>
+                                        <option value="Liquide">Liquide</option>
+                                        <option value="Flammable">Flammable</option>
+                                        <option value="Non Fragile">Non Fragile</option>
+                                    </select> 
+                                </div>
 
-				                <div class="col-span-12 sm:col-span-3"> 
-				                 	<label for="modal-form-1" class="form-label">Longeur*</label> 
-				                 	<input type="number" class="form-control" name="longeur" value="0"> 
-				                </div>
+                                <div class="col-span-12 sm:col-span-12"> 
+                                    <label for="modal-form-1" class="form-label">Libelle*</label> 
+                                    <input type="text" class="form-control" placeholder="Ex. Sac de chaussures" name="libelle" required> 
+                                </div>
 
-				                <div class="col-span-12 sm:col-span-3"> 
-				                 	<label for="modal-form-1" class="form-label">Largeur*</label> 
-				                 	<input type="number" class="form-control" name="largeur" value="0"> 
-				                </div>
+                                <div class="col-span-12 sm:col-span-3"> 
+                                    <label for="modal-form-1" class="form-label">Longeur*</label> 
+                                    <input type="number" class="form-control" name="longeur" value="0"> 
+                                </div>
 
-				                <div class="col-span-12 sm:col-span-3">  
-				                 	<label for="modal-form-1" class="form-label">Hauteur*</label> 
-				                 	<input type="number" class="form-control" name="hauteur" value="0"> 
-				                </div>
+                                <div class="col-span-12 sm:col-span-3"> 
+                                    <label for="modal-form-1" class="form-label">Largeur*</label> 
+                                    <input type="number" class="form-control" name="largeur" value="0"> 
+                                </div>
 
-				                <div class="col-span-12 sm:col-span-3"> 
-				                 	<label for="modal-form-1" class="form-label">Poids*</label> 
-				                 	<input type="number" class="form-control" name="poids" value="0"> 
-				                </div>
+                                <div class="col-span-12 sm:col-span-3">  
+                                    <label for="modal-form-1" class="form-label">Hauteur*</label> 
+                                    <input type="number" class="form-control" name="hauteur" value="0"> 
+                                </div>
 
-				                <div class="col-span-12 sm:col-span-12"> 
-				                 	<label for="modal-form-1" class="form-label">Description*</label> 
-				                 	<textarea class="form-control" name="description" rows="3"></textarea>
-				                </div>
+                                <div class="col-span-12 sm:col-span-3"> 
+                                    <label for="modal-form-1" class="form-label">Poids*</label> 
+                                    <input type="number" class="form-control" name="poids" value="0"> 
+                                </div>
+
+                                <div class="col-span-12 sm:col-span-12"> 
+                                    <label for="modal-form-1" class="form-label">Description*</label> 
+                                    <textarea class="form-control" name="description" rows="3"></textarea>
+                                </div>
 
 				                 
 
 				             </div> <!-- END: Modal Body -->
 				             <!-- BEGIN: Modal Footer -->
 				             <div class="modal-footer">
-				             	<a href="" class="side-menu" onclick="event.preventDefault(); document.getElementById('paquet-form').submit();" class="btn btn-primary w-20">Soumettre</a> 
-				             </div> 
+                                <button type="submit" class="btn btn-lg btn-primary py-1 px-2 ml-auto">Soumettre</button>
+                             </div> 
 				             <!-- END: Modal Footer -->
 				            </form>
 				         </div>
