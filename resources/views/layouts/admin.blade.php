@@ -14,16 +14,15 @@
     <link href="{{ URL::to('assets/dist/images/logos/icon_bleu.png') }}" rel="shortcut icon">
 
     <!-- A propos du Dev -->
-    <meta name="auteur" content="Yannick ABOH">
-    <meta name="status" content="Ingénieur Logiciel, Freelance">
-    <meta name="email" content="yannickabohthierry@gmail.com">
-    <meta name="whatsapp" content="(+241) 074 83 56 31 | 066 68 23 53 | (+237) 697 57 30 41">
+    <meta name="auteur" content="JOBS">
 
     <title>{{ $app_name ? $app_name : 'LA POSTE' }} | {{ $page_title ? $page_title : '' }}</title>
 
 
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="{{ URL::to('assets/dist/css/app.css') }}" />
+
+    {{-- jaune #ffc928 --}}
     <!-- END: CSS Assets-->
 
 
@@ -43,7 +42,7 @@
             <ul>
 
                 <li>
-                    <a href="{{ route('adminHome') }}" class="side-menu side-menu--active">
+                    <a href="{{ route('adminHome') }}" class="side-menu side-menu{{ $home ?? '' }}">
                         <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
                         <div class="side-menu__title">
                             Tableau de bord
@@ -421,7 +420,8 @@
                         id="alert"> <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                         <strong>Succès!</strong> {{ Session::get('success') }}. <button type="button"
                             class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i
-                                data-lucide="x" class="w-4 h-4"></i> </button> </div>
+                                data-lucide="x" class="w-4 h-4"></i> </button>
+                    </div>
                     <br>
                 @endif
 
