@@ -273,7 +273,8 @@
                                         <div class="side-menu__title">Statuts</div>
                                     </a>
                                 </li>
-                                <li>
+
+                                {{-- <li>
                                     <a href="{{ route('adminTarif') }}" class="side-menu">
                                         <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
                                         <div class="side-menu__title">Tarifs</div>
@@ -289,6 +290,32 @@
                                     <a href="{{ route('adminDelai') }}" class="side-menu">
                                         <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
                                         <div class="side-menu__title">Delais d'expédition</div>
+                                    </a>
+                                </li> --}}
+
+
+                                <li>
+                                    <a href="{{ route('adminType') }}" class="side-menu">
+                                        <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
+                                        <div class="side-menu__title">Types d'expédition</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('adminRegime') }}" class="side-menu">
+                                        <div class="side-menu__icon"> <i data-lucide="target"></i> </div>
+                                        <div class="side-menu__title">Régimes d'expédition</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('adminCategory') }}" class="side-menu">
+                                        <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                        <div class="side-menu__title">Catégories d'expédition</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('adminPrice') }}" class="side-menu">
+                                        <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                        <div class="side-menu__title">Tarif d'expédition</div>
                                     </a>
                                 </li>
                             </ul>

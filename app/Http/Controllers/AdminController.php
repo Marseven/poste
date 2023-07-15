@@ -31,6 +31,7 @@ use App\Models\StatutExpedition;
 use App\Models\SuiviExpedition;
 use App\Models\TarifExpedition;
 use App\Models\TempsExpedition;
+use App\Models\TypeExpedition;
 use App\Models\Ville;
 
 
@@ -1817,25 +1818,17 @@ class AdminController extends Controller
     {
 
         $app_name = "La Poste";
-        $page_title = "Tarifs expedition";
+        $page_title = "Types d'expedition";
 
-        $tarifs = TarifExpedition::paginate(10);
-        $countries = Pays::all();
-        $provinces = Province::all();
-        $villes = Ville::all();
-
+        $types = TypeExpedition::paginate(10);
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-
-        return view('admin.adminTarif', compact(
+        return view('admin.adminType', compact(
             'page_title',
             'app_name',
-            'tarifs',
-            'countries',
-            'provinces',
-            'villes'
+            'types',
         ));
     }
 
@@ -1846,31 +1839,21 @@ class AdminController extends Controller
      */
     public function adminAddType(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-        $tarif = new TarifExpedition();
+        $tarif = new TypeExpedition();
 
         // Récupérer les données du formulaire
         $tarif->code = $request->input('code');
-        $tarif->pays_exp = $request->input('pays_exp');
-        $tarif->province_exp = $request->input('province_exp');
-        $tarif->ville_exp = $request->input('ville_exp');
-        $tarif->pays_dest = $request->input('pays_dest');
-        $tarif->province_dest = $request->input('province_dest');
-        $tarif->ville_dest = $request->input('ville_dest');
-        $tarif->poids_min = $request->input('poids_min');
-        $tarif->poids_max = $request->input('poids_max');
-        $tarif->tarif = $request->input('tarif');
+        $tarif->tarif = $request->input('libelle');
         $tarif->agent_id = $admin_id;
         $tarif->active = $request->input('active');
 
         if ($tarif->save()) {
-
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau tarif crée avec succès !');
+            return back()->with('success', 'Nouveau tarif crée avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce tarif !');
+        return back()->with('failed', 'Impossible de creer ce tarif !');
     }
 
     /**
@@ -1880,35 +1863,25 @@ class AdminController extends Controller
      */
     public function adminEditType(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         // Get tarif by id
-        $tarif = TarifExpedition::find($request->input('tarif_id'));
-        if (!empty($tarif)) {
+        $type = TypeExpedition::find($request->input('type_id'));
+        if (!empty($type)) {
 
             // Récupérer les données du formulaire
-            $tarif->code = $request->input('code');
-            $tarif->pays_exp = $request->input('pays_exp');
-            $tarif->province_exp = $request->input('province_exp');
-            $tarif->ville_exp = $request->input('ville_exp');
-            $tarif->pays_dest = $request->input('pays_dest');
-            $tarif->province_dest = $request->input('province_dest');
-            $tarif->ville_dest = $request->input('ville_dest');
-            $tarif->poids_min = $request->input('poids_min');
-            $tarif->poids_max = $request->input('poids_max');
-            $tarif->tarif = $request->input('tarif');
-            $tarif->agent_id = $admin_id;
-            $tarif->active = $request->input('active');
+            $type->code = $request->input('code');
+            $type->libelle = $request->input('libelle');
+            $type->agent_id = $admin_id;
+            $type->active = $request->input('active');
 
-            if ($tarif->save()) {
-
+            if ($type->save()) {
                 // Redirection
-                return redirect()->back()->with('success', 'Tarif modifié avec succès !');
+                return back()->with('success', 'Tarif modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce tarif !');
+            return back()->with('failed', 'Impossible de modifier ce tarif !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce tarif !');
+        return back()->with('failed', 'Impossible de trouver ce tarif !');
     }
 
     /**

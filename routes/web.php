@@ -128,6 +128,34 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/admin/recherche-tarif', [App\Http\Controllers\AdminController::class, 'adminSearchTarif'])->name('adminSearchTarif');
     /* End Tarif */
 
+    /* Start type */
+    Route::get('dashboard/admin/types-expedition', [App\Http\Controllers\AdminController::class, 'adminType'])->name('adminType');
+    Route::post('dashboard/admin/add-type', [App\Http\Controllers\AdminController::class, 'adminAddType'])->name('adminAddType');
+    Route::post('dashboard/admin/edit-type', [App\Http\Controllers\AdminController::class, 'adminEditType'])->name('adminEditType');
+    Route::get('dashboard/admin/recherche-type', [App\Http\Controllers\AdminController::class, 'adminSearchType'])->name('adminSearchType');
+    /* End Type */
+
+    /* Start Regime */
+    Route::get('dashboard/admin/regimes-expedition', [App\Http\Controllers\AdminController::class, 'adminRegime'])->name('adminRegime');
+    Route::post('dashboard/admin/add-regime', [App\Http\Controllers\AdminController::class, 'adminAddRegime'])->name('adminAddRegime');
+    Route::post('dashboard/admin/edit-regime', [App\Http\Controllers\AdminController::class, 'adminEditRegime'])->name('adminEditRegime');
+    Route::get('dashboard/admin/recherche-regime', [App\Http\Controllers\AdminController::class, 'adminSearchRegime'])->name('adminSearchRegime');
+    /* End Regime */
+
+    /* Start Category */
+    Route::get('dashboard/admin/Categories-expedition', [App\Http\Controllers\AdminController::class, 'adminCategory'])->name('adminCategory');
+    Route::post('dashboard/admin/add-category', [App\Http\Controllers\AdminController::class, 'adminAddCategory'])->name('adminAddCategory');
+    Route::post('dashboard/admin/edit-category', [App\Http\Controllers\AdminController::class, 'adminEditCategory'])->name('adminEditCategory');
+    Route::get('dashboard/admin/recherche-category', [App\Http\Controllers\AdminController::class, 'adminSearchCategory'])->name('adminSearchCategory');
+    /* End Category */
+
+    /* Start Price */
+    Route::get('dashboard/admin/prices-expedition', [App\Http\Controllers\AdminController::class, 'adminPrice'])->name('adminPrice');
+    Route::post('dashboard/admin/add-price', [App\Http\Controllers\AdminController::class, 'adminAddPrice'])->name('adminAddPrice');
+    Route::post('dashboard/admin/edit-price', [App\Http\Controllers\AdminController::class, 'adminEditPrice'])->name('adminEditPrice');
+    Route::get('dashboard/admin/recherche-price', [App\Http\Controllers\AdminController::class, 'adminSearchPrice'])->name('adminSearchPrice');
+    /* End Price */
+
     /* Start Expedition */
     Route::get('dashboard/admin/expeditions', [App\Http\Controllers\AdminController::class, 'adminExpeditionList'])->name('adminExpeditionList');
     Route::get('dashboard/admin/nouvelle-expedition', [App\Http\Controllers\AdminController::class, 'adminNewExpedition'])->name('adminNewExpedition');
