@@ -29,13 +29,13 @@
                                 <div class="flex">
                                     <i data-lucide="navigation" class="report-box__icon text-primary"></i>
                                     <!--div class="ml-auto">
-                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                            </div-->
+                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $expeditions->count() }}
                                 </div>
-                                <div class="text-base text-slate-500 mt-1">Expeditions</div>
+                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions</div>
                             </div>
                         </div>
                     </div>
@@ -45,13 +45,13 @@
                                 <div class="flex">
                                     <i data-lucide="credit-card" class="report-box__icon text-pending"></i>
                                     <!--div class="ml-auto">
-                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                            </div-->
+                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $paiements->count() }}
                                 </div>
-                                <div class="text-base text-slate-500 mt-1">Paiements</div>
+                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions en cours</div>
                             </div>
                         </div>
                     </div>
@@ -61,13 +61,13 @@
                                 <div class="flex">
                                     <i data-lucide="users" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                            </div-->
+                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $clients->count() }}
                                 </div>
-                                <div class="text-base text-slate-500 mt-1">Clients</div>
+                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions livrées</div>
                             </div>
                         </div>
                     </div>
@@ -77,13 +77,13 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-success"></i>
                                     <!--div class="ml-auto">
-                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                            </div-->
+                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $packages->count() }}
                                 </div>
-                                <div class="text-base text-slate-500 mt-1">Packages</div>
+                                <div class="text-base text-slate-500 mt-1">Nbre de réservations</div>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                         <div class="box p-5 zoom-in">
                             <div class="flex items-center">
                                 <div class="w-2/4 flex-none">
-                                    <div class="text-lg font-medium truncate">Target Sales</div>
+                                    <div class="text-lg font-medium truncate">Tx réservation en ligne</div>
                                     <div class="text-slate-500 mt-1">300 Sales</div>
                                 </div>
                                 <div class="flex-none ml-auto relative">
@@ -109,27 +109,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-12 sm:col-span-6 2xl:col-span-3 intro-y">
-                        <div class="box p-5 zoom-in">
-                            <div class="flex">
-                                <div class="text-lg font-medium truncate mr-3">Social Media</div>
-                                <div
-                                    class="py-1 px-2 flex items-center rounded-full text-xs bg-slate-100 dark:bg-darkmode-400 text-slate-500 cursor-pointer ml-auto truncate">
-                                    320 Followers</div>
-                            </div>
-                            <div class="mt-1">
-                                <div class="h-[58px]">
-                                    <canvas class="simple-line-chart-1 -ml-1" width="389" height="116"
-                                        style="display: block; box-sizing: border-box; height: 58px; width: 194.5px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="col-span-12 sm:col-span-6 2xl:col-span-3 intro-y">
                         <div class="box p-5 zoom-in">
                             <div class="flex items-center">
                                 <div class="w-2/4 flex-none">
-                                    <div class="text-lg font-medium truncate">New Products</div>
+                                    <div class="text-lg font-medium truncate">Tx réservation complétée</div>
                                     <div class="text-slate-500 mt-1">1450 Products</div>
                                 </div>
                                 <div class="flex-none ml-auto relative">
@@ -144,22 +129,47 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-span-12 sm:col-span-6 2xl:col-span-3 intro-y">
                         <div class="box p-5 zoom-in">
-                            <div class="flex">
-                                <div class="text-lg font-medium truncate mr-3">Posted Ads</div>
-                                <div
-                                    class="py-1 px-2 flex items-center rounded-full text-xs bg-slate-100 dark:bg-darkmode-400 text-slate-500 cursor-pointer ml-auto truncate">
-                                    180 Campaign</div>
-                            </div>
-                            <div class="mt-1">
-                                <div class="h-[58px]">
-                                    <canvas class="simple-line-chart-1 -ml-1" width="389" height="116"
-                                        style="display: block; box-sizing: border-box; height: 58px; width: 194.5px;"></canvas>
+                            <div class="flex items-center">
+                                <div class="w-2/4 flex-none">
+                                    <div class="text-lg font-medium truncate">Tx réservation annulée</div>
+                                    <div class="text-slate-500 mt-1">1450 Products</div>
+                                </div>
+                                <div class="flex-none ml-auto relative">
+                                    <div class="w-[90px] h-[90px]">
+                                        <canvas id="report-donut-chart-2" width="180" height="180"
+                                            style="display: block; box-sizing: border-box; height: 90px; width: 90px;"></canvas>
+                                    </div>
+                                    <div
+                                        class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">
+                                        45%</div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-span-12 sm:col-span-6 2xl:col-span-3 intro-y">
+                        <div class="box p-5 zoom-in">
+                            <div class="flex items-center">
+                                <div class="w-2/4 flex-none">
+                                    <div class="text-lg font-medium truncate">Satisfaction Client</div>
+                                    <div class="text-slate-500 mt-1">1450 Products</div>
+                                </div>
+                                <div class="flex-none ml-auto relative">
+                                    <div class="w-[90px] h-[90px]">
+                                        <canvas id="report-donut-chart-2" width="180" height="180"
+                                            style="display: block; box-sizing: border-box; height: 90px; width: 90px;"></canvas>
+                                    </div>
+                                    <div
+                                        class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">
+                                        45%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="grid grid-cols-12 gap-6 mt-5">
@@ -188,7 +198,7 @@
                                     </div>
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">4.710</div>
-                                <div class="text-base text-slate-500 mt-1">Item Sales</div>
+                                <div class="text-base text-slate-500 mt-1">Chiffre d'Affaire des expéditions</div>
                             </div>
                         </div>
                     </div>
@@ -217,7 +227,7 @@
                                     </div>
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">3.721</div>
-                                <div class="text-base text-slate-500 mt-1">New Orders</div>
+                                <div class="text-base text-slate-500 mt-1">Délais de livraison</div>
                             </div>
                         </div>
                     </div>
@@ -246,7 +256,7 @@
                                     </div>
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">2.149</div>
-                                <div class="text-base text-slate-500 mt-1">Total Products</div>
+                                <div class="text-base text-slate-500 mt-1">Nbre de réclamations</div>
                             </div>
                         </div>
                     </div>
@@ -273,7 +283,7 @@
                                     </div>
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">152.040</div>
-                                <div class="text-base text-slate-500 mt-1">Unique Visitor</div>
+                                <div class="text-base text-slate-500 mt-1">Délais de Traitement</div>
                             </div>
                         </div>
                     </div>
@@ -285,7 +295,7 @@
             <div class="col-span-12 mt-6">
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">
-                        Dernieres expeditions
+                        Dernières expeditions
                     </h2>
                 </div>
                 <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
@@ -294,10 +304,8 @@
                             <tr>
                                 <th class="whitespace-nowrap text-center">SUIVI</th>
                                 <th class="text-center whitespace-nowrap">DATE</th>
-                                <th class="text-center whitespace-nowrap">ORIGINE</th>
-                                <th class="text-center whitespace-nowrap">DESTINATION</th>
-                                <th class="text-center whitespace-nowrap">PAIEMENT</th>
-                                <th class="text-center whitespace-nowrap">STATUT</th>
+                                <th class="text-center whitespace-nowrap">EXPEDITEUR</th>
+                                <th class="text-center whitespace-nowrap">DESTINATAIRE</th>
                                 <th class="text-center whitespace-nowrap">COUT TOTAL</th>
                                 <th class="text-center whitespace-nowrap">STATUT FACTURE</th>
                                 <th class="text-center whitespace-nowrap">ACTIONS</th>
@@ -333,12 +341,6 @@
                                             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
                                                 {{ $expedition->adresse_dest }}
                                             </div>
-                                        </td>
-                                        <td class="text-center">
-
-                                        </td>
-                                        <td class="text-center">
-
                                         </td>
                                         <td class="text-center">
                                             {{ $expedition->amount ? $expedition->amount : 0 }} XAF
@@ -429,8 +431,4 @@
 
         </div>
     </div>
-
-
-
-
 @endsection

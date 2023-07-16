@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class PriceExpedition extends Model
 {
     use HasFactory;
+
+    public function regime()
+    {
+        return $this->belongsTo(RegimeExpedition::class, 'regime_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(TypeExpedition::class, 'type_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryExpedition::class, 'category_id');
+    }
 }

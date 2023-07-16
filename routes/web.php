@@ -156,6 +156,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/admin/recherche-price', [App\Http\Controllers\AdminController::class, 'adminSearchPrice'])->name('adminSearchPrice');
     /* End Price */
 
+    Route::get('dashboard/admin/select-data', [App\Http\Controllers\AdminController::class, 'selectData'])->name('adminSelect');
+
     /* Start Expedition */
     Route::get('dashboard/admin/expeditions', [App\Http\Controllers\AdminController::class, 'adminExpeditionList'])->name('adminExpeditionList');
     Route::get('dashboard/admin/nouvelle-expedition', [App\Http\Controllers\AdminController::class, 'adminNewExpedition'])->name('adminNewExpedition');
@@ -172,11 +174,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('dashboard/admin/new-document', [App\Http\Controllers\AdminController::class, 'adminNewDocument'])->name('adminNewDocument');
     Route::post('dashboard/admin/new-paquet', [App\Http\Controllers\AdminController::class, 'adminNewPaquet'])->name('adminNewPaquet');
+    Route::post('dashboard/admin/delete-paquet', [App\Http\Controllers\AdminController::class, 'adminDeletePaquet'])->name('adminDeletePaquet');
     Route::post('dashboard/admin/add-expedition', [App\Http\Controllers\AdminController::class, 'adminAddExpedition'])->name('adminAddExpedition');
     /* End Expedition */
 
     /* Start Facture */
     Route::get('dashboard/admin/facture/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminFactureExpedition'])->name('adminFactureExpedition');
+    Route::get('dashboard/admin/facture/pay/{code}', [App\Http\Controllers\AdminController::class, 'adminFacturePay'])->name('adminFacturePay');
     Route::get('dashboard/admin/imprimer/facture/{code}', [App\Http\Controllers\AdminController::class, 'adminFacturePrint'])->name('adminFacturePrint');
     /* End Facture */
 

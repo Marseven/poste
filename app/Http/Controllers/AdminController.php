@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Adresse;
 use App\Models\Agence;
+use App\Models\CategoryExpedition;
 use App\Models\ColisExpedition;
 use App\Models\DelaiExpedition;
 use App\Models\Devise;
@@ -24,7 +25,9 @@ use App\Models\ParametrePaiement;
 use App\Models\ParametreSms;
 use App\Models\ParametreWhatsapp;
 use App\Models\Pays;
+use App\Models\PriceExpedition;
 use App\Models\Province;
+use App\Models\RegimeExpedition;
 use App\Models\ServiceExpedition;
 use App\Models\Societe;
 use App\Models\StatutExpedition;
@@ -259,6 +262,9 @@ class AdminController extends Controller
 
         $app_name = "LA POSTE";
         $page_title = "Compte";
+        $account = "side-menu--active";
+        $account_sub = "side-menu__sub-open";
+        $account2 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -271,7 +277,10 @@ class AdminController extends Controller
             'app_name',
             'admin',
             'agences',
-            'comptes'
+            'comptes',
+            'account',
+            'account_sub',
+            'account2'
         ));
     }
 
@@ -286,6 +295,9 @@ class AdminController extends Controller
 
         $app_name = "LA POSTE";
         $page_title = "Nouveau Compte";
+        $account = "side-menu--active";
+        $account_sub = "side-menu__sub-open";
+        $account1 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -296,7 +308,10 @@ class AdminController extends Controller
             'page_title',
             'app_name',
             'admin',
-            'agences'
+            'agences',
+            'account',
+            'account_sub',
+            'account1'
         ));
     }
 
@@ -494,6 +509,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Pays";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place1 = "side-menu--active";
 
         $countries = Pays::paginate(10);
 
@@ -505,7 +523,10 @@ class AdminController extends Controller
         return view('admin.adminPays', compact(
             'page_title',
             'app_name',
-            'countries'
+            'countries',
+            'place',
+            'place_sub',
+            'place1'
         ));
     }
 
@@ -659,6 +680,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Provinces";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place2 = "side-menu--active";
 
         $provinces = Province::paginate(10);
         $countries = Pays::all();
@@ -672,7 +696,10 @@ class AdminController extends Controller
             'page_title',
             'app_name',
             'provinces',
-            'countries'
+            'countries',
+            'place',
+            'place_sub',
+            'place2'
         ));
     }
 
@@ -777,6 +804,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Villes";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place3 = "side-menu--active";
 
         $villes = Ville::paginate(10);
         $provinces = Province::all();
@@ -790,7 +820,10 @@ class AdminController extends Controller
             'page_title',
             'app_name',
             'villes',
-            'provinces'
+            'provinces',
+            'place',
+            'place_sub',
+            'place3'
         ));
     }
 
@@ -1081,6 +1114,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Agences";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place4 = "side-menu--active";
 
         $agences = Agence::paginate(10);
         $villes = Ville::all();
@@ -1094,7 +1130,10 @@ class AdminController extends Controller
             'page_title',
             'app_name',
             'agences',
-            'villes'
+            'villes',
+            'place',
+            'place_sub',
+            'place4'
         ));
     }
 
@@ -1845,15 +1884,15 @@ class AdminController extends Controller
 
         // Récupérer les données du formulaire
         $tarif->code = $request->input('code');
-        $tarif->tarif = $request->input('libelle');
+        $tarif->libelle = $request->input('libelle');
         $tarif->agent_id = $admin_id;
         $tarif->active = $request->input('active');
 
         if ($tarif->save()) {
             // Redirection
-            return back()->with('success', 'Nouveau tarif crée avec succès !');
+            return back()->with('success', 'Nouveau Type crée avec succès !');
         }
-        return back()->with('failed', 'Impossible de creer ce tarif !');
+        return back()->with('failed', 'Impossible de creer ce Type !');
     }
 
     /**
@@ -1877,11 +1916,11 @@ class AdminController extends Controller
 
             if ($type->save()) {
                 // Redirection
-                return back()->with('success', 'Tarif modifié avec succès !');
+                return back()->with('success', 'Type modifié avec succès !');
             }
-            return back()->with('failed', 'Impossible de modifier ce tarif !');
+            return back()->with('failed', 'Impossible de modifier ce type !');
         }
-        return back()->with('failed', 'Impossible de trouver ce tarif !');
+        return back()->with('failed', 'Impossible de trouver ce type !');
     }
 
     /**
@@ -1893,25 +1932,21 @@ class AdminController extends Controller
     {
 
         $app_name = "La Poste";
-        $page_title = "Tarifs expedition";
+        $page_title = "Régimes d'expedition";
 
-        $tarifs = TarifExpedition::paginate(10);
-        $countries = Pays::all();
-        $provinces = Province::all();
-        $villes = Ville::all();
+        $regimes = RegimeExpedition::paginate(10);
+        $types = TypeExpedition::all();
 
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
 
-        return view('admin.adminTarif', compact(
+        return view('admin.adminRegime', compact(
             'page_title',
             'app_name',
-            'tarifs',
-            'countries',
-            'provinces',
-            'villes'
+            'regimes',
+            'types',
         ));
     }
 
@@ -1922,31 +1957,22 @@ class AdminController extends Controller
      */
     public function adminAddRegime(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-        $tarif = new TarifExpedition();
+        $regime = new RegimeExpedition();
 
         // Récupérer les données du formulaire
-        $tarif->code = $request->input('code');
-        $tarif->pays_exp = $request->input('pays_exp');
-        $tarif->province_exp = $request->input('province_exp');
-        $tarif->ville_exp = $request->input('ville_exp');
-        $tarif->pays_dest = $request->input('pays_dest');
-        $tarif->province_dest = $request->input('province_dest');
-        $tarif->ville_dest = $request->input('ville_dest');
-        $tarif->poids_min = $request->input('poids_min');
-        $tarif->poids_max = $request->input('poids_max');
-        $tarif->tarif = $request->input('tarif');
-        $tarif->agent_id = $admin_id;
-        $tarif->active = $request->input('active');
+        $regime->code = $request->input('code');
+        $regime->libelle = $request->input('libelle');
+        $regime->agent_id = $admin_id;
+        $regime->type_id = $request->input('type_exp');
+        $regime->active = $request->input('active');
 
-        if ($tarif->save()) {
-
+        if ($regime->save()) {
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau tarif crée avec succès !');
+            return back()->with('success', 'Nouveau Régime crée avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce tarif !');
+        return back()->with('failed', 'Impossible de creer ce tarif !');
     }
 
     /**
@@ -1956,35 +1982,26 @@ class AdminController extends Controller
      */
     public function adminEditRegime(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         // Get tarif by id
-        $tarif = TarifExpedition::find($request->input('tarif_id'));
-        if (!empty($tarif)) {
+        $regime = TarifExpedition::find($request->input('regime_id'));
+        if (!empty($regime)) {
 
             // Récupérer les données du formulaire
-            $tarif->code = $request->input('code');
-            $tarif->pays_exp = $request->input('pays_exp');
-            $tarif->province_exp = $request->input('province_exp');
-            $tarif->ville_exp = $request->input('ville_exp');
-            $tarif->pays_dest = $request->input('pays_dest');
-            $tarif->province_dest = $request->input('province_dest');
-            $tarif->ville_dest = $request->input('ville_dest');
-            $tarif->poids_min = $request->input('poids_min');
-            $tarif->poids_max = $request->input('poids_max');
-            $tarif->tarif = $request->input('tarif');
-            $tarif->agent_id = $admin_id;
-            $tarif->active = $request->input('active');
+            $regime->code = $request->input('code');
+            $regime->libelle = $request->input('libelle');
+            $regime->agent_id = $admin_id;
+            $regime->type_id = $request->input('type_exp');
+            $regime->active = $request->input('active');
 
-            if ($tarif->save()) {
-
+            if ($regime->save()) {
                 // Redirection
-                return redirect()->back()->with('success', 'Tarif modifié avec succès !');
+                return back()->with('success', 'Régime modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce tarif !');
+            return back()->with('failed', 'Impossible de modifier ce tarif !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce tarif !');
+        return back()->with('failed', 'Impossible de trouver ce tarif !');
     }
 
     /**
@@ -1994,27 +2011,20 @@ class AdminController extends Controller
      */
     public function adminCategory(Request $request)
     {
-
         $app_name = "La Poste";
-        $page_title = "Tarifs expedition";
+        $page_title = "Catégories d'expedition";
 
-        $tarifs = TarifExpedition::paginate(10);
-        $countries = Pays::all();
-        $provinces = Province::all();
-        $villes = Ville::all();
-
+        $categories = CategoryExpedition::paginate(10);
+        $regimes = RegimeExpedition::all();
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-
-        return view('admin.adminTarif', compact(
+        return view('admin.adminCategory', compact(
             'page_title',
             'app_name',
-            'tarifs',
-            'countries',
-            'provinces',
-            'villes'
+            'categories',
+            'regimes',
         ));
     }
 
@@ -2025,31 +2035,24 @@ class AdminController extends Controller
      */
     public function adminAddCategory(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-        $tarif = new TarifExpedition();
+        $category = new CategoryExpedition();
+        $regime = RegimeExpedition::find($request->input('regime_exp'));
 
         // Récupérer les données du formulaire
-        $tarif->code = $request->input('code');
-        $tarif->pays_exp = $request->input('pays_exp');
-        $tarif->province_exp = $request->input('province_exp');
-        $tarif->ville_exp = $request->input('ville_exp');
-        $tarif->pays_dest = $request->input('pays_dest');
-        $tarif->province_dest = $request->input('province_dest');
-        $tarif->ville_dest = $request->input('ville_dest');
-        $tarif->poids_min = $request->input('poids_min');
-        $tarif->poids_max = $request->input('poids_max');
-        $tarif->tarif = $request->input('tarif');
-        $tarif->agent_id = $admin_id;
-        $tarif->active = $request->input('active');
+        $category->code = $request->input('code');
+        $category->libelle = $request->input('libelle');
+        $category->type_id = $regime->type_id;
+        $category->regime_id = $regime->id;
+        $category->agent_id = $admin_id;
+        $category->active = $request->input('active');
 
-        if ($tarif->save()) {
-
+        if ($category->save()) {
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau tarif crée avec succès !');
+            return back()->with('success', 'Nouvelle catégorie crée avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce tarif !');
+        return back()->with('failed', 'Impossible de creer  cette catégorie !');
     }
 
     /**
@@ -2059,35 +2062,28 @@ class AdminController extends Controller
      */
     public function adminEditCategory(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         // Get tarif by id
-        $tarif = TarifExpedition::find($request->input('tarif_id'));
-        if (!empty($tarif)) {
+        $category = CategoryExpedition::find($request->input('tarif_id'));
+        $regime = RegimeExpedition::find($request->input('regime_exp'));
+        if (!empty($category)) {
 
             // Récupérer les données du formulaire
-            $tarif->code = $request->input('code');
-            $tarif->pays_exp = $request->input('pays_exp');
-            $tarif->province_exp = $request->input('province_exp');
-            $tarif->ville_exp = $request->input('ville_exp');
-            $tarif->pays_dest = $request->input('pays_dest');
-            $tarif->province_dest = $request->input('province_dest');
-            $tarif->ville_dest = $request->input('ville_dest');
-            $tarif->poids_min = $request->input('poids_min');
-            $tarif->poids_max = $request->input('poids_max');
-            $tarif->tarif = $request->input('tarif');
-            $tarif->agent_id = $admin_id;
-            $tarif->active = $request->input('active');
+            $category->code = $request->input('code');
+            $category->libelle = $request->input('libelle');
+            $category->type_id = $regime->type_id;
+            $category->regime_id = $regime->id;
+            $category->agent_id = $admin_id;
+            $category->active = $request->input('active');
 
-            if ($tarif->save()) {
-
+            if ($category->save()) {
                 // Redirection
-                return redirect()->back()->with('success', 'Tarif modifié avec succès !');
+                return back()->with('success', 'catégorie modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce tarif !');
+            return back()->with('failed', 'Impossible de modifier  cette catégorie !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce tarif !');
+        return back()->with('failed', 'Impossible de trouver cette catégorie !');
     }
 
     /**
@@ -2101,23 +2097,18 @@ class AdminController extends Controller
         $app_name = "La Poste";
         $page_title = "Tarifs expedition";
 
-        $tarifs = TarifExpedition::paginate(10);
-        $countries = Pays::all();
-        $provinces = Province::all();
-        $villes = Ville::all();
-
+        $prices = PriceExpedition::paginate(10);
+        $categories = CategoryExpedition::all();
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
 
-        return view('admin.adminTarif', compact(
+        return view('admin.adminPrice', compact(
             'page_title',
             'app_name',
-            'tarifs',
-            'countries',
-            'provinces',
-            'villes'
+            'prices',
+            'categories',
         ));
     }
 
@@ -2128,31 +2119,26 @@ class AdminController extends Controller
      */
     public function adminAddPrice(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-        $tarif = new TarifExpedition();
+        $price = new PriceExpedition();
+        $category = CategoryExpedition::find($request->input('category_exp'));
 
         // Récupérer les données du formulaire
-        $tarif->code = $request->input('code');
-        $tarif->pays_exp = $request->input('pays_exp');
-        $tarif->province_exp = $request->input('province_exp');
-        $tarif->ville_exp = $request->input('ville_exp');
-        $tarif->pays_dest = $request->input('pays_dest');
-        $tarif->province_dest = $request->input('province_dest');
-        $tarif->ville_dest = $request->input('ville_dest');
-        $tarif->poids_min = $request->input('poids_min');
-        $tarif->poids_max = $request->input('poids_max');
-        $tarif->tarif = $request->input('tarif');
-        $tarif->agent_id = $admin_id;
-        $tarif->active = $request->input('active');
+        $price->code = $request->input('code');
+        $price->weight = $request->input('weight');
+        $price->price = $request->input('price');
+        $price->type_id = $category->type_id;
+        $price->category_id = $category->id;
+        $price->regime_id = $category->regime_id;
+        $price->agent_id = $admin_id;
+        $price->active = $request->input('active');
 
-        if ($tarif->save()) {
-
+        if ($price->save()) {
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau tarif crée avec succès !');
+            return back()->with('success', 'Nouveau tarif crée avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce tarif !');
+        return back()->with('failed', 'Impossible de creer ce tarif !');
     }
 
     /**
@@ -2162,35 +2148,50 @@ class AdminController extends Controller
      */
     public function adminEditPrice(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         // Get tarif by id
-        $tarif = TarifExpedition::find($request->input('tarif_id'));
-        if (!empty($tarif)) {
+        $price = PriceExpedition::find($request->input('price_id'));
+        $category = CategoryExpedition::find($request->input('category_exp'));
+        if (!empty($price)) {
 
             // Récupérer les données du formulaire
-            $tarif->code = $request->input('code');
-            $tarif->pays_exp = $request->input('pays_exp');
-            $tarif->province_exp = $request->input('province_exp');
-            $tarif->ville_exp = $request->input('ville_exp');
-            $tarif->pays_dest = $request->input('pays_dest');
-            $tarif->province_dest = $request->input('province_dest');
-            $tarif->ville_dest = $request->input('ville_dest');
-            $tarif->poids_min = $request->input('poids_min');
-            $tarif->poids_max = $request->input('poids_max');
-            $tarif->tarif = $request->input('tarif');
-            $tarif->agent_id = $admin_id;
-            $tarif->active = $request->input('active');
+            $price->code = $request->input('code');
+            $price->weight = $request->input('weight');
+            $price->price = $request->input('price');
+            $price->type_id = $category->type_id;
+            $price->category_id = $category->id;
+            $price->regime_id = $category->regime_id;
+            $price->agent_id = $admin_id;
+            $price->active = $request->input('active');
 
-            if ($tarif->save()) {
-
+            if ($price->save()) {
                 // Redirection
-                return redirect()->back()->with('success', 'Tarif modifié avec succès !');
+                return back()->with('success', 'Tarif modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce tarif !');
+            return back()->with('failed', 'Impossible de modifier ce tarif !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce tarif !');
+        return back()->with('failed', 'Impossible de trouver ce tarif !');
+    }
+
+    public function selectData(Request $request)
+    {
+        if ($request->target == 'regime') {
+            $organization = RegimeExpedition::where('type_id', $request->id)->get();
+            $response = json_encode($organization);
+
+            return response()->json($response);
+        } elseif ($request->target == 'category') {
+            $organization = CategoryExpedition::where('regime_id', $request->id)->get();
+            $response = json_encode($organization);
+
+            return response()->json($response);
+        } elseif ($request->target == 'price') {
+            $organization = PriceExpedition::where('category_id', $request->id)->get();
+            $response = json_encode($organization);
+
+            return response()->json($response);
+        }
     }
 
 
@@ -2210,6 +2211,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Expeditions";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
 
         $expeditions = Expedition::orderBy('id', 'DESC')->paginate(10);
 
@@ -2221,7 +2225,10 @@ class AdminController extends Controller
         return view('admin.adminExpeditionList', compact(
             'page_title',
             'app_name',
-            'expeditions'
+            'expeditions',
+            'exp',
+            'exp_sub',
+            'exp2'
         ));
     }
 
@@ -2235,6 +2242,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Nouvelle Expedition";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp1 = "side-menu--active";
 
         $code_aleatoire = Carbon::now()->timestamp;
 
@@ -2252,6 +2262,8 @@ class AdminController extends Controller
         $services = ServiceExpedition::all();
         $tarifs = TarifExpedition::all();
         $delais = TempsExpedition::all();
+
+        $types = TypeExpedition::all();
 
 
         $documents = DocumentExpedition::where('code', $code_aleatoire)->get();
@@ -2275,7 +2287,11 @@ class AdminController extends Controller
             'delais',
             'documents',
             'paquets',
-            'societe'
+            'types',
+            'societe',
+            'exp',
+            'exp1',
+            'exp_sub'
         ));
     }
 
@@ -2623,30 +2639,48 @@ class AdminController extends Controller
      */
     public function adminNewPaquet(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         $paquet = new ColisExpedition();
+        $price = PriceExpedition::find($request->input('poids'));
 
         // Récupérer les données du formulaire
         $paquet->code = $request->input('code');
-        $paquet->modele = $request->input('modele');
         $paquet->libelle = $request->input('libelle');
         $paquet->description = $request->input('description');
-        $paquet->longeur = $request->input('longeur');
-        $paquet->largeur = $request->input('largeur');
-        $paquet->hauteur = $request->input('hauteur');
-        $paquet->poids = $request->input('poids');
+        $paquet->poids = $price->id;
         $paquet->agent_id = $admin_id;
         $paquet->active = 1;
 
         if ($paquet->save()) {
-
-            // Redirection
-            return redirect()->back()->with('success', 'Colis ajoutee avec succès !');
+            $paquet->load(['price']);
+            $response = json_encode($paquet);
+            return response()->json($response);
         }
-        return redirect()->back()->with('failed', 'Impossible de rajouter ce colis !');
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminDeletePaquet(Request $request)
+    {
+        $admin_id = Auth::user()->id;
+        $paquet = ColisExpedition::find($request->input('id'));
+
+        if ($paquet) {
+            $id = $paquet->id;
+            $price = PriceExpedition::find($paquet->poids);
+            $paquet->delete();
+            $response = json_encode([$id, $price]);
+            return response()->json($response);
+        } else {
+            $response = json_encode(0);
+            return response()->json($response);
+        }
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -2694,11 +2728,14 @@ class AdminController extends Controller
             $expedition->adresse_dest = $request->input('adresse_dest');
 
             $expedition->service_exp_id = $request->input('service_exp_id');
-            $expedition->delai_exp_id = $request->input('delai_exp_id');
-            $expedition->forfait_exp_id = $request->input('forfait_exp_id');
+            $expedition->type_exp_id = $request->input('type_id');
+            $expedition->regime_exp_id = $request->input('regime_id');
+            $expedition->category_exp_id = $request->input('category_id');
+
+            $expedition->amount = $request->input('amount');
 
             $expedition->agent_id = $admin_id;
-            $expedition->active = $request->input('active');
+            $expedition->active = 1;
 
             if ($expedition->save()) {
 
@@ -2707,44 +2744,23 @@ class AdminController extends Controller
                     ->where('code', $code_aleatoire)
                     ->update(['expedition_id' => $expedition->id]);
 
-
-                // Save
-                //$documents->save();
-
-
                 // Get Sum Poids des colis
                 $poids_total = ColisExpedition::where('code', $code_aleatoire)->sum('poids');
-
-
-                // Get Tarif
-                $tarif = TarifExpedition::where('poids_min', '<', $poids_total)->where('poids_max', '>', $poids_total)->first();
-
-
-                // Update Expedition
-                DB::table('expeditions')
-                    ->where('code', $code_aleatoire)
-                    ->update([
-                        'tarif_exp_id' => $tarif->id,
-                        'amount' => (intval($tarif->tarif) * intval($poids_total)),
-                    ]);
-
-                // Save
-                //$expedition->save();
 
                 // New Facture
                 $facture = new FactureExpedition();
 
                 $facture->code = $code_aleatoire;
-                $facture->expedition_id = $request->input('service_exp_id');
+                $facture->expedition_id = $expedition->id;
 
                 $facture->save();
 
                 // Redirection
-                return redirect()->back()->with('success', 'Expedition ajoutee avec succès !');
+                return redirect('/dashboard/admin/expeditions')->with('success', 'Expedition ajoutee avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de rajouter cette expedition !');
+            return back()->with('failed', 'Impossible de rajouter cette expedition !');
         } else {
-            return redirect()->back()->with('failed', 'Veuillez rajouter aumoins un colis svp !');
+            return back()->with('failed', 'Veuillez rajouter aumoins un colis svp !');
         }
     }
 
@@ -3106,6 +3122,7 @@ class AdminController extends Controller
         $expedition = Expedition::where('code_aleatoire', $code)->first();
         if (!empty($expedition)) {
 
+            $expedition->load(['type', 'regime', 'category']);
             // Récupérer les données
             $expedition_id = intval($expedition->id);
             $paquets = ColisExpedition::where('code', $code)->get();
@@ -3148,6 +3165,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Packages";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp3 = "side-menu--active";
 
         $packages = Package::orderBy('id', 'DESC')->paginate(10);
         $agences = Agence::all();
@@ -3163,7 +3183,10 @@ class AdminController extends Controller
             'app_name',
             'packages',
             'agences',
-            'villes'
+            'villes',
+            'exp',
+            'exp_sub',
+            'exp3'
         ));
     }
 

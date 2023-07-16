@@ -4,20 +4,20 @@
 
     <div class="col-span-12 2xl:col-span-12">
         <h2 class="intro-y text-lg font-medium mt-10">
-            Type d'expedition
+            Tarifs d'expedition
         </h2>
         <div class="grid grid-cols-12 gap-12 mt-5">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#large-modal-size-preview"
-                    class="btn btn-primary shadow-md mr-2">Nouveau Type</a>
+                    class="btn btn-primary shadow-md mr-2">Nouveau tarif</a>
 
                 <!-- BEGIN: Large Modal Content -->
                 <!-- BEGIN: Modal Content -->
                 <div id="large-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <form method="POST" action="{{ route('adminAddType') }}">
+                            <form method="POST" action="{{ route('adminAddPrice') }}">
                                 @csrf
                                 <!-- BEGIN: Modal Header -->
                                 <div class="modal-header">
@@ -28,17 +28,32 @@
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-1" class="form-label">Code</label>
-                                        <input type="text" class="form-control" placeholder="T000001" name="code">
+                                        <input type="text" class="form-control" placeholder="R000001" name="code"
+                                            required>
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-4">
+                                        <label for="modal-form-6" class="form-label">Catégorie d'expédition</label>
+                                        <select id="modal-form-6" class="form-select" name="category_exp" required>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->libelle }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
-                                        <label for="modal-form-2" class="form-label">Tarif</label>
-                                        <input type="text" class="form-control" name="libelle">
+                                        <label for="modal-form-2" class="form-label">Poids (KG)</label>
+                                        <input type="number" step="0.1" class="form-control" name="weight" required>
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-12">
+                                        <label for="modal-form-2" class="form-label">Prix (FCFA)</label>
+                                        <input type="number" class="form-control" name="price" required>
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-6" class="form-label">Statut</label>
-                                        <select id="modal-form-6" class="form-select" name="active">
+                                        <select id="modal-form-6" class="form-select" name="active" required>
                                             <option value="1">active</option>
                                             <option value="0">inactif</option>
                                         </select>
@@ -57,17 +72,17 @@
                 <!-- END: Large Modal Content -->
 
                 <div class="hidden md:block mx-auto text-slate-500">
-                    Affiche de 1 a 10 sur {{ $tarifs->count() }} plages de poids
+                    Affiche de 1 a 10 sur {{ $prices->count() }} tarifs
                 </div>
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-tarif" action="{{ route('adminSearchTarif') }}" method="GET" class="d-none">
+                        <form id="search-price" action="{{ route('adminSearchPrice') }}" method="GET" class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">
                             <a href=""
-                                onclick="event.preventDefault(); document.getElementById('search-type').submit();">
+                                onclick="event.preventDefault(); document.getElementById('search-price').submit();">
                                 <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                             </a>
                         </form>
@@ -88,25 +103,35 @@
                     <thead>
                         <tr>
                             <th class="whitespace-nowrap text-center">CODE</th>
-                            <th class="text-center whitespace-nowrap">LIBELLE</th>
+                            <th class="text-center whitespace-nowrap">CATÉGORIE</th>
+                            <th class="text-center whitespace-nowrap">POIDS</th>
+                            <th class="text-center whitespace-nowrap">PRIX</th>
                             <th class="text-center whitespace-nowrap">STATUT</th>
                             <th class="text-center whitespace-nowrap">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @if ($types)
-                            @foreach ($types as $type)
+                        @if ($prices)
+                            @foreach ($prices as $price)
+                                @php
+                                    $price->load(['category']);
+                                @endphp
                                 <tr class="intro-x">
                                     <td class="text-center">
-                                        {{ $type->code }}
+                                        {{ $price->code }}
                                     </td>
-
                                     <td class="text-center">
-                                        {{ $type->libelle }}
+                                        {{ $price->category->libelle }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $price->weight }} KG
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $price->price }} FCFA
                                     </td>
                                     <td class="w-40">
-                                        @if ($type->active == 1)
+                                        @if ($price->active == 1)
                                             <div class="flex items-center justify-center text-success"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> Active </div>
                                         @else
@@ -117,7 +142,7 @@
                                     <td class="table-report__action w-56">
                                         <div class="flex justify-center items-center">
                                             <a class="flex items-center mr-3" href="javascript:;" data-tw-toggle="modal"
-                                                data-tw-target="#update-{{ $tarif->id }}"> <i data-lucide="edit"
+                                                data-tw-target="#update-{{ $price->id }}"> <i data-lucide="edit"
                                                     class="w-4 h-4 mr-1"></i> </a>
                                         </div>
                                     </td>
@@ -125,10 +150,10 @@
 
 
                                 <!-- BEGIN: Delete Confirmation Modal -->
-                                <div id="update-{{ $type->id }}" class="modal" tabindex="-1" aria-hidden="true">
+                                <div id="update-{{ $price->id }}" class="modal" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('adminEditType') }}">
+                                            <form method="POST" action="{{ route('adminEditPrice') }}">
                                                 @csrf
                                                 <!-- BEGIN: Modal Header -->
                                                 <div class="modal-header">
@@ -139,22 +164,47 @@
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
                                                     <div class="col-span-12 sm:col-span-12">
-                                                        <input type="hidden" name="forfait_id" value="{{ $type->id }}">
+                                                        <input type="hidden" name="regime_id"
+                                                            value="{{ $price->id }}">
                                                         <label for="modal-form-1" class="form-label">Code</label>
                                                         <input type="text" class="form-control" placeholder="P05"
-                                                            name="code" value="{{ $type->code }}">
+                                                            name="code" value="{{ $price->code }}" required>
+                                                    </div>
+
+                                                    <div class="col-span-12 sm:col-span-4">
+                                                        <label for="modal-form-6" class="form-label">Catégorie
+                                                            d'expéditon</label>
+                                                        <select id="modal-form-6" class="form-select" name="regime_exp"
+                                                            required>
+                                                            @foreach ($categories as $category)
+                                                                @if ($category->id == $category->regime_id)
+                                                                    <option value="{{ $category->id }}" selected>
+                                                                        {{ $category->libelle }}</option>
+                                                                @else
+                                                                    <option value="{{ $category->id }}">
+                                                                        {{ $category->libelle }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
                                                     </div>
 
                                                     <div class="col-span-12 sm:col-span-12">
-                                                        <label for="modal-form-2" class="form-label">Libelle</label>
-                                                        <input type="number" class="form-control" name="libelle"
-                                                            value="{{ $type->libelle }}">
+                                                        <label for="modal-form-2" class="form-label">Poids (KG)</label>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $price->weight }}" name="weight" required>
+                                                    </div>
+
+                                                    <div class="col-span-12 sm:col-span-12">
+                                                        <label for="modal-form-2" class="form-label">Prix (FCFA)</label>
+                                                        <input type="number" class="form-control"
+                                                            value="{{ $price->price }}" name="price" required>
                                                     </div>
 
 
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-6" class="form-label">Statut</label>
-                                                        <select id="modal-form-6" class="form-select" name="active">
+                                                        <select id="modal-form-6" class="form-select" name="active"
+                                                            required>
                                                             <option value="1">active</option>
                                                             <option value="0">inactif</option>
                                                         </select>
@@ -190,7 +240,7 @@
             <!-- BEGIN: Pagination -->
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
                 <nav class="w-full sm:w-auto sm:mr-auto">
-                    {{ $tarifs->links() }}
+                    {{ $prices->links() }}
                 </nav>
             </div>
             <!-- END: Pagination -->

@@ -18,13 +18,13 @@ return new class extends Migration
             $table->id();
 
             $table->string('code');
-            $table->string('modele');
+            $table->string('modele')->nullable();
             $table->string('libelle');
             $table->mediumText('description');
 
-            $table->double('longeur');
-            $table->double('largeur');
-            $table->double('hauteur');
+            $table->double('longeur')->nullable();
+            $table->double('largeur')->nullable();
+            $table->double('hauteur')->nullable();
             $table->double('poids');
 
             $table->string('photo')->default('expeditions/colis/colis.png');

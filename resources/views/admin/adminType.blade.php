@@ -28,17 +28,18 @@
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-1" class="form-label">Code</label>
-                                        <input type="text" class="form-control" placeholder="T000001" name="code">
+                                        <input type="text" class="form-control" placeholder="T000001" name="code"
+                                            required>
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
-                                        <label for="modal-form-2" class="form-label">Tarif</label>
-                                        <input type="text" class="form-control" name="libelle">
+                                        <label for="modal-form-2" class="form-label">Libelle</label>
+                                        <input type="text" class="form-control" name="libelle" required>
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-6" class="form-label">Statut</label>
-                                        <select id="modal-form-6" class="form-select" name="active">
+                                        <select id="modal-form-6" class="form-select" name="active" required>
                                             <option value="1">active</option>
                                             <option value="0">inactif</option>
                                         </select>
@@ -57,7 +58,7 @@
                 <!-- END: Large Modal Content -->
 
                 <div class="hidden md:block mx-auto text-slate-500">
-                    Affiche de 1 a 10 sur {{ $tarifs->count() }} plages de poids
+                    Affiche de 1 a 10 sur {{ $types->count() }} types
                 </div>
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
@@ -117,7 +118,7 @@
                                     <td class="table-report__action w-56">
                                         <div class="flex justify-center items-center">
                                             <a class="flex items-center mr-3" href="javascript:;" data-tw-toggle="modal"
-                                                data-tw-target="#update-{{ $tarif->id }}"> <i data-lucide="edit"
+                                                data-tw-target="#update-{{ $type->id }}"> <i data-lucide="edit"
                                                     class="w-4 h-4 mr-1"></i> </a>
                                         </div>
                                     </td>
@@ -139,22 +140,23 @@
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
                                                     <div class="col-span-12 sm:col-span-12">
-                                                        <input type="hidden" name="forfait_id" value="{{ $type->id }}">
+                                                        <input type="hidden" name="type_id" value="{{ $type->id }}">
                                                         <label for="modal-form-1" class="form-label">Code</label>
                                                         <input type="text" class="form-control" placeholder="P05"
-                                                            name="code" value="{{ $type->code }}">
+                                                            name="code" value="{{ $type->code }}" required>
                                                     </div>
 
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                                        <input type="number" class="form-control" name="libelle"
-                                                            value="{{ $type->libelle }}">
+                                                        <input type="text" class="form-control" name="libelle"
+                                                            value="{{ $type->libelle }}" required>
                                                     </div>
 
 
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-6" class="form-label">Statut</label>
-                                                        <select id="modal-form-6" class="form-select" name="active">
+                                                        <select id="modal-form-6" class="form-select" name="active"
+                                                            required>
                                                             <option value="1">active</option>
                                                             <option value="0">inactif</option>
                                                         </select>
@@ -190,7 +192,7 @@
             <!-- BEGIN: Pagination -->
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
                 <nav class="w-full sm:w-auto sm:mr-auto">
-                    {{ $tarifs->links() }}
+                    {{ $types->links() }}
                 </nav>
             </div>
             <!-- END: Pagination -->

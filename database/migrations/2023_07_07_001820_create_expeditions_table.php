@@ -42,6 +42,11 @@ return new class extends Migration
             $table->integer('temps_exp_id')->nullable();
 
             $table->integer('tarif_exp_id')->nullable();
+            $table->integer('type_exp_id')->nullable();
+            $table->integer('regime_exp_id')->nullable();
+            $table->integer('category_exp_id')->nullable();
+
+            $table->double('amount')->nullable();
 
             $table->integer('mode_paiement_id')->nullable();
             $table->integer('methode_paiement_id')->nullable();
