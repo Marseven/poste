@@ -141,7 +141,7 @@
                                 <tr class="intro-x">
                                     <td class="text-center">
                                         <a href="{{ route('adminSuiviPackage', ['code' => $package->code]) }}"
-                                            class="text-primary" target="_blank">
+                                            class="text-primary">
                                             {{ $package->code }}
                                         </a>
                                     </td>

@@ -3115,6 +3115,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Suivi Expedition";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
 
         $societe = Societe::find(1);
 
@@ -3141,12 +3144,15 @@ class AdminController extends Controller
                     'expedition',
                     'societe',
                     'paquets',
-                    'historiques'
+                    'historiques',
+                    'exp',
+                    'exp_sub',
+                    'exp2'
                 ));
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+            return back()->with('failed', 'Impossible de modifier cette expedition !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
     ################################################################################################################
@@ -3398,7 +3404,8 @@ class AdminController extends Controller
                                 ]);
 
                             // Redirection
-
+                            $response = json_encode($assign);
+                            return response()->json($response);
                         }
                     }
                 }
@@ -3421,6 +3428,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Suivi Package";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp3 = "side-menu--active";
 
         $societe = Societe::find(1);
 
@@ -3442,7 +3452,10 @@ class AdminController extends Controller
                     'app_name',
                     'today_paquets',
                     'societe',
-                    'package'
+                    'package',
+                    'exp',
+                    'exp_sub',
+                    'exp3'
                 ));
             }
             return redirect()->back()->with('failed', 'Aucun colis expedie pour le moment !');
