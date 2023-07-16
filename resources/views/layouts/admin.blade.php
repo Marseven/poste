@@ -336,7 +336,7 @@
 
                 <li class="side-nav__devider my-6"></li>
 
-                <li>
+                {{-- <li>
                     <a href="" class="side-menu"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <div class="side-menu__icon"> <i data-lucide="log-out"></i> </div>
@@ -345,7 +345,7 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>
-                </li>
+                </li> --}}
 
 
             </ul>

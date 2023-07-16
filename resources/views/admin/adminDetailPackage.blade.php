@@ -184,7 +184,7 @@
 
                         <!-- BEGIN: Modal Footer -->
                         <div class="modal-footer">
-                            <button onclick="assing()" class="btn btn-primary w-20">Confirmer</button>
+                            <button onclick="assign()" class="btn btn-primary w-20">Confirmer</button>
                         </div>
                         <!-- END: Modal Footer -->
                     </div>
@@ -225,7 +225,6 @@
                     }
                 }
             });
-
         }
     </script>
 @endpush

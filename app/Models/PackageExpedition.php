@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class PackageExpedition extends Model
 {
     use HasFactory;
+
+    public function colis()
+    {
+        return $this->hasMany(ColisExpedition::class, 'colis_id');
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class, 'paquet_id');
+    }
 }

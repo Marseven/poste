@@ -27,10 +27,10 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <i data-lucide="navigation" class="report-box__icon text-primary"></i>
+                                    <i data-lucide="package" class="report-box__icon text-primary"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                            </div-->
+                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                    </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $expeditions->count() }}
@@ -43,10 +43,10 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <i data-lucide="credit-card" class="report-box__icon text-pending"></i>
+                                    <i data-lucide="package" class="report-box__icon text-pending"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                            </div-->
+                                                                                                                                                                                                                        <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                    </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $paiements->count() }}
@@ -59,10 +59,10 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <i data-lucide="users" class="report-box__icon text-warning"></i>
+                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                            </div-->
+                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                    </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $clients->count() }}
@@ -77,8 +77,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-success"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                            </div-->
+                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                    </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $packages->count() }}
@@ -95,7 +95,7 @@
                             <div class="flex items-center">
                                 <div class="w-2/4 flex-none">
                                     <div class="text-lg font-medium truncate">Tx réservation en ligne</div>
-                                    <div class="text-slate-500 mt-1">300 Sales</div>
+                                    <div class="text-slate-500 mt-1">0 Réservations en ligne</div>
                                 </div>
                                 <div class="flex-none ml-auto relative">
                                     <div class="w-[90px] h-[90px]">
@@ -104,7 +104,7 @@
                                     </div>
                                     <div
                                         class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">
-                                        20%</div>
+                                        0%</div>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                             <div class="flex items-center">
                                 <div class="w-2/4 flex-none">
                                     <div class="text-lg font-medium truncate">Tx réservation complétée</div>
-                                    <div class="text-slate-500 mt-1">1450 Products</div>
+                                    <div class="text-slate-500 mt-1">0 Réservations complétées</div>
                                 </div>
                                 <div class="flex-none ml-auto relative">
                                     <div class="w-[90px] h-[90px]">
@@ -124,7 +124,7 @@
                                     </div>
                                     <div
                                         class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">
-                                        45%</div>
+                                        0%</div>
                                 </div>
                             </div>
                         </div>
@@ -135,16 +135,16 @@
                             <div class="flex items-center">
                                 <div class="w-2/4 flex-none">
                                     <div class="text-lg font-medium truncate">Tx réservation annulée</div>
-                                    <div class="text-slate-500 mt-1">1450 Products</div>
+                                    <div class="text-slate-500 mt-1">0 Réservations annulées</div>
                                 </div>
                                 <div class="flex-none ml-auto relative">
                                     <div class="w-[90px] h-[90px]">
-                                        <canvas id="report-donut-chart-2" width="180" height="180"
+                                        <canvas id="report-donut-chart-3" width="180" height="180"
                                             style="display: block; box-sizing: border-box; height: 90px; width: 90px;"></canvas>
                                     </div>
                                     <div
                                         class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">
-                                        45%</div>
+                                        0%</div>
                                 </div>
                             </div>
                         </div>
@@ -155,16 +155,16 @@
                             <div class="flex items-center">
                                 <div class="w-2/4 flex-none">
                                     <div class="text-lg font-medium truncate">Satisfaction Client</div>
-                                    <div class="text-slate-500 mt-1">1450 Products</div>
+                                    <div class="text-slate-500 mt-1">0 Feedback</div>
                                 </div>
                                 <div class="flex-none ml-auto relative">
                                     <div class="w-[90px] h-[90px]">
-                                        <canvas id="report-donut-chart-2" width="180" height="180"
+                                        <canvas id="report-donut-chart-3" width="180" height="180"
                                             style="display: block; box-sizing: border-box; height: 90px; width: 90px;"></canvas>
                                     </div>
                                     <div
                                         class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">
-                                        45%</div>
+                                        0%</div>
                                 </div>
                             </div>
                         </div>
@@ -177,17 +177,9 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" icon-name="shopping-cart"
-                                        data-lucide="shopping-cart"
-                                        class="lucide lucide-shopping-cart report-box__icon text-primary">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
-                                    </svg>
+                                    <i data-lucide="dollar-sign" class="report-box__icon text-primary"></i>
                                     <div class="ml-auto">
-                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 33% <svg
+                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -197,7 +189,7 @@
                                             </svg> </div>
                                     </div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">4.710</div>
+                                <div class="text-3xl font-medium leading-8 mt-6">O FCFA</div>
                                 <div class="text-base text-slate-500 mt-1">Chiffre d'Affaire des expéditions</div>
                             </div>
                         </div>
@@ -206,17 +198,9 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" icon-name="credit-card"
-                                        data-lucide="credit-card"
-                                        class="lucide lucide-credit-card report-box__icon text-pending">
-                                        <rect x="1" y="4" width="22" height="16"
-                                            rx="2" ry="2"></rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                    </svg>
+                                    <i data-lucide="clock" class="report-box__icon text-primary"></i>
                                     <div class="ml-auto">
-                                        <div class="report-box__indicator bg-danger tooltip cursor-pointer"> 2% <svg
+                                        <div class="report-box__indicator bg-danger tooltip cursor-pointer"> 0% <svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -226,7 +210,7 @@
                                             </svg> </div>
                                     </div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">3.721</div>
+                                <div class="text-3xl font-medium leading-8 mt-6">0</div>
                                 <div class="text-base text-slate-500 mt-1">Délais de livraison</div>
                             </div>
                         </div>
@@ -235,17 +219,9 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" icon-name="monitor"
-                                        data-lucide="monitor" class="lucide lucide-monitor report-box__icon text-warning">
-                                        <rect x="2" y="3" width="20" height="14"
-                                            rx="2" ry="2"></rect>
-                                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                                    </svg>
+                                    <i data-lucide="message-square" class="report-box__icon text-primary"></i>
                                     <div class="ml-auto">
-                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 12% <svg
+                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -255,7 +231,7 @@
                                             </svg> </div>
                                     </div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">2.149</div>
+                                <div class="text-3xl font-medium leading-8 mt-6">0</div>
                                 <div class="text-base text-slate-500 mt-1">Nbre de réclamations</div>
                             </div>
                         </div>
@@ -264,15 +240,9 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" icon-name="user"
-                                        data-lucide="user" class="lucide lucide-user report-box__icon text-success">
-                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
+                                    <i data-lucide="clock" class="report-box__icon text-primary"></i>
                                     <div class="ml-auto">
-                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 22% <svg
+                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -282,7 +252,7 @@
                                             </svg> </div>
                                     </div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">152.040</div>
+                                <div class="text-3xl font-medium leading-8 mt-6">0</div>
                                 <div class="text-base text-slate-500 mt-1">Délais de Traitement</div>
                             </div>
                         </div>
@@ -342,7 +312,7 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            {{ $expedition->amount ? $expedition->amount : 0 }} XAF
+                                            {{ $expedition->amount ? $expedition->amount : 0 }} FCFA
                                         </td>
                                         <td class="w-40">
                                             @if ($expedition->active == 1)

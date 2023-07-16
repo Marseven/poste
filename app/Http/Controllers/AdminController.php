@@ -3403,16 +3403,18 @@ class AdminController extends Controller
                                     'active' => 2
                                 ]);
 
+                            $assigns = PackageExpedition::where('package_id', $package->id)->get();
+
+                            $assigns->load(['colis']);
+
                             // Redirection
-                            $response = json_encode($assign);
+                            $response = json_encode($assigns);
                             return response()->json($response);
                         }
                     }
                 }
             }
             // Get colis by id
-
-
         }
     }
 
