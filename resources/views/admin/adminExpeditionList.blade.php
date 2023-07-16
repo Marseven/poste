@@ -105,7 +105,7 @@
                                     <td class="table-report__action w-56">
                                         <div class="flex justify-center items-center">
                                             <div class="dropdown">
-                                                <button class="dropdown-toggle btn btn-primary" aria-expanded="false"
+                                                <button class="dropdown-toggle btn btn-warning" aria-expanded="false"
                                                     data-tw-toggle="dropdown">Actions
                                                 </button>
                                                 <div class="dropdown-menu w-40">

@@ -3312,6 +3312,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Detail Package";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp3 = "side-menu--active";
 
         $societe = Societe::find(1);
 
@@ -3333,7 +3336,10 @@ class AdminController extends Controller
                     'app_name',
                     'today_paquets',
                     'societe',
-                    'package'
+                    'package',
+                    'exp',
+                    'exp_sub',
+                    'exp3'
                 ));
             }
             return redirect()->back()->with('failed', 'Aucun colis expedie pour le moment !');
@@ -3352,60 +3358,55 @@ class AdminController extends Controller
         $admin_id = Auth::user()->id;
 
         // Get package by id
-        $package = Package::find($request->input('package_id'));
+        $package = Package::find($request->input('package'));
         if (!empty($package)) {
 
-            // Get colis by id
-            $paquet = ColisExpedition::find($request->input('colis_id'));
-            if (!empty($paquet)) {
+            foreach ($request->input('colis') as $colis) {
+                $paquet = ColisExpedition::find($colis);
+                if (!empty($paquet)) {
 
-                // Check if this colis is already assigned
-                $old_assign = PackageExpedition::where('colis_id', $paquet->id)->get();
-                if (empty($old_assign) || count($old_assign) == 0) {
+                    // Check if this colis is already assigned
+                    $old_assign = PackageExpedition::where('colis_id', $paquet->id)->get();
+                    if (empty($old_assign) || count($old_assign) == 0) {
 
-                    $code = Carbon::now()->timestamp;
-                    $code_package = $package->code;
-                    $code_colis = $paquet->code;
+                        $code = Carbon::now()->timestamp;
+                        $code_package = $package->code;
+                        $code_colis = $paquet->code;
 
-                    $assign = new PackageExpedition();
+                        $assign = new PackageExpedition();
 
-                    // Récupérer les données du formulaire
-                    $assign->code = $code . '.' . $code_package . '.' . $code_colis;
+                        // Récupérer les données du formulaire
+                        $assign->code = $code . '.' . $code_package . '.' . $code_colis;
+                        $assign->package_id = $request->input('package_id');
+                        $assign->colis_id = $request->input('colis_id');
 
-                    $assign->package_id = $request->input('package_id');
-                    $assign->colis_id = $request->input('colis_id');
+                        $assign->agent_id = $admin_id;
+                        $assign->active = 1;
 
+                        if ($assign->save()) {
 
-                    $assign->agent_id = $admin_id;
-                    $assign->active = 1;
+                            // Update package
+                            DB::table('packages')
+                                ->where('id', $package->id)
+                                ->increment('nbre_colis');
 
-                    if ($assign->save()) {
+                            // Update colis
+                            $colis = DB::table('colis_expeditions')
+                                ->where('id', $paquet->id)
+                                ->update([
+                                    'active' => 2
+                                ]);
 
-                        // Update package
-                        $sac = DB::table('packages')
-                            ->where('id', $package->id)
-                            ->increment('nbre_colis');
-                        //$paquet->nbre_colis += 1;
-                        //$paquet->save();
+                            // Redirection
 
-                        // Update colis
-                        $colis = DB::table('colis_expeditions')
-                            ->where('id', $paquet->id)
-                            ->update([
-                                'active' => 2
-                            ]);
-
-
-                        // Redirection
-                        return redirect()->back()->with('success', 'Assignation confirmee avec succès !');
+                        }
                     }
-                    return redirect()->back()->with('failed', 'Impossible de confirmer l\'assignation de ce colis !');
                 }
-                return redirect()->back()->with('failed', 'Ce colis a deja ete assigne !');
             }
-            return redirect()->back()->with('failed', 'Impossible de trouver ce colis !');
+            // Get colis by id
+
+
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce package !');
     }
 
     /**

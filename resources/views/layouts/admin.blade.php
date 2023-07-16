@@ -22,6 +22,7 @@
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="{{ URL::to('assets/dist/css/app.css') }}" />
 
+    @stack('styles')
     {{-- jaune #ffc928 --}}
     <!-- END: CSS Assets-->
 
@@ -36,7 +37,7 @@
         <nav class="side-nav">
             <a href="" class="intro-x flex items-center pl-5 pt-4">
                 <img alt="La Poste" class="w-6" src="{{ URL::to('assets/dist/images/logos/icon_blanc.png') }}">
-                <span class="hidden xl:block text-white text-lg ml-3"> La Poste </span>
+                <span class="hidden xl:block text-white text-lg ml-3 font-extrabold"> LA POSTE </span>
             </a>
             <div class="side-nav__devider my-6"></div>
             <ul>
