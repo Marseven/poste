@@ -155,7 +155,7 @@
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
                                                     <div class="col-span-12 sm:col-span-12">
-                                                        <input type="hidden" name="regime_id"
+                                                        <input type="hidden" name="category_id"
                                                             value="{{ $category->id }}">
                                                         <label for="modal-form-1" class="form-label">Code</label>
                                                         <input type="text" class="form-control" placeholder="P05"

@@ -2095,7 +2095,7 @@ class AdminController extends Controller
         $admin_id = Auth::user()->id;
 
         // Get tarif by id
-        $category = CategoryExpedition::find($request->input('tarif_id'));
+        $category = CategoryExpedition::find($request->input('category_id'));
         $regime = RegimeExpedition::find($request->input('regime_exp'));
         if (!empty($category)) {
 
