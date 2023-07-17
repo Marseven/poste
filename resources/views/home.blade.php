@@ -92,9 +92,15 @@
                                 class="burger-icon-mid"></span><span class="burger-icon-bottom"></span></div>
                     </div>
 
-                    <div class="d-none d-sm-inline-block"><a class="btn btn-default mr-10 hover-up"
-                            href="{{ route('login') }}">Connexion</a>
-                    </div>
+                    @if (!isset($user))
+                        <div class="d-none d-sm-inline-block"><a class="btn btn-default mr-10 hover-up"
+                                href="{{ route('login') }}">Connexion</a>
+                        </div>
+                    @else
+                        <div class="d-none d-sm-inline-block"><a class="btn btn-brand-1 mr-10 hover-up"
+                                href="{{ route('adminHome') }}">Administration</a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -307,8 +313,8 @@
                         alt="transp">
                     <p class="font-md color-grey-700 wow animate__animated animate__fadeIn">Delivering Results for
                         Industry Leaders</p>
-                    <h2 class="color-brand-2 mb-65 mt-15 wow animate__animated animate__fadeIn">We are proud of our
-                        workforce<br class="d-none d-lg-block">and have worked hard.</h2>
+                    <h2 class="color-brand-2 mb-65 mt-15 wow animate__animated animate__fadeIn">Nous sommes fiers & <br
+                            class="d-none d-lg-block">heureux de vous servir</h2>
                 </div>
                 <div class="row mt-50 align-items-center">
                     <div class="col-xl-7 col-lg-6 mb-30">
@@ -714,7 +720,8 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="box-faqs-left">
-                            <h2 class="title-favicon mb-20 wow animate__animated animate__fadeIn">FAQs</h2>
+                            <h2 class="title-favicon mb-20 wow animate__animated animate__fadeIn">Foire Aux Questions
+                            </h2>
                             <p class="font-md color-grey-700 mb-50 wow animate__animated animate__fadeIn">Feeling
                                 inquisitive? Have a read through some of our FAQs or contact our supporters for help</p>
                             <div class="box-gallery-faqs">
