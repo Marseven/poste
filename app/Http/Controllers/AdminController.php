@@ -1860,8 +1860,9 @@ class AdminController extends Controller
         $page_title = "Types d'expedition";
         $setting = "side-menu--active";
         $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
-        $setting41 = "side-menu--active";
+        $setting43 = "side-menu--active";
 
         $types = TypeExpedition::paginate(10);
 
@@ -1874,8 +1875,9 @@ class AdminController extends Controller
             'types',
             'setting',
             'setting_sub',
+            'setting_sub4',
             'setting4',
-            'setting41',
+            'setting43',
         ));
     }
 
@@ -1943,6 +1945,7 @@ class AdminController extends Controller
         $page_title = "Régimes d'expedition";
         $setting = "side-menu--active";
         $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
         $setting42 = "side-menu--active";
 
@@ -1961,6 +1964,7 @@ class AdminController extends Controller
             'types',
             'setting',
             'setting_sub',
+            'setting_sub4',
             'setting4',
             'setting42',
         ));
@@ -2031,6 +2035,7 @@ class AdminController extends Controller
         $page_title = "Catégories d'expedition";
         $setting = "side-menu--active";
         $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
         $setting43 = "side-menu--active";
 
@@ -2047,6 +2052,7 @@ class AdminController extends Controller
             'regimes',
             'setting',
             'setting_sub',
+            'setting_sub4',
             'setting4',
             'setting43',
         ));
@@ -2122,6 +2128,7 @@ class AdminController extends Controller
         $page_title = "Tarifs expedition";
         $setting = "side-menu--active";
         $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
         $setting44 = "side-menu--active";
 
@@ -2139,6 +2146,7 @@ class AdminController extends Controller
             'categories',
             'setting',
             'setting_sub',
+            'setting_sub4',
             'setting4',
             'setting44',
         ));

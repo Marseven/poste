@@ -189,7 +189,7 @@
                                     <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                                 </div>
                             </a>
-                            <ul class="">
+                            <ul class="{{ $setting_sub1 ?? '' }}">
                                 <li>
                                     <a href="" class="side-menu {{ $setting11 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
@@ -219,7 +219,7 @@
                                     <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                                 </div>
                             </a>
-                            <ul class="">
+                            <ul class="{{ $setting_sub2 ?? '' }}">
                                 <li>
                                     <a href="" class="side-menu {{ $setting21 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
@@ -243,7 +243,7 @@
                                     <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                                 </div>
                             </a>
-                            <ul class="">
+                            <ul class="{{ $setting_sub3 ?? '' }}">
                                 <li>
                                     <a href="{{ route('adminSociete') }}" class="side-menu {{ $setting31 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
@@ -261,7 +261,7 @@
                                     <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                                 </div>
                             </a>
-                            <ul class="">
+                            <ul class="{{ $setting_sub4 ?? '' }}">
                                 <li>
                                     <a href="{{ route('adminService') }}" class="side-menu {{ $setting41 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
