@@ -179,7 +179,7 @@
                             <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                         </div>
                     </a>
-                    <ul class="">
+                    <ul class="{{ $setting_sub ?? '' }}">
 
                         <li>
                             <a href="javascript:;" class="side-menu {{ $setting1 ?? '' }}">

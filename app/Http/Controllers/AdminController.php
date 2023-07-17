@@ -1858,6 +1858,10 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Types d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting41 = "side-menu--active";
 
         $types = TypeExpedition::paginate(10);
 
@@ -1868,6 +1872,10 @@ class AdminController extends Controller
             'page_title',
             'app_name',
             'types',
+            'setting',
+            'setting_sub',
+            'setting4',
+            'setting41',
         ));
     }
 
@@ -1933,6 +1941,10 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Régimes d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting42 = "side-menu--active";
 
         $regimes = RegimeExpedition::paginate(10);
         $types = TypeExpedition::all();
@@ -1947,6 +1959,10 @@ class AdminController extends Controller
             'app_name',
             'regimes',
             'types',
+            'setting',
+            'setting_sub',
+            'setting4',
+            'setting42',
         ));
     }
 
@@ -2013,6 +2029,10 @@ class AdminController extends Controller
     {
         $app_name = "La Poste";
         $page_title = "Catégories d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting43 = "side-menu--active";
 
         $categories = CategoryExpedition::paginate(10);
         $regimes = RegimeExpedition::all();
@@ -2025,6 +2045,10 @@ class AdminController extends Controller
             'app_name',
             'categories',
             'regimes',
+            'setting',
+            'setting_sub',
+            'setting4',
+            'setting43',
         ));
     }
 
@@ -2096,6 +2120,10 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Tarifs expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting44 = "side-menu--active";
 
         $prices = PriceExpedition::paginate(10);
         $categories = CategoryExpedition::all();
@@ -2109,6 +2137,10 @@ class AdminController extends Controller
             'app_name',
             'prices',
             'categories',
+            'setting',
+            'setting_sub',
+            'setting4',
+            'setting44',
         ));
     }
 
