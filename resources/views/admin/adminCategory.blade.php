@@ -181,7 +181,7 @@
 
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                                        <input type="number" class="form-control" name="libelle"
+                                                        <input type="text" class="form-control" name="libelle"
                                                             value="{{ $category->libelle }}" required>
                                                     </div>
 
