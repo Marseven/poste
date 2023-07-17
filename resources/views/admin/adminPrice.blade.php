@@ -43,7 +43,7 @@
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-2" class="form-label">Poids (KG)</label>
-                                        <input type="number" step="0.1" class="form-control" name="weight" required>
+                                        <input type="number" step="0.01" class="form-control" name="weight" required>
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
