@@ -70,7 +70,10 @@
                                 <tr>
                                     <td class="border-b dark:border-darkmode-400">
                                         <div class="font-medium whitespace-nowrap">
-                                            {{ $paquet->libelle }}
+                                            <a href="javascript:;" data-tw-toggle="modal"
+                                                data-tw-target="#paquet-{{ $paquet->id }}">
+                                                {{ $paquet->libelle }}
+                                            </a>
                                         </div>
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
@@ -107,6 +110,31 @@
                                         @endif
                                     </td>
                                 </tr>
+
+                                <!-- BEGIN: Modal Content -->
+                                <div id="paquet-{{ $paquet->id }}" class="modal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <!-- BEGIN: Modal Header -->
+                                            <div class="modal-header">
+                                                <h2 class="font-medium text-base mr-auto">QR CODE</h2>
+                                            </div> <!-- END: Modal Header -->
+                                            <!-- BEGIN: Modal Body -->
+                                            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+
+                                                <div class="col-span-12 sm:col-span-12">
+                                                    <center>
+                                                        {!! QrCode::size(250)->generate($paquet->id) !!}
+                                                    </center>
+                                                </div>
+                                                <br><br>
+
+                                            </div> <!-- END: Modal Body -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END: Modal Content -->
+                                <!-- END: Large Modal Content -->
                             @endforeach
                         @else
                             <tr>
