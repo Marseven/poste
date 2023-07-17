@@ -1,9 +1,6 @@
 @extends('layouts.admin')
 
 @section('page-content')
-
-
-
     <div class="intro-y flex items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
             Package - {{ $package->code }}
@@ -63,7 +60,6 @@
 
             <!-- BEGIN: Directory & Files -->
             <div id="content-colis" class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
-
                 @if ($today_paquets)
                     @foreach ($today_paquets as $paquet)
                         <div class="intro-y col-span-6 sm:col-span-4 md:col-span-4 2xl:col-span-4">
@@ -81,21 +77,21 @@
                                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                                 </svg>
                                 <a href="" class="block font-medium mt-4 text-center truncate">
-                                    {{ $paquet->libelle }}
+                                    {{ $paquet->colis->libelle }}
                                 </a>
                                 <div class="text-slate-500 text-xs text-center mt-0.5">
-                                    {{ $paquet->code }}
+                                    {{ $paquet->colis->code }}
                                 </div>
                                 <div class="text-slate-500 text-xs text-center mt-0.5">
-                                    @if ($paquet->active == 1)
+                                    @if ($paquet->colis->active == 1)
                                         <div class="flex items-center justify-center text-primary"> Enregistre(e) </div>
-                                    @elseif($paquet->active == 2)
+                                    @elseif($paquet->colis->active == 2)
                                         <div class="flex items-center justify-center text-success"> Assigne(e) </div>
-                                    @elseif($paquet->active == 3)
+                                    @elseif($paquet->colis->active == 3)
                                         <div class="flex items-center justify-center text-success"> CNT </div>
-                                    @elseif($paquet->active == 4)
+                                    @elseif($paquet->colis->active == 4)
                                         <div class="flex items-center justify-center text-success"> Expedie(e) </div>
-                                    @elseif($paquet->active == 5)
+                                    @elseif($paquet->colis->active == 5)
                                         <div class="flex items-center justify-center text-success"> Livre(e) </div>
                                     @else
                                         <div class="flex items-center justify-center text-warning"> Non defini </div>
@@ -103,17 +99,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- BEGIN: Delete Confirmation Modal -->
-
-                        <!-- END: Delete Confirmation Modal -->
                     @endforeach
-                @else
-                    <div class="alert alert-pending show flex items-center mb-2" role="alert"> <i
-                            data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun colis pour le moment ! </div>
                 @endif
-
-
             </div>
             <!-- END: Directory & Files -->
 
@@ -216,13 +203,50 @@
                 success: function(result) {
                     console.log(result);
                     result = JSON.parse(result);
-                    var option_html = "<option value='0'>Choisir</option>";
-                    for (i = 0; i < result.length; i++) {
-                        is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
-                        option_html += "<option " + is_selected + "  value='" + result[i].id + "'>" +
-                            result[i].name +
-                            "</option>";
+                    if (result != 0 || result != 1) {
+                        var option_html = '';
+                        for (i = 0; i < result.length; i++) {
+                            option_html =
+                                '<div class="intro-y col-span-6 sm:col-span-4 md:col-span-4 2xl:col-span-4"><div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in"><i data-lucide="package" class="text-primary"></i><a href="" class="block font-medium mt-4 text-center truncate">' +
+                                result[i].colis.libelle +
+                                '</a><div class="text-slate-500 text-xs text-center mt-0.5">' + result[i].colis
+                                .code + '</div><div class="text-slate-500 text-xs text-center mt-0.5">';
+
+                            if (result[i].colis.active == 1) {
+                                option_html +=
+                                    '<div class="flex items-center justify-center text-primary"> Enregistre(e) </div>';
+                            }
+                            if (result[i].colis.active == 2) {
+                                option_html +=
+                                    '<div class="flex items-center justify-center text-success"> Assigne(e) </div>';
+                            }
+                            if (result[i].colis.active == 3) {
+                                option_html +=
+                                    ' <div class="flex items-center justify-center text-success"> CNT </div>';
+                            }
+
+                            if (result[i].colis.active == 4) {
+                                option_html +=
+                                    '<div class="flex items-center justify-center text-success"> Expedie(e) </div>';
+                            }
+
+                            if (result[i].colis.active == 5) {
+                                option_html +=
+                                    '<div class="flex items-center justify-center text-success"> Livre(e) </div>';
+                            }
+                            option_html += '</div></div></div>';
+                        }
+                        $('#content-colis').append(option_html);
+                    } else {
+                        alert('Le(s) colis ne peux être assigné.')
                     }
+
+                    const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector(
+                        "#confirm"));
+                    myModal.hide();
+                    const myModal1 = tailwind.Modal.getOrCreateInstance(document.querySelector(
+                        "#add-colis"));
+                    myModal1.hide();
                 }
             });
         }

@@ -113,17 +113,17 @@
                                                         @if ($expedition->active == 1)
                                                             <li>
                                                                 <a href="{{ route('adminFacturePay', ['code' => $expedition->code_aleatoire]) }}"
-                                                                    class="dropdown-item" target="_blank">Ajouter un
+                                                                    class="dropdown-item">Ajouter un
                                                                     paiement</a>
                                                             </li>
                                                         @endif
                                                         <li>
                                                             <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code_aleatoire]) }}"
-                                                                class="dropdown-item" target="_blank">Facture</a>
+                                                                class="dropdown-item">Facture</a>
                                                         </li>
                                                         <li>
                                                             <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code_aleatoire]) }}"
-                                                                class="dropdown-item" target="_blank">Etiquette</a>
+                                                                class="dropdown-item">Etiquette</a>
                                                         </li>
 
                                                     </ul>
@@ -158,8 +158,4 @@
         </div>
 
     </div>
-
-
-
-
 @endsection

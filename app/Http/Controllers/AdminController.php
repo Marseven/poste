@@ -2931,6 +2931,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Facture Expedition";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
 
         $societe = Societe::find(1);
 
@@ -2941,6 +2944,8 @@ class AdminController extends Controller
             // Récupérer les données
             $expedition_id = intval($expedition->id);
             $paquets = ColisExpedition::where('code', $code)->get();
+
+            $expedition->load(['type', 'regime', 'category']);
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -2954,12 +2959,15 @@ class AdminController extends Controller
                     'facture',
                     'expedition',
                     'societe',
-                    'paquets'
+                    'paquets',
+                    'exp',
+                    'exp_sub',
+                    'exp2'
                 ));
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+            return back()->with('failed', 'Impossible de modifier cette expedition !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
     /**
@@ -2974,6 +2982,9 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Facture Expedition";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
 
         $societe = Societe::find(1);
 
@@ -2997,7 +3008,10 @@ class AdminController extends Controller
                     'facture',
                     'expedition',
                     'societe',
-                    'paquets'
+                    'paquets',
+                    'exp',
+                    'exp_sub',
+                    'exp2'
                 ));
             }
             return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
@@ -3332,10 +3346,11 @@ class AdminController extends Controller
             $today = Carbon::today();
 
             // Get colis du jours
-            $today_paquets = ColisExpedition::whereDate('created_at', $today)->paginate(10);
+            $today_paquets = PackageExpedition::where('package_id', $package->id)->paginate(10);
 
             if (!empty($today_paquets)) {
 
+                $today_paquets->load(['colis']);
                 // Redirection
                 return view('admin.adminDetailPackage', compact(
                     'page_title',
@@ -3360,7 +3375,6 @@ class AdminController extends Controller
      */
     public function adminPackageAssign(Request $request)
     {
-        $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         // Get package by id
@@ -3369,6 +3383,7 @@ class AdminController extends Controller
 
             foreach ($request->input('colis') as $colis) {
                 $paquet = ColisExpedition::find($colis);
+
                 if (!empty($paquet)) {
 
                     // Check if this colis is already assigned
@@ -3383,8 +3398,8 @@ class AdminController extends Controller
 
                         // Récupérer les données du formulaire
                         $assign->code = $code . '.' . $code_package . '.' . $code_colis;
-                        $assign->package_id = $request->input('package_id');
-                        $assign->colis_id = $request->input('colis_id');
+                        $assign->package_id = $request->input('package');
+                        $assign->colis_id = $colis;
 
                         $assign->agent_id = $admin_id;
                         $assign->active = 1;
@@ -3411,10 +3426,16 @@ class AdminController extends Controller
                             $response = json_encode($assigns);
                             return response()->json($response);
                         }
+                    } else {
+                        $response = json_encode(0);
+                        return response()->json($response);
                     }
                 }
             }
             // Get colis by id
+        } else {
+            $response = json_encode(1);
+            return response()->json($response);
         }
     }
 
@@ -3444,10 +3465,10 @@ class AdminController extends Controller
             $today = Carbon::today();
 
             // Get colis du jours
-            $today_paquets = ColisExpedition::whereDate('created_at', $today)->paginate(10);
+            $today_paquets = PackageExpedition::where('package_id', $package->id)->paginate(10);
 
             if (!empty($today_paquets)) {
-
+                $today_paquets->load(['colis']);
                 // Redirection
                 return view('admin.adminSuiviPackage', compact(
                     'page_title',
@@ -3460,9 +3481,9 @@ class AdminController extends Controller
                     'exp3'
                 ));
             }
-            return redirect()->back()->with('failed', 'Aucun colis expedie pour le moment !');
+            return back()->with('failed', 'Aucun colis expedie pour le moment !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
     ################################################################################################################

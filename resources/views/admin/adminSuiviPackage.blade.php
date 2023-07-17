@@ -86,25 +86,33 @@
                         <div class="intro-y col-span-6 sm:col-span-4 md:col-span-4 2xl:col-span-4">
                             <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
 
-                                <a href="" class="w-3/5 file__icon file__icon--file mx-auto">
-                                    <div class="file__icon__file-name">COLIS</div>
-                                </a>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" icon-name="package" data-lucide="package"
+                                    class="lucide lucide-package block mx-auto">
+                                    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                                    <path
+                                        d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z">
+                                    </path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
                                 <a href="" class="block font-medium mt-4 text-center truncate">
-                                    {{ $paquet->libelle }}
+                                    {{ $paquet->colis->libelle }}
                                 </a>
                                 <div class="text-slate-500 text-xs text-center mt-0.5">
-                                    {{ $paquet->code }}
+                                    {{ $paquet->colis->code }}
                                 </div>
                                 <div class="text-slate-500 text-xs text-center mt-0.5">
-                                    @if ($paquet->active == 1)
+                                    @if ($paquet->colis->active == 1)
                                         <div class="flex items-center justify-center text-primary"> Enregistre(e) </div>
-                                    @elseif($paquet->active == 2)
+                                    @elseif($paquet->colis->active == 2)
                                         <div class="flex items-center justify-center text-success"> Assigne(e) </div>
-                                    @elseif($paquet->active == 3)
+                                    @elseif($paquet->colis->active == 3)
                                         <div class="flex items-center justify-center text-success"> CNT </div>
-                                    @elseif($paquet->active == 4)
+                                    @elseif($paquet->colis->active == 4)
                                         <div class="flex items-center justify-center text-success"> Expedie(e) </div>
-                                    @elseif($paquet->active == 5)
+                                    @elseif($paquet->colis->active == 5)
                                         <div class="flex items-center justify-center text-success"> Livre(e) </div>
                                     @else
                                         <div class="flex items-center justify-center text-warning"> Non defini </div>

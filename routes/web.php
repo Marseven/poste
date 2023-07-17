@@ -21,10 +21,9 @@ Route::get('/welcome', function () {
 
 
 /* route du site */
-Route::get('/', [App\Http\Controllers\SiteController::class, 'accueil'])->name('accueil');
-Route::post('/se-connecter', [App\Http\Controllers\SiteController::class, 'connexion'])->name('connexion');
-
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('accueil');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/se-connecter', [App\Http\Controllers\SiteController::class, 'connexion'])->name('connexion');
 /* Fin routage du site */
 
 Route::middleware(['auth'])->group(function () {

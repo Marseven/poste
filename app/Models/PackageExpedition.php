@@ -11,7 +11,7 @@ class PackageExpedition extends Model
 
     public function colis()
     {
-        return $this->hasMany(ColisExpedition::class, 'colis_id');
+        return $this->belongsTo(ColisExpedition::class, 'colis_id');
     }
 
     public function package()
