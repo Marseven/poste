@@ -30,8 +30,11 @@ class PackageExpeditionResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
 
-            'package' => $package->code,
-            'colis' => $colis->code,
+            'package_code' => $package->code,
+            'package_libelle' => $package->libelle,
+
+            'colis_code' => $colis->code,
+            'colis_libelle' => $colis->libelle,
 
             'agent' => $agent->name,
 

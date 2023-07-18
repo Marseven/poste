@@ -18,16 +18,17 @@ use Illuminate\Support\Facades\Route;
 
 
 /* Routing de gestion d'authentification */
-Route::post('login', [App\Http\Controllers\Api\ApiAgentController::class, 'login']);
-Route::post('forgotpassword', [App\Http\Controllers\Api\ApiAgentController::class, 'forgotpassword']);
-Route::post('resetpassword', [App\Http\Controllers\Api\ApiAgentController::class, 'resetpassword']);
+Route::post('se-connecter', [App\Http\Controllers\Api\ApiAgentController::class, 'seconnecter']);
+Route::post('mot-de-passe-oublie', [App\Http\Controllers\Api\ApiAgentController::class, 'forgotpassword']);
+Route::post('reinitialiser-mot-de-passe', [App\Http\Controllers\Api\ApiAgentController::class, 'resetpassword']);
 /* Routing de gestion d'authentification */
 
 
-Route::middleware(['auth:api'])->group(function() {
+Route::middleware(['auth:sanctum'])->group(function() {
 
-	Route::get('getprofil/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'getprofil']);
-	Route::post('modifierpassword/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'modifierpassword']);
+	Route::post('mon-profil', [App\Http\Controllers\Api\ApiAgentController::class, 'getprofil']);
+	Route::post('modifier-profil/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'modifierprofil']);
+	Route::post('modifier-mot-de-passe/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'modifierpassword']);
 
 	Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'notifications']);
 
@@ -41,6 +42,8 @@ Route::middleware(['auth:api'])->group(function() {
 	Route::post('cloturer-assignation/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'close_assignation']);
 
 	Route::post('detail-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'detail_colis']);
+	Route::post('detail-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'detail_package']);
+
 
 
 });
