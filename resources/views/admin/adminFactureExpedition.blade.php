@@ -8,7 +8,8 @@
             Facture Expedition
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a onclick="genererPDF()" href="#" class="btn btn-primary shadow-md mr-2">Imprimer</a>
+            <a href="{{ route('FacturePrint', ['code' => $expedition->code_aleatoire]) }}"
+                class="btn btn-primary shadow-md mr-2">Imprimer</a>
         </div>
     </div>
     <!-- BEGIN: Invoice -->

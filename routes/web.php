@@ -181,11 +181,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/admin/facture/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminFactureExpedition'])->name('adminFactureExpedition');
     Route::get('dashboard/admin/facture/pay/{code}', [App\Http\Controllers\AdminController::class, 'adminFacturePay'])->name('adminFacturePay');
     Route::get('dashboard/admin/imprimer/facture/{code}', [App\Http\Controllers\AdminController::class, 'adminFacturePrint'])->name('adminFacturePrint');
+
+    Route::get('/imprimer/facture/{code}', [App\Http\Controllers\AdminController::class, 'FacturePrint'])->name('FacturePrint');
+
     /* End Facture */
 
     /* Start Etiquette */
     Route::get('dashboard/admin/etiquette/expedition/{code}', [App\Http\Controllers\AdminController::class, 'adminEtiquetteExpedition'])->name('adminEtiquetteExpedition');
     Route::get('dashboard/admin/imprimer/etiquette/{code}', [App\Http\Controllers\AdminController::class, 'adminEtiquettePrint'])->name('adminEtiquettePrint');
+
+    Route::get('/imprimer/etiquette/{code}', [App\Http\Controllers\AdminController::class, 'EtiquettePrint'])->name('EtiquettePrint');
     /* End Etiquette */
 
     /* Start Suivi */

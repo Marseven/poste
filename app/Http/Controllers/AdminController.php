@@ -52,6 +52,8 @@ use Illuminate\Support\Facades\Validator;
 use WisdomDiala\Countrypkg\Models\Country;
 use WisdomDiala\Countrypkg\Models\State;
 
+use PDF;
+
 class AdminController extends Controller
 {
     ################################################################################################################
@@ -1947,7 +1949,7 @@ class AdminController extends Controller
         $setting_sub = "side-menu__sub-open";
         $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
-        $setting42 = "side-menu--active";
+        $setting44 = "side-menu--active";
 
         $regimes = RegimeExpedition::paginate(10);
         $types = TypeExpedition::all();
@@ -1966,7 +1968,7 @@ class AdminController extends Controller
             'setting_sub',
             'setting_sub4',
             'setting4',
-            'setting42',
+            'setting44',
         ));
     }
 
@@ -2037,7 +2039,7 @@ class AdminController extends Controller
         $setting_sub = "side-menu__sub-open";
         $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
-        $setting43 = "side-menu--active";
+        $setting45 = "side-menu--active";
 
         $categories = CategoryExpedition::paginate(10);
         $regimes = RegimeExpedition::all();
@@ -2054,7 +2056,7 @@ class AdminController extends Controller
             'setting_sub',
             'setting_sub4',
             'setting4',
-            'setting43',
+            'setting45',
         ));
     }
 
@@ -2130,7 +2132,7 @@ class AdminController extends Controller
         $setting_sub = "side-menu__sub-open";
         $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
-        $setting44 = "side-menu--active";
+        $setting46 = "side-menu--active";
 
         $prices = PriceExpedition::paginate(10);
         $categories = CategoryExpedition::all();
@@ -2148,7 +2150,7 @@ class AdminController extends Controller
             'setting_sub',
             'setting_sub4',
             'setting4',
-            'setting44',
+            'setting46',
         ));
     }
 
@@ -2214,6 +2216,11 @@ class AdminController extends Controller
         return back()->with('failed', 'Impossible de trouver ce tarif !');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function selectData(Request $request)
     {
         if ($request->target == 'regime') {
@@ -3059,6 +3066,56 @@ class AdminController extends Controller
         return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function FacturePrint($code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $app_name = "La Poste";
+        $page_title = "Facture Expedition";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
+
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        if (!empty($expedition)) {
+
+            // Récupérer les données
+            $expedition_id = intval($expedition->id);
+            $paquets = ColisExpedition::where('code', $code)->get();
+
+            // Get facture by expedition_id
+            $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+            $data = compact(
+                'page_title',
+                'app_name',
+                'facture',
+                'expedition',
+                'societe',
+                'paquets',
+                'exp',
+                'exp_sub',
+                'exp2'
+            );
+            $pdf = PDF::loadView('pdf.facturePrint', $data);
+
+            return $pdf->download('facture-' . $code . '.pdf');
+        } else {
+            return back()->with('failed', 'Impossible de trouver cette expedition !');
+        }
+    }
+
     ################################################################################################################
     #                                                                                                              #
     #   ETIQUETTE                                                                                                  #
@@ -3149,6 +3206,61 @@ class AdminController extends Controller
             return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
         }
         return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function EtiquettePrint(Request $request, $code)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $app_name = "La Poste";
+        $page_title = "Etiquette Expedition";
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        if (!empty($expedition)) {
+
+            // Récupérer les données
+            $expedition_id = intval($expedition->id);
+            $paquets = ColisExpedition::where('code', $code)->get();
+
+            // Get facture by expedition_id
+            $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+            if (!empty($facture)) {
+
+                $data = compact(
+                    'page_title',
+                    'app_name',
+                    'facture',
+                    'expedition',
+                    'societe',
+                    'paquets'
+                );
+
+                $largeur_etiquette = 5; // en cm
+                $hauteur_etiquette = 3; // en cm
+
+                $pdf = PDF::loadView('pdf.etiquettePrint', $data)->setPaper(array(0, 0, 300, 500), 'landscape');
+
+                //$pdf->setPaper([$largeur_etiquette, $hauteur_etiquette], 'cm');
+
+                return $pdf->download('etiquette-' . $code . '.pdf');
+                // Redirection
+            } else {
+                return back()->with('failed', 'Impossible de modifier cette expedition !');
+            }
+        } else {
+
+            return back()->with('failed', 'Impossible de trouver cette expedition !');
+        }
     }
 
     ################################################################################################################
