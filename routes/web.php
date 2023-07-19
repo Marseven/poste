@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('accueil');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/signin', [App\Http\Controllers\HomeController::class, 'login'])->name('signin');
 /* Fin routage du site */
 
 Route::middleware(['auth'])->group(function () {
