@@ -58,7 +58,7 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('creer-compte', [UserController::class, 'adminNewCompte'])->name('adminNewCompte');
     Route::post('add-compte', [UserController::class, 'adminAddCompte'])->name('adminAddCompte');
     Route::get('comptes', [UserController::class, 'adminCompte'])->name('adminCompte');
-    Route::post('edit-compte', [UserControllerr::class, 'adminEditCompte'])->name('adminEditCompte');
+    Route::post('edit-compte', [UserController::class, 'adminEditCompte'])->name('adminEditCompte');
     Route::post('avatar-compte', [UserController::class, 'adminAvatarCompte'])->name('adminAvatarCompte');
     Route::get('recherche-compte', [UserController::class, 'adminSearchCompte'])->name('adminSearchCompte');
     /* End Compte */
