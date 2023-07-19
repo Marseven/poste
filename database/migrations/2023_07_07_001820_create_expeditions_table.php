@@ -17,11 +17,11 @@ return new class extends Migration
 
             $table->id();
 
-            $table->string('code_agence');
-            $table->string('code_aleatoire');
+            $table->string('code');
             $table->string('reference');
 
-            $table->integer('agence_id')->nullable();
+            $table->integer('agence_exp_id')->nullable();
+            $table->integer('agence_dest_id')->nullable();
 
             $table->string('name_exp');
             $table->string('phone_exp');
@@ -33,29 +33,18 @@ return new class extends Migration
             $table->string('email_dest');
             $table->string('adresse_dest');
 
-            $table->integer('service_exp_id')->nullable();
-            $table->integer('forfait_exp_id')->nullable();
+            $table->boolean('address');
+            $table->string('bp')->nullable();
+
             $table->integer('mode_exp_id')->nullable();
-
-            $table->integer('methode_exp_id')->nullable();
             $table->integer('delai_exp_id')->nullable();
-            $table->integer('temps_exp_id')->nullable();
-
-            $table->integer('tarif_exp_id')->nullable();
-            $table->integer('type_exp_id')->nullable();
-            $table->integer('regime_exp_id')->nullable();
-            $table->integer('category_exp_id')->nullable();
 
             $table->double('amount')->nullable();
-
-            $table->integer('mode_paiement_id')->nullable();
             $table->integer('methode_paiement_id')->nullable();
 
             $table->integer('client_id')->nullable();
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');
-
-
             $table->timestamps();
         });
     }

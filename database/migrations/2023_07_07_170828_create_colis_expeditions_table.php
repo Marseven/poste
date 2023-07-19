@@ -18,20 +18,22 @@ return new class extends Migration
             $table->id();
 
             $table->string('code');
-            $table->string('modele')->nullable();
+            $table->integer('service_exp_id')->nullable();
+
             $table->string('libelle');
             $table->mediumText('description');
+            $table->string('type')->nullable();
 
+            $table->double('poids');
             $table->double('longeur')->nullable();
             $table->double('largeur')->nullable();
             $table->double('hauteur')->nullable();
-            $table->double('poids');
 
             $table->string('photo')->default('expeditions/colis/colis.png');
 
             $table->integer('agent_id')->nullable();
+            $table->integer('client_id')->nullable();
             $table->integer('active')->default('0');
-
             $table->timestamps();
         });
     }

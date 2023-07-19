@@ -21,9 +21,6 @@ return new class extends Migration
             $table->string('libelle');
             $table->mediumText('description');
 
-            $table->integer('ville_origine_id')->nullable();
-            $table->integer('ville_destination_id')->nullable();
-
             $table->integer('agence_origine_id')->nullable();
             $table->integer('agence_destination_id')->nullable();
 

@@ -38,7 +38,7 @@ class LoginController extends Controller
 
                 if (intval(Auth::user()->status) == 1) {
                     # code...
-                    return '/dashboard/admin';
+                    return '/';
                 } else {
                     # code...
                     return redirect('/')->with('failed', 'Votre compte a été désactivé. Veuillez contacter votre administrateur !');

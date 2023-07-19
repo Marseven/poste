@@ -18,19 +18,15 @@ return new class extends Migration
             $table->id();
 
             $table->string('reference');
-
             $table->integer('client_id')->nullable();
             $table->integer('expedition_id')->nullable();
-
             $table->double('amount')->nullable();
             $table->mediumText('description')->nullable();
-
             $table->integer('status')->nullable();
             $table->integer('timeout')->nullable();
-
             $table->string('ebilling_id')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->string('operator')->nullable();
-
             $table->datetime('expired_at')->nullable();
             $table->datetime('paid_at')->nullable();
 

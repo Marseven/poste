@@ -19,10 +19,10 @@ return new class extends Migration
 
             $table->string('code');
 
-            $table->integer('package_id')->nullable();
-            $table->integer('colis_id')->nullable();
+            $table->integer('package_id');
+            $table->integer('colis_id');
 
-            $table->integer('agent_id')->nullable();
+            $table->integer('agent_id');
             $table->integer('active')->default('0');
 
             $table->timestamps();

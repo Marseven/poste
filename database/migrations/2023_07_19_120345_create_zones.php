@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('regime_expeditions', function (Blueprint $table) {
+        Schema::create('zones', function (Blueprint $table) {
             $table->id();
-
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('libelle');
 
-            $table->integer('type_id');
-            $table->integer('agent_id')->nullable();
+            $table->integer('reseau_id')->nullable();
             $table->integer('active')->default('0');
-
+            $table->integer('agent_id')->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('regime_expeditions');
+        Schema::dropIfExists('zones');
     }
 };

@@ -14,18 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('provinces', function (Blueprint $table) {
-
             $table->id();
 
             $table->string('code')->nullable();
             $table->string('libelle');
-
             $table->integer('pays_id')->nullable();
-
-
             $table->integer('active')->default('0');
 
-            
             $table->timestamps();
         });
     }

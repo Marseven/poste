@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('action');
 
             $table->integer('expedition_id')->nullable();
+            $table->integer('status_id')->nullable();
 
             $table->integer('user_id')->nullable();
             $table->integer('active')->default('0');

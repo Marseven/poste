@@ -21,10 +21,11 @@ return new class extends Migration
             $table->string('libelle');
             $table->string('flag')->nullable();
 
+            $table->integer('reseau_id')->nullable();
+            $table->integer('zone_id')->nullable();
 
             $table->integer('active')->default('0');
-
-            
+            $table->integer('agent_id')->nullable();
             $table->timestamps();
         });
     }

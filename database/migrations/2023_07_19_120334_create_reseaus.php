@@ -13,17 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('methode_expeditions', function (Blueprint $table) {
-
+        Schema::create('reseaus', function (Blueprint $table) {
             $table->id();
 
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('libelle');
-            $table->mediumText('description');
 
-            $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');
-
+            $table->integer('agent_id')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('methode_expeditions');
+        Schema::dropIfExists('reseaus');
     }
 };

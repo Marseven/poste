@@ -25,8 +25,8 @@ return new class extends Migration
 
 
             $table->integer('active')->default('0');
+            $table->integer('agent_id')->nullable();
 
-            
             $table->timestamps();
         });
     }

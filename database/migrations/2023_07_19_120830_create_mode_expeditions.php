@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('type_expeditions', function (Blueprint $table) {
+        Schema::create('mode_expeditions', function (Blueprint $table) {
             $table->id();
 
             $table->string('code');
             $table->string('libelle');
+            $table->mediumText('description');
 
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_expeditions');
+        Schema::dropIfExists('mode_expeditions');
     }
 };

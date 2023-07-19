@@ -21,30 +21,11 @@ class RedirectIfAuthenticated
     {
         $guards = empty($guards) ? [null] : $guards;
 
+        $guards = empty($guards) ? [null] : $guards;
+
         foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check() && Auth::user()) {
-
-                $role = Auth::user()->role; 
-
-                switch ($role) {
-
-                    case 'Admin':
-                        // Redirection
-                        if (intval(Auth::user()->status) == 1) {
-                            # code...
-                            return redirect()->route('rootAdmin');
-                        } else {
-                            # code...
-                            return redirect()->route('accueil')->with('failed', 'Votre compte a été désactivé. Veuillez contacter votre administrateur !');
-                        }
-                        break;
-
-                    
-
-                    default:
-                        return redirect()->route('accueil');
-                        break;
-                }
+            if (Auth::guard($guard)->check()) {
+                return redirect(RouteServiceProvider::PROFIL);
             }
         }
 
