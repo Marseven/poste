@@ -9,8 +9,13 @@ class ColisExpedition extends Model
 {
     use HasFactory;
 
-    public function price()
+    public function service()
     {
-        return $this->belongsTo(PriceExpedition::class, 'poids');
+        return $this->belongsTo(ServiceExpedition::class, 'service_exp_id');
+    }
+
+    public function expedition()
+    {
+        return $this->belongsTo(Expedition::class, 'code');
     }
 }

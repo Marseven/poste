@@ -60,8 +60,8 @@
 
             <!-- BEGIN: Directory & Files -->
             <div id="content-colis" class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
-                @if ($today_paquets)
-                    @foreach ($today_paquets as $paquet)
+                @if ($colis)
+                    @foreach ($colis as $paquet)
                         <div class="intro-y col-span-6 sm:col-span-4 md:col-span-4 2xl:col-span-4">
                             <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
 

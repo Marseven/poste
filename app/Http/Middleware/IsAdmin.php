@@ -22,8 +22,9 @@ class IsAdmin
         if (Auth::user()) {
             $role = Auth::user()->role;
 
-            switch ($role) {
 
+
+            switch ($role) {
                 case 'Admin':
                     // Redirection
                     if (intval(Auth::user()->status) == 1) {

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('code');
             $table->string('libelle');
             $table->mediumText('description');
-
+            $table->double('weight_max')->nullable();
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');
 

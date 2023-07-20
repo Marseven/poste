@@ -30,6 +30,7 @@ class UserController extends Controller
 
         $app_name = "LA POSTE";
         $page_title = "Profil";
+        $account = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -40,7 +41,8 @@ class UserController extends Controller
             'page_title',
             'app_name',
             'admin',
-            'agences'
+            'agences',
+            'account'
         ));
     }
 
@@ -66,9 +68,9 @@ class UserController extends Controller
         if ($admin->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Profil modifié avec succès !');
+            return back()->with('success', 'Profil modifié avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de modifier votre profil !');
+        return back()->with('failed', 'Impossible de modifier votre profil !');
     }
 
     /**
@@ -107,15 +109,15 @@ class UserController extends Controller
                     if ($admin->save()) {
 
                         // Redirection
-                        return redirect()->back()->with('success', 'Avatar modifiée avec succès !');
+                        return back()->with('success', 'Avatar modifiée avec succès !');
                     }
-                    return redirect()->back()->with('failed', 'Impossible de modifier votre avatar !');
+                    return back()->with('failed', 'Impossible de modifier votre avatar !');
                 }
-                return redirect()->back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
+                return back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
             }
-            return redirect()->back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
+            return back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
         }
-        return redirect()->back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
+        return back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
     }
 
     /**
@@ -142,13 +144,13 @@ class UserController extends Controller
                 if ($admin->save()) {
 
                     // Redirection
-                    return redirect()->back()->with('success', 'Mot de passe modifié avec succès !');
+                    return back()->with('success', 'Mot de passe modifié avec succès !');
                 }
-                return redirect()->back()->with('failed', 'Impossible de modifier votre mot de passe !');
+                return back()->with('failed', 'Impossible de modifier votre mot de passe !');
             }
-            return redirect()->back()->with('failed', 'Votre ancien mot de passe semble incorrect. Veuillez saisir le bon svp !');
+            return back()->with('failed', 'Votre ancien mot de passe semble incorrect. Veuillez saisir le bon svp !');
         }
-        return redirect()->back()->with('failed', 'Les mots de passe ne sont pas identiques. Veuillez réessayer svp !');
+        return back()->with('failed', 'Les mots de passe ne sont pas identiques. Veuillez réessayer svp !');
     }
 
     ################################################################################################################
@@ -251,9 +253,9 @@ class UserController extends Controller
         if ($user->save()) {
 
             // Redirection
-            return redirect()->route('adminCompte')->with('success', 'Nouveau Compte cree avec succès !');
+            return redirect('comptes')->with('success', 'Nouveau Compte cree avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce compte !');
+        return back()->with('failed', 'Impossible de creer ce compte !');
     }
 
     /**
@@ -296,17 +298,17 @@ class UserController extends Controller
                         if ($user->save()) {
 
                             // Redirection
-                            return redirect()->back()->with('success', 'Avatar modifiée avec succès !');
+                            return back()->with('success', 'Avatar modifiée avec succès !');
                         }
-                        return redirect()->back()->with('failed', 'Impossible de modifier votre avatar !');
+                        return back()->with('failed', 'Impossible de modifier votre avatar !');
                     }
-                    return redirect()->back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
+                    return back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
                 }
-                return redirect()->back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
+                return back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
             }
-            return redirect()->back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
+            return back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce compte !');
+        return back()->with('failed', 'Impossible de trouver ce compte !');
     }
 
     /**
@@ -341,11 +343,11 @@ class UserController extends Controller
             if ($user->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Compte modifié avec succès !');
+                return back()->with('success', 'Compte modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce compte !');
+            return back()->with('failed', 'Impossible de modifier ce compte !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce compte !');
+        return back()->with('failed', 'Impossible de trouver ce compte !');
     }
 
     /**
@@ -358,6 +360,9 @@ class UserController extends Controller
 
         $app_name = "LA POSTE";
         $page_title = "Compte";
+        $account = "side-menu--active";
+        $account_sub = "side-menu__sub-open";
+        $account1 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -392,7 +397,10 @@ class UserController extends Controller
             'app_name',
             'admin',
             'agences',
-            'comptes'
+            'comptes',
+            'account',
+            'account_sub',
+            'account1'
         ));
     }
 }

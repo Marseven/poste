@@ -6,13 +6,13 @@
         <div class="flex flex-col lg:flex-row pt-10 px-5 sm:px-20 sm:pt-20 lg:pb-20 text-center sm:text-left">
             <div class="font-semibold text-primary text-3xl">
                 FACTURE
-                <div class="text-xl text-primary font-medium">#{{ $expedition->code_aleatoire }}</div>
+                <div class="text-xl text-primary font-medium">{{ $expedition->code }}</div>
 
                 @php
                     $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
                 @endphp
                 <div class="mt-1">
-                    {!! QrCode::size(130)->generate($expedition->code_aleatoire) !!}
+                    {!! QrCode::size(130)->generate($expedition->code) !!}
                 </div>
             </div>
             <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">

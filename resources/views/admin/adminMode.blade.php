@@ -1,22 +1,23 @@
 @extends('layouts.admin')
 
 @section('page-content')
+
     <div class="col-span-12 2xl:col-span-12">
         <h2 class="intro-y text-lg font-medium mt-10">
-            Délais d'expedition
+            Modes d'expedition
         </h2>
         <div class="grid grid-cols-12 gap-12 mt-5">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#large-modal-size-preview"
-                    class="btn btn-primary shadow-md mr-2">Nouveau Délais</a>
+                    class="btn btn-primary shadow-md mr-2">Nouveau Mode</a>
 
                 <!-- BEGIN: Large Modal Content -->
                 <!-- BEGIN: Modal Content -->
                 <div id="large-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <form method="POST" action="{{ route('adminAddDelai') }}">
+                            <form method="POST" action="{{ route('adminAddMode') }}">
                                 @csrf
                                 <!-- BEGIN: Modal Header -->
                                 <div class="modal-header">
@@ -27,12 +28,12 @@
 
                                     <div class="col-span-12 sm:col-span-6">
                                         <label for="modal-form-1" class="form-label">Code</label>
-                                        <input type="text" class="form-control" placeholder="24H" name="code">
+                                        <input type="text" class="form-control" placeholder="RJT" name="code">
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-6">
                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                        <input type="text" class="form-control" placeholder="24 HEURES" name="libelle">
+                                        <input type="text" class="form-control" placeholder="REJETE" name="libelle">
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
@@ -62,17 +63,17 @@
                 <!-- END: Large Modal Content -->
 
                 <div class="hidden md:block mx-auto text-slate-500">
-                    Affiche de 1 a 10 sur {{ $delais->count() }} delais d'expedition
+                    Affiche de 1 a 10 sur {{ $modes->count() }} modes d'expedition
                 </div>
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-delai" action="{{ route('adminSearchDelai') }}" method="GET" class="d-none">
+                        <form id="search-statuts" action="{{ route('adminSearchStatut') }}" method="GET" class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">
                             <a href=""
-                                onclick="event.preventDefault(); document.getElementById('search-delai').submit();">
+                                onclick="event.preventDefault(); document.getElementById('search-statuts').submit();">
                                 <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                             </a>
                         </form>
@@ -100,17 +101,17 @@
                     </thead>
                     <tbody>
 
-                        @if ($delais)
-                            @foreach ($delais as $delai)
+                        @if ($modes)
+                            @foreach ($modes as $mode)
                                 <tr class="intro-x">
                                     <td class="text-center">
-                                        {{ $delai->code }}
+                                        {{ $mode->code }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $delai->libelle }}
+                                        {{ $mode->libelle }}
                                     </td>
                                     <td class="w-40">
-                                        @if ($delai->active == 1)
+                                        @if ($mode->active == 1)
                                             <div class="flex items-center justify-center text-success"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> Active </div>
                                         @else
@@ -121,7 +122,7 @@
                                     <td class="table-report__action w-56">
                                         <div class="flex justify-center items-center">
                                             <a class="flex items-center mr-3" href="javascript:;" data-tw-toggle="modal"
-                                                data-tw-target="#update-{{ $delai->id }}"> <i data-lucide="edit"
+                                                data-tw-target="#update-{{ $mode->id }}"> <i data-lucide="edit"
                                                     class="w-4 h-4 mr-1"></i> </a>
                                         </div>
                                     </td>
@@ -129,10 +130,10 @@
 
 
                                 <!-- BEGIN: Delete Confirmation Modal -->
-                                <div id="update-{{ $delai->id }}" class="modal" tabindex="-1" aria-hidden="true">
+                                <div id="update-{{ $mode->id }}" class="modal" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('adminEditDelai') }}">
+                                            <form method="POST" action="{{ route('adminEditMode') }}">
                                                 @csrf
                                                 <!-- BEGIN: Modal Header -->
                                                 <div class="modal-header">
@@ -143,25 +144,22 @@
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
                                                     <div class="col-span-12 sm:col-span-6">
-                                                        <input type="hidden" name="service_id"
-                                                            value="{{ $delai->id }}">
+                                                        <input type="hidden" name="mode_id" value="{{ $mode->id }}">
                                                         <label for="modal-form-1" class="form-label">Code</label>
-                                                        <input type="text" class="form-control" placeholder="24H"
-                                                            name="code" value="{{ $delai->code }}">
+                                                        <input type="text" class="form-control" placeholder="RJT"
+                                                            name="code" value="{{ $mode->code }}">
                                                     </div>
 
                                                     <div class="col-span-12 sm:col-span-6">
                                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="24 HEURES" name="libelle"
-                                                            value="{{ $delai->libelle }}">
+                                                        <input type="text" class="form-control" placeholder="REJETE"
+                                                            name="libelle" value="{{ $mode->libelle }}">
                                                     </div>
-
 
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-2" class="form-label">Description</label>
                                                         <textarea name="description" class="form-control" rows="4">
-									                 		{{ $delai->description }}
+									                 		{{ $mode->description }}
 									                 	</textarea>
                                                     </div>
 
@@ -204,10 +202,15 @@
             <!-- BEGIN: Pagination -->
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
                 <nav class="w-full sm:w-auto sm:mr-auto">
-                    {{ $delais->links() }}
+                    {{ $modes->links() }}
                 </nav>
             </div>
             <!-- END: Pagination -->
         </div>
+
     </div>
+
+
+
+
 @endsection

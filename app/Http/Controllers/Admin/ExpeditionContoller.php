@@ -15,6 +15,7 @@ use App\Models\PackageExpedition;
 use App\Models\Pays;
 use App\Models\PriceExpedition;
 use App\Models\Province;
+use App\Models\Reseau;
 use App\Models\ServiceExpedition;
 use App\Models\Societe;
 use App\Models\SuiviExpedition;
@@ -24,12 +25,18 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 use PDF;
 
 class ExpeditionContoller extends Controller
 {
     //
+    public function __construct()
+    {
+
+        // dd(Auth::user());
+
+    }
+
     ################################################################################################################
     #                                                                                                              #
     #   EXPEDITION                                                                                                 #
@@ -82,45 +89,30 @@ class ExpeditionContoller extends Controller
         $exp1 = "side-menu--active";
 
         $code_aleatoire = Carbon::now()->timestamp;
-
+        $agence = Agence::find(Auth::user()->agence_id);
+        $code_aleatoire = $agence->code . '.' . $code_aleatoire;
 
         $societe = Societe::find(1);
-
-
-        $countries = Pays::all();
-        $provinces = Province::all();
-        $villes = Ville::all();
-
-
-        $agences = Agence::all();
+        $reseaux = Reseau::all();
         $services = ServiceExpedition::all();
-        $delais = DelaiExpedition::all();
-
-        $types = ModeExpedition::all();
-
-
-        $documents = DocumentExpedition::where('code', $code_aleatoire)->get();
-        $paquets = ColisExpedition::where('code', $code_aleatoire)->get();
-
+        $modes = ModeExpedition::all();
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
+        $colis = ColisExpedition::where('agent_id', $admin_id)->get();
+        foreach ($colis as $coli) {
+            $coli->load(['expedition']);
+            if ($coli->expedition == null) $coli->delete();
+        }
 
         return view('admin.adminNewExpedition', compact(
             'page_title',
             'app_name',
             'code_aleatoire',
-            'countries',
-            'provinces',
-            'villes',
-            'agences',
-            'forfaits',
+            'reseaux',
             'services',
-            'delais',
-            'documents',
-            'paquets',
-            'types',
+            'modes',
             'societe',
             'exp',
             'exp1',
@@ -172,15 +164,15 @@ class ExpeditionContoller extends Controller
                     if ($document->save()) {
 
                         // Redirection
-                        return redirect()->back()->with('success', 'Document ajoute avec succès !');
+                        return back()->with('success', 'Document ajoute avec succès !');
                     }
-                    return redirect()->back()->with('failed', 'Impossible de modifier ce document !');
+                    return back()->with('failed', 'Impossible de modifier ce document !');
                 }
-                return redirect()->back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
+                return back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
             }
-            return redirect()->back()->with('failed', 'L\'extension du fichier doit être soit du, pdf jpg ou du png !');
+            return back()->with('failed', 'L\'extension du fichier doit être soit du, pdf jpg ou du png !');
         }
-        return redirect()->back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
+        return back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
     }
 
     /**
@@ -193,18 +185,48 @@ class ExpeditionContoller extends Controller
         $admin_id = Auth::user()->id;
 
         $paquet = new ColisExpedition();
-        $price = PriceExpedition::find($request->input('poids'));
+
+        $cd = explode('.', $request->input('code'));
+
+        // Store data
+        $code_aleatoire = $cd[1];
 
         // Récupérer les données du formulaire
-        $paquet->code = $request->input('code');
+        $paquet->code = $code_aleatoire;
         $paquet->libelle = $request->input('libelle');
         $paquet->description = $request->input('description');
-        $paquet->poids = $price->id;
+        $paquet->service_exp_id = $request->input('service');
+        $paquet->poids = $request->input('poids');
+        if ($request->input('type') != 0) $paquet->type = $request->input('type');
+
+        $price = PriceExpedition::where('type', 'Standard')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
+
+        $first = 0;
+        $last = 0;
+        $sup = 0;
+        $amount = 0;
+
+        if ($price->first == 1) {
+            $first = $price->weight;
+            $last = $paquet->poids - $first;
+            $priceSup = PriceExpedition::where('type', 'Supplémentaire')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
+            //dd($priceSup);
+            if (!$priceSup) {
+                $sup = 0;
+            } else {
+                $sup = $priceSup->price;
+            };
+            $amount = $price->price + (round($last / $price->weight, 1) * $sup);
+        } else {
+            $amount = round($paquet->poids / $price->weight, 1) * $price->price;
+        }
+
+        $paquet->amount = $amount;
         $paquet->agent_id = $admin_id;
         $paquet->active = 1;
 
         if ($paquet->save()) {
-            $paquet->load(['price']);
+            $paquet->load(['service']);
             $response = json_encode($paquet);
             return response()->json($response);
         }
@@ -222,7 +244,7 @@ class ExpeditionContoller extends Controller
 
         if ($paquet) {
             $id = $paquet->id;
-            $price = PriceExpedition::find($paquet->poids);
+            $price = $paquet->amount;
             $paquet->delete();
             $response = json_encode([$id, $price]);
             return response()->json($response);
@@ -243,8 +265,10 @@ class ExpeditionContoller extends Controller
         $admin = User::find(Auth::user()->id);
         $admin_id = Auth::user()->id;
 
+        $cd = explode('.', $request->input('code_aleatoire'));
+
         // Store data
-        $code_aleatoire = $request->input('code_aleatoire');
+        $code_aleatoire = $cd[1];
         $agence_id = $request->input('agence_id');
 
         // Check if this expedition have almost one colis
@@ -258,13 +282,12 @@ class ExpeditionContoller extends Controller
             $agence = Agence::find($agence_id);
 
             // Set data
-            $code_agence = $agence->code;
-            $reference = $agence->code . $code_aleatoire;
+            $reference =  $request->input('code_aleatoire') . '.' . $agence->code;
 
             // Récupérer les données du formulaire
-            $expedition->code_aleatoire = $request->input('code_aleatoire');
-            $expedition->agence_id = $request->input('agence_id');
-            $expedition->code_agence = $code_agence;
+            $expedition->code = $code_aleatoire;
+            $expedition->agence_dest_id = $request->input('agence_id');
+            $expedition->agence_exp_id = $admin->agence_id;
 
             $expedition->reference = $reference;
 
@@ -278,10 +301,9 @@ class ExpeditionContoller extends Controller
             $expedition->phone_dest = $request->input('phone_dest');
             $expedition->adresse_dest = $request->input('adresse_dest');
 
-            $expedition->service_exp_id = $request->input('service_exp_id');
-            $expedition->type_exp_id = $request->input('type_id');
-            $expedition->regime_exp_id = $request->input('regime_id');
-            $expedition->category_exp_id = $request->input('category_id');
+            $expedition->mode_exp_id = $request->input('mode_exp_id');
+            $expedition->address = $request->input('address');
+            $expedition->bp = $request->input('bp');
 
             $expedition->amount = $request->input('amount');
 
@@ -307,98 +329,12 @@ class ExpeditionContoller extends Controller
                 $facture->save();
 
                 // Redirection
-                return redirect('/dashboard/admin/expeditions')->with('success', 'Expedition ajoutee avec succès !');
+                return redirect('/expeditions')->with('success', 'Expedition ajoutee avec succès !');
             }
             return back()->with('failed', 'Impossible de rajouter cette expedition !');
         } else {
             return back()->with('failed', 'Veuillez rajouter aumoins un colis svp !');
         }
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function adminNewStep1(Request $request)
-    {
-        $admin = Auth::user();
-        $admin_id = Auth::user()->id;
-
-        // Store data
-        $code_aleatoire = $request->input('code_aleatoire');
-        $agence_id = $request->input('agence_id');
-
-        $expedition = new Expedition();
-
-        // Get agence by id
-        $agence = Agence::find($agence_id);
-
-        // Set data
-        $code_agence = $agence->code;
-        $reference = $agence->code . $code_aleatoire;
-
-        // Récupérer les données du formulaire
-        $expedition->code_aleatoire = $request->input('code_aleatoire');
-        $expedition->agence_id = $request->input('agence_id');
-        $expedition->code_agence = $code_agence;
-
-        $expedition->reference = $reference;
-
-        $expedition->name_exp = $request->input('name_exp');
-        $expedition->email_exp = $request->input('email_exp');
-        $expedition->phone_exp = $request->input('phone_exp');
-        $expedition->adresse_exp = $request->input('adresse_exp');
-
-        $expedition->name_dest = $request->input('name_dest');
-        $expedition->email_dest = $request->input('email_dest');
-        $expedition->phone_dest = $request->input('phone_dest');
-        $expedition->adresse_dest = $request->input('adresse_dest');
-
-        //$expedition->service_exp_id = $request->input('service_exp_id');
-        //$expedition->delai_exp_id = $request->input('delai_exp_id');
-        //$expedition->forfait_exp_id = $request->input('forfait_exp_id');
-
-        $expedition->agent_id = $admin_id;
-        $expedition->active = 0;
-
-        if ($expedition->save()) {
-
-            // Redirection
-            return redirect()->route('adminStep2', ['code' => $code_aleatoire])->with('success', 'Etape 1 validee avec succès !');
-        }
-        return redirect()->back()->with('failed', 'Impossible de rajouter ce colis !');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function adminNewStep2(Request $request)
-    {
-        $admin = Auth::user();
-        $admin_id = Auth::user()->id;
-
-        $code_aleatoire = $request->input('code_aleatoire');
-
-        // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $request->input('code_aleatoire'))->first();
-        if (!empty($expedition)) {
-
-            // Récupérer les données du formulaire
-            $expedition->service_exp_id = $request->input('service_exp_id');
-            $expedition->delai_exp_id = $request->input('delai_exp_id');
-            $expedition->forfait_exp_id = $request->input('forfait_exp_id');
-
-            if ($expedition->save()) {
-
-                // Redirection
-                return redirect()->route('adminStep3', ['code' => $code_aleatoire])->with('success', 'Etape 2 validee avec succès !');
-            }
-            return redirect()->back()->with('failed', 'Impossible de valider cette etape !');
-        }
-        return redirect()->back()->with('failed', 'Impossible de valider cette etape !');
     }
 
     /**
@@ -450,11 +386,11 @@ class ExpeditionContoller extends Controller
             if ($facture->save()) {
 
                 // Redirection
-                return redirect()->route('adminExpeditionList')->with('success', 'Validation effectuee avec succès !');
+                return redirect('adminExpeditionList')->with('success', 'Validation effectuee avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de valider cette expedition !');
+            return back()->with('failed', 'Impossible de valider cette expedition !');
         }
-        return redirect()->back()->with('failed', 'Impossible de valider cette expedition !');
+        return back()->with('failed', 'Impossible de valider cette expedition !');
     }
 
     ################################################################################################################
@@ -482,14 +418,14 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
             $paquets = ColisExpedition::where('code', $code)->get();
 
-            $expedition->load(['type', 'regime', 'category']);
+            $expedition->load(['mode']);
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -533,7 +469,7 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
             // Récupérer les données
@@ -558,9 +494,9 @@ class ExpeditionContoller extends Controller
                     'exp2'
                 ));
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+            return back()->with('failed', 'Impossible de modifier cette expedition !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
 
@@ -584,7 +520,7 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
             // Récupérer les données
@@ -635,7 +571,7 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
             // Récupérer les données
@@ -657,9 +593,9 @@ class ExpeditionContoller extends Controller
                     'paquets'
                 ));
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+            return back()->with('failed', 'Impossible de modifier cette expedition !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
     /**
@@ -678,7 +614,7 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
             // Récupérer les données
@@ -700,9 +636,9 @@ class ExpeditionContoller extends Controller
                     'paquets'
                 ));
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette expedition !');
+            return back()->with('failed', 'Impossible de modifier cette expedition !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
     /**
@@ -721,7 +657,7 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
             // Récupérer les données
@@ -785,10 +721,10 @@ class ExpeditionContoller extends Controller
         $societe = Societe::find(1);
 
         // Get expedition by id
-        $expedition = Expedition::where('code_aleatoire', $code)->first();
+        $expedition = Expedition::where('code', $code)->first();
         if (!empty($expedition)) {
 
-            $expedition->load(['type', 'regime', 'category']);
+            $expedition->load(['mode']);
             // Récupérer les données
             $expedition_id = intval($expedition->id);
             $paquets = ColisExpedition::where('code', $code)->get();
@@ -838,21 +774,17 @@ class ExpeditionContoller extends Controller
         $exp_sub = "side-menu__sub-open";
         $exp3 = "side-menu--active";
 
-        $packages = Package::orderBy('id', 'DESC')->paginate(10);
-        $agences = Agence::all();
-        $villes = Ville::all();
-
-
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
+        $packages = Package::orderBy('id', 'DESC')->paginate(10);
+        $agences = Agence::where('id', '<>', $admin->agence_id)->get();
 
         return view('admin.adminPackage', compact(
             'page_title',
             'app_name',
             'packages',
             'agences',
-            'villes',
             'exp',
             'exp_sub',
             'exp3'
@@ -869,6 +801,9 @@ class ExpeditionContoller extends Controller
 
         $app_name = "La Poste";
         $page_title = "Packages";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp3 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -879,15 +814,16 @@ class ExpeditionContoller extends Controller
             ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
             ->orWhere('description', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
-        $agences = Agence::all();
-        $villes = Ville::all();
+        $agences = Agence::where('id', '<>', $admin->agence_id)->get();
 
         return view('admin.adminPackage', compact(
             'page_title',
             'app_name',
             'packages',
             'agences',
-            'villes'
+            'exp',
+            'exp_sub',
+            'exp3'
         ));
     }
 
@@ -902,33 +838,28 @@ class ExpeditionContoller extends Controller
         $admin_id = Auth::user()->id;
 
         $code = Carbon::now()->timestamp;
-        $agence_origine = Agence::find($request->input('agence_origine_id'));
-        $agence_destination = Agence::find($request->input('agence_destination_id'));
+        $agence_origine = Agence::find($admin->agence_id);
+        $agence_destination = Agence::find($request->input('agence_dest_id'));
 
         $package = new Package();
 
         // Récupérer les données du formulaire
-        $package->code = $code . '.' . $agence_origine->code . '.' . $agence_destination->code;
+        $package->code = $agence_origine->code . '.' . $code . '.' . $agence_destination->code;
 
         $package->libelle = $request->input('libelle');
         $package->description = $request->input('description');
 
-        $package->ville_origine_id = $request->input('ville_origine_id');
-        $package->ville_destination_id = $request->input('ville_destination_id');
-
-        $package->agence_origine_id = $request->input('agence_origine_id');
-        $package->agence_destination_id = $request->input('agence_destination_id');
-
+        $package->agence_exp_id = $agence_origine->id;
+        $package->agence_dest_id = $agence_destination->id;
 
         $package->agent_id = $admin_id;
         $package->active = $request->input('active');
 
         if ($package->save()) {
-
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau Package crée avec succès !');
+            return back()->with('success', 'Nouveau Package crée avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce package !');
+        return back()->with('failed', 'Impossible de creer ce package !');
     }
 
     /**
@@ -941,6 +872,9 @@ class ExpeditionContoller extends Controller
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
+        $agence_origine = Agence::find($admin->agence_id);
+        $agence_destination = Agence::find($request->input('agence_dest_id'));
+
         // Get package by id
         $package = Package::find($request->input('package_id'));
         if (!empty($package)) {
@@ -949,12 +883,8 @@ class ExpeditionContoller extends Controller
             $package->libelle = $request->input('libelle');
             $package->description = $request->input('description');
 
-            $package->ville_origine_id = $request->input('ville_origine_id');
-            $package->ville_destination_id = $request->input('ville_destination_id');
-
-            $package->agence_origine_id = $request->input('agence_origine_id');
-            $package->agence_destination_id = $request->input('agence_destination_id');
-
+            $package->agence_exp_id = $agence_origine->id;
+            $package->agence_dest_id = $agence_destination->id;
 
             $package->agent_id = $admin_id;
             $package->active = $request->input('active');
@@ -962,11 +892,11 @@ class ExpeditionContoller extends Controller
             if ($package->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Package modifié avec succès !');
+                return back()->with('success', 'Package modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce package !');
+            return back()->with('failed', 'Impossible de modifier ce package !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce package !');
+        return back()->with('failed', 'Impossible de trouver ce package !');
     }
 
     /**
@@ -995,16 +925,18 @@ class ExpeditionContoller extends Controller
             $today = Carbon::today();
 
             // Get colis du jours
-            $today_paquets = PackageExpedition::where('package_id', $package->id)->paginate(10);
+            $today_paquets = ColisExpedition::whereDate('created_at', $today)->paginate(10);
 
             if (!empty($today_paquets)) {
 
-                $today_paquets->load(['colis']);
+                $colis = PackageExpedition::where('package_id', $package->id)->paginate(10);
+                $colis->load(['colis']);
                 // Redirection
                 return view('admin.adminDetailPackage', compact(
                     'page_title',
                     'app_name',
                     'today_paquets',
+                    'colis',
                     'societe',
                     'package',
                     'exp',
@@ -1012,9 +944,9 @@ class ExpeditionContoller extends Controller
                     'exp3'
                 ));
             }
-            return redirect()->back()->with('failed', 'Aucun colis expedie pour le moment !');
+            return back()->with('failed', 'Aucun colis expedie pour le moment !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette expedition !');
+        return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
 
     /**

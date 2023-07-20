@@ -19,10 +19,13 @@ return new class extends Migration
 
             $table->double('weight');
             $table->double('price');
+
             $table->string('type');
+            $table->integer('first');
 
             $table->integer('zone_id');
             $table->integer('service_id');
+            $table->integer('mode_id');
 
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');

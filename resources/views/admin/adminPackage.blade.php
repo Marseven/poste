@@ -26,36 +26,9 @@
                                 <!-- BEGIN: Modal Body -->
                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
-                                    <div class="col-span-12 sm:col-span-6">
-                                        <label for="modal-form-6" class="form-label">Ville Origine</label>
-                                        <select id="modal-form-6" class="form-select" name="ville_origine_id">
-                                            @foreach ($villes as $ville)
-                                                <option value="{{ $ville->id }}">{{ $ville->libelle }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-span-12 sm:col-span-6">
-                                        <label for="modal-form-6" class="form-label">Ville Destination</label>
-                                        <select id="modal-form-6" class="form-select" name="ville_destination_id">
-                                            @foreach ($villes as $ville)
-                                                <option value="{{ $ville->id }}">{{ $ville->libelle }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-span-12 sm:col-span-6">
-                                        <label for="modal-form-6" class="form-label">Agence Origine</label>
-                                        <select id="modal-form-6" class="form-select" name="agence_origine_id">
-                                            @foreach ($agences as $agence)
-                                                <option value="{{ $agence->id }}">{{ $agence->libelle }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-span-12 sm:col-span-6">
-                                        <label for="modal-form-6" class="form-label">Agence Destination</label>
-                                        <select id="modal-form-6" class="form-select" name="agence_destination_id">
+                                    <div class="col-span-12 sm:col-span-12">
+                                        <label for="modal-form-6" class="form-label">Bureau de Destination</label>
+                                        <select id="modal-form-6" class="form-select" name="agence_dest_id">
                                             @foreach ($agences as $agence)
                                                 <option value="{{ $agence->id }}">{{ $agence->libelle }}</option>
                                             @endforeach
@@ -99,8 +72,7 @@
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-packages" action="{{ route('adminSearchPackage') }}" method="GET"
-                            class="d-none">
+                        <form id="search-packages" action="{{ route('adminSearchPackage') }}" method="GET" class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">
@@ -155,23 +127,19 @@
                                     </td>
                                     <td class="text-center">
                                         <a href="" class="font-medium whitespace-nowrap">
-                                            {{ $package->agence_origine_id ? $package->agence_origine->libelle : 'Non defini' }}
+                                            {{ $package->agence_exp_id ? $package->agence_exp->libelle : 'Non defini' }}
                                         </a>
-                                        <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
-                                            {{ $package->ville_origine_id ? $package->ville_origine->libelle : 'Non defini' }}
-                                        </div>
+
                                     </td>
                                     <td class="text-center">
                                         <a href="" class="font-medium whitespace-nowrap">
-                                            {{ $package->agence_destination_id ? $package->agence_destination->libelle : 'Non defini' }}
+                                            {{ $package->agence_dest_id ? $package->agence_dest->libelle : 'Non defini' }}
                                         </a>
-                                        <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
-                                            {{ $package->ville_destination_id ? $package->ville_destination->libelle : 'Non defini' }}
-                                        </div>
+
                                     </td>
                                     <td class="text-center">
                                         <a href="" class="font-medium whitespace-nowrap">
-                                            {{ $package->nbre_colis }}
+                                            {{ $package->colis->count() }}
                                         </a>
                                     </td>
                                     <td class="w-40">
@@ -212,63 +180,13 @@
 
                                                     <input type="hidden" name="package_id" value="{{ $package->id }}">
 
-                                                    <div class="col-span-12 sm:col-span-6">
-                                                        <label for="modal-form-6" class="form-label">Ville Origine</label>
-                                                        <select id="modal-form-6" class="form-select"
-                                                            name="ville_origine_id">
-                                                            @foreach ($villes as $ville)
-                                                                @if ($ville->id == $package->ville_origine_id)
-                                                                    <option value="{{ $ville->id }}" selected>
-                                                                        {{ $ville->libelle }}</option>
-                                                                @else
-                                                                    <option value="{{ $ville->id }}">
-                                                                        {{ $ville->libelle }}</option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-span-12 sm:col-span-6">
-                                                        <label for="modal-form-6" class="form-label">Ville
+                                                    <div class="col-span-12 sm:col-span-12">
+                                                        <label for="modal-form-6" class="form-label">Bureau de destination
                                                             Destination</label>
                                                         <select id="modal-form-6" class="form-select"
-                                                            name="ville_destination_id">
-                                                            @foreach ($villes as $ville)
-                                                                @if ($ville->id == $package->ville_destination_id)
-                                                                    <option value="{{ $ville->id }}" selected>
-                                                                        {{ $ville->libelle }}</option>
-                                                                @else
-                                                                    <option value="{{ $ville->id }}">
-                                                                        {{ $ville->libelle }}</option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-span-12 sm:col-span-6">
-                                                        <label for="modal-form-6" class="form-label">Agence
-                                                            Origine</label>
-                                                        <select id="modal-form-6" class="form-select"
-                                                            name="agence_origine_id">
+                                                            name="agence_dest_id">
                                                             @foreach ($agences as $agence)
-                                                                @if ($agence->id == $package->agence_origine_id)
-                                                                    <option value="{{ $agence->id }}" selected>
-                                                                        {{ $agence->libelle }}</option>
-                                                                @else
-                                                                    <option value="{{ $agence->id }}">
-                                                                        {{ $agence->libelle }}</option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-span-12 sm:col-span-6">
-                                                        <label for="modal-form-6" class="form-label">Agence
-                                                            Destination</label>
-                                                        <select id="modal-form-6" class="form-select"
-                                                            name="agence_destination_id">
-                                                            @foreach ($agences as $agence)
-                                                                @if ($agence->id == $package->agence_destination_id)
+                                                                @if ($agence->id == $package->agence_dest_id)
                                                                     <option value="{{ $agence->id }}" selected>
                                                                         {{ $agence->libelle }}</option>
                                                                 @else
@@ -336,8 +254,11 @@
         </div>
 
     </div>
-
-
-
-
 @endsection
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script></script>
+@endpush

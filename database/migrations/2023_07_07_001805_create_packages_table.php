@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('libelle');
             $table->mediumText('description');
 
-            $table->integer('agence_origine_id')->nullable();
-            $table->integer('agence_destination_id')->nullable();
+            $table->integer('agence_exp_id')->nullable();
+            $table->integer('agence_dest_id')->nullable();
 
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');

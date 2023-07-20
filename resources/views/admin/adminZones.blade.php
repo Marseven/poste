@@ -1,22 +1,23 @@
 @extends('layouts.admin')
 
 @section('page-content')
+
     <div class="col-span-12 2xl:col-span-12">
         <h2 class="intro-y text-lg font-medium mt-10">
-            Délais d'expedition
+            Liste des Zones
         </h2>
         <div class="grid grid-cols-12 gap-12 mt-5">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#large-modal-size-preview"
-                    class="btn btn-primary shadow-md mr-2">Nouveau Délais</a>
+                    class="btn btn-primary shadow-md mr-2">Nouvelle Zone</a>
 
                 <!-- BEGIN: Large Modal Content -->
                 <!-- BEGIN: Modal Content -->
                 <div id="large-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <form method="POST" action="{{ route('adminAddDelai') }}">
+                            <form method="POST" action="{{ route('adminAddZone') }}">
                                 @csrf
                                 <!-- BEGIN: Modal Header -->
                                 <div class="modal-header">
@@ -25,19 +26,22 @@
                                 <!-- BEGIN: Modal Body -->
                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
+                                    <div class="col-span-12 sm:col-span-12">
+                                        <label for="modal-form-6" class="form-label">Réseau</label>
+                                        <select id="modal-form-6" class="form-select" name="reseau_id">
+                                            @foreach ($reseaux as $reseau)
+                                                <option value="{{ $reseau->id }}">{{ $reseau->libelle }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div class="col-span-12 sm:col-span-6">
                                         <label for="modal-form-1" class="form-label">Code</label>
-                                        <input type="text" class="form-control" placeholder="24H" name="code">
+                                        <input type="text" class="form-control" placeholder="GA" name="code">
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-6">
                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                        <input type="text" class="form-control" placeholder="24 HEURES" name="libelle">
-                                    </div>
-
-                                    <div class="col-span-12 sm:col-span-12">
-                                        <label for="modal-form-2" class="form-label">Description</label>
-                                        <textarea name="description" class="form-control" rows="4"></textarea>
+                                        <input type="text" class="form-control" placeholder="GABON" name="libelle">
                                     </div>
 
 
@@ -62,17 +66,17 @@
                 <!-- END: Large Modal Content -->
 
                 <div class="hidden md:block mx-auto text-slate-500">
-                    Affiche de 1 a 10 sur {{ $delais->count() }} delais d'expedition
+                    Affiche de 1 a 10 sur {{ $zones->count() }} zones
                 </div>
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-delai" action="{{ route('adminSearchDelai') }}" method="GET" class="d-none">
+                        <form id="search-zones" action="{{ route('adminSearchZone') }}" method="GET" class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">
                             <a href=""
-                                onclick="event.preventDefault(); document.getElementById('search-delai').submit();">
+                                onclick="event.preventDefault(); document.getElementById('search-zones').submit();">
                                 <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                             </a>
                         </form>
@@ -93,24 +97,31 @@
                     <thead>
                         <tr>
                             <th class="whitespace-nowrap text-center">CODE</th>
-                            <th class="text-center whitespace-nowrap">LIBELLE</th>
+                            <th class="text-center whitespace-nowrap">RÉSEAU</th>
+                            <th class="text-center whitespace-nowrap">NOM</th>
                             <th class="text-center whitespace-nowrap">STATUT</th>
                             <th class="text-center whitespace-nowrap">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @if ($delais)
-                            @foreach ($delais as $delai)
+                        @if ($zones)
+                            @foreach ($zones as $zone)
+                                @php
+                                    $zone->load(['reseau']);
+                                @endphp
                                 <tr class="intro-x">
                                     <td class="text-center">
-                                        {{ $delai->code }}
+                                        {{ $zone->code }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $delai->libelle }}
+                                        {{ $zone->reseau->libelle }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $zone->libelle }}
                                     </td>
                                     <td class="w-40">
-                                        @if ($delai->active == 1)
+                                        @if ($zone->active == 1)
                                             <div class="flex items-center justify-center text-success"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> Active </div>
                                         @else
@@ -121,18 +132,16 @@
                                     <td class="table-report__action w-56">
                                         <div class="flex justify-center items-center">
                                             <a class="flex items-center mr-3" href="javascript:;" data-tw-toggle="modal"
-                                                data-tw-target="#update-{{ $delai->id }}"> <i data-lucide="edit"
+                                                data-tw-target="#update-{{ $zone->id }}"> <i data-lucide="edit"
                                                     class="w-4 h-4 mr-1"></i> </a>
                                         </div>
                                     </td>
                                 </tr>
-
-
                                 <!-- BEGIN: Delete Confirmation Modal -->
-                                <div id="update-{{ $delai->id }}" class="modal" tabindex="-1" aria-hidden="true">
+                                <div id="update-{{ $zone->id }}" class="modal" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{ route('adminEditDelai') }}">
+                                            <form method="POST" action="{{ route('adminEditZone') }}">
                                                 @csrf
                                                 <!-- BEGIN: Modal Header -->
                                                 <div class="modal-header">
@@ -141,28 +150,34 @@
                                                 </div> <!-- END: Modal Header -->
                                                 <!-- BEGIN: Modal Body -->
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-
-                                                    <div class="col-span-12 sm:col-span-6">
-                                                        <input type="hidden" name="service_id"
-                                                            value="{{ $delai->id }}">
-                                                        <label for="modal-form-1" class="form-label">Code</label>
-                                                        <input type="text" class="form-control" placeholder="24H"
-                                                            name="code" value="{{ $delai->code }}">
+                                                    <div class="col-span-12 sm:col-span-12">
+                                                        <label for="modal-form-6" class="form-label">Reseau</label>
+                                                        <select id="modal-form-6" class="form-select" name="reseau_id">
+                                                            @foreach ($reseaux as $reseau)
+                                                                @if ($reseau->id == $zone->reseau_id)
+                                                                    <option value="{{ $reseau->id }}" selected>
+                                                                        {{ $reseau->libelle }}</option>
+                                                                @else
+                                                                    <option value="{{ $reseau->id }}">
+                                                                        {{ $reseau->libelle }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
                                                     </div>
+                                                    <div class="col-span-12 sm:col-span-6">
+                                                        <input type="hidden" name="zone_id"
+                                                            value="{{ $zone->id }}">
+                                                        <label for="modal-form-1" class="form-label">Code</label>
+                                                        <input type="text" class="form-control" placeholder="GA"
+                                                            name="code" value="{{ $zone->code }}">
+                                                    </div>
+
+
 
                                                     <div class="col-span-12 sm:col-span-6">
                                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="24 HEURES" name="libelle"
-                                                            value="{{ $delai->libelle }}">
-                                                    </div>
-
-
-                                                    <div class="col-span-12 sm:col-span-12">
-                                                        <label for="modal-form-2" class="form-label">Description</label>
-                                                        <textarea name="description" class="form-control" rows="4">
-									                 		{{ $delai->description }}
-									                 	</textarea>
+                                                        <input type="text" class="form-control" placeholder="GABON"
+                                                            name="libelle" value="{{ $zone->libelle }}">
                                                     </div>
 
 
@@ -204,10 +219,11 @@
             <!-- BEGIN: Pagination -->
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
                 <nav class="w-full sm:w-auto sm:mr-auto">
-                    {{ $delais->links() }}
+                    {{ $zones->links() }}
                 </nav>
             </div>
             <!-- END: Pagination -->
         </div>
+
     </div>
 @endsection

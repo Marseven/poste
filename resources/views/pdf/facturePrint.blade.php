@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{{ $page_title }}</title>
 </head>
 
 <body>
@@ -13,13 +13,13 @@
         <div class="flex flex-col lg:flex-row pt-10 px-5 sm:px-20 sm:pt-20 lg:pb-20 text-center sm:text-left">
             <div class="font-semibold text-primary text-3xl">
                 FACTURE
-                <div class="text-xl text-primary font-medium">#{{ $expedition->code_aleatoire }}</div>
+                <div class="text-xl text-primary font-medium">{{ $expedition->code }}</div>
 
                 @php
                     $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
                 @endphp
                 <div class="mt-1">
-                    {!! QrCode::size(130)->generate($expedition->code_aleatoire) !!}
+                    {!! QrCode::size(130)->generate($expedition->code) !!}
                 </div>
             </div>
             <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
@@ -53,53 +53,67 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">
-                                LIBELLE
-                            </th>
-                            <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">
-                                TYPE
-                            </th>
-                            <th class="border-b-2 dark:border-darkmode-400 text-right whitespace-nowrap">
-                                HAUTEUR
-                            </th>
-                            <th class="border-b-2 dark:border-darkmode-400 text-right whitespace-nowrap">
-                                LONGEUR
-                            </th>
-                            <th class="border-b-2 dark:border-darkmode-400 text-right whitespace-nowrap">
-                                LARGEUR
-                            </th>
-                            <th class="border-b-2 dark:border-darkmode-400 text-right whitespace-nowrap">
-                                POIDS
-                            </th>
+                            <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">SERVICE</th>
+                            <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">LIBELLE</th>
+                            <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">DESCRIPTION</th>
+                            <th class="border-b-2 dark:border-darkmode-400  whitespace-nowrap">POIDS</th>
+                            <th class="border-b-2 dark:border-darkmode-400  whitespace-nowrap">PRIX</th>
+                            <th class="border-b-2 dark:border-darkmode-400  whitespace-nowrap">STATUT</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         @if ($paquets)
                             @foreach ($paquets as $paquet)
+                                @php
+                                    $paquet->load(['service']);
+                                @endphp
                                 <tr>
+                                    <td class="border-b dark:border-darkmode-400">
+                                        <div class="font-medium whitespace-nowrap">
+                                            {{ $paquet->service->libelle }}
+                                        </div>
+                                    </td>
                                     <td class="border-b dark:border-darkmode-400">
                                         <div class="font-medium whitespace-nowrap">
                                             {{ $paquet->libelle }}
                                         </div>
-                                        <div class="text-slate-500 text-sm mt-0.5 whitespace-nowrap">
+                                    </td>
+                                    <td class="text-left border-b dark:border-darkmode-400 w-32">
+                                        <div class="font-medium whitespace-nowrap">
                                             {{ $paquet->description }}
                                         </div>
                                     </td>
-                                    <td class="text-left text-warning border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->modele }}
+                                    <td class="text-left border-b dark:border-darkmode-400 w-32">
+                                        {{ $paquet->poids }} KG(s)
                                     </td>
-                                    <td class="text-center border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->hauteur }}
+                                    <td class="text-left border-b dark:border-darkmode-400 w-32">
+                                        {{ $paquet->amount }} FCFA
                                     </td>
-                                    <td class="text-center border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->longeur }}
-                                    </td>
-                                    <td class="text-center border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->largeur }}
-                                    </td>
-                                    <td class="text-center border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->poids }}
+                                    <td class="text-left border-b dark:border-darkmode-400 w-32">
+                                        @if ($paquet->active == 1)
+                                            <div class="flex items-center justify-center text-warning"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Enregistre(e)
+                                            </div>
+                                        @elseif($paquet->active == 2)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Assigne(e)
+                                            </div>
+                                        @elseif($paquet->active == 3)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> CNT </div>
+                                        @elseif($paquet->active == 4)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Expedie(e)
+                                            </div>
+                                        @elseif($paquet->active == 5)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Livre(e) </div>
+                                        @else
+                                            <div class="flex items-center justify-center text-warning"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Non defini
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -123,17 +137,10 @@
             <div class="text-center sm:text-left mt-10 sm:mt-0">
                 <div class="text-base text-slate-500">Informations supplementaires</div>
                 <div class="mt-1">
-                    <strong>Service</strong> :
-                    {{ $expedition->service_exp_id ? $expedition->service->libelle : 'Non defini' }}
+                    <strong>Mode</strong> :
+                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
                 </div>
-                <div class="mt-1">
-                    <strong>Delai de livraison</strong> :
-                    {{ $expedition->temps_exp_id ? $expedition->delai->libelle : 'Non defini' }}
-                </div>
-                <div class="mt-1">
-                    <strong>Plage de poids du colis ou paquet</strong> :
-                    {{ $expedition->forfait_exp_id ? $expedition->forfait->libelle : 'Non defini' }}
-                </div>
+
 
                 <br>
 

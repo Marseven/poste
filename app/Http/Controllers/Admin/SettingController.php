@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agence;
 use App\Models\DelaiExpedition;
+use App\Models\ModeExpedition;
 use App\Models\Mouchard;
+use App\Models\Pays;
 use App\Models\PriceExpedition;
+use App\Models\Province;
 use App\Models\ServiceExpedition;
 use App\Models\StatutExpedition;
+use App\Models\Ville;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Facades\Agent;
+use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
 class SettingController extends Controller
 {
@@ -32,6 +39,11 @@ class SettingController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Services";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting41 = "side-menu--active";
 
         $services = ServiceExpedition::paginate(10);
 
@@ -44,6 +56,11 @@ class SettingController extends Controller
             'page_title',
             'app_name',
             'services',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting41',
         ));
     }
 
@@ -57,6 +74,11 @@ class SettingController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Services";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting41 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -70,7 +92,12 @@ class SettingController extends Controller
         return view('admin.adminService', compact(
             'page_title',
             'app_name',
-            'services'
+            'services',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting41',
         ));
     }
 
@@ -90,15 +117,16 @@ class SettingController extends Controller
         $service->code = $request->input('code');
         $service->libelle = $request->input('libelle');
         $service->description = $request->input('description');
+        $service->weight_max = $request->input('weight_max');
         $service->agent_id = $admin_id;
         $service->active = $request->input('active');
 
         if ($service->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau service créee avec succès !');
+            return back()->with('success', 'Nouveau service créee avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce service !');
+        return back()->with('failed', 'Impossible de creer ce service !');
     }
 
     /**
@@ -119,17 +147,18 @@ class SettingController extends Controller
             $service->code = $request->input('code');
             $service->libelle = $request->input('libelle');
             $service->description = $request->input('description');
+            $service->weight_max = $request->input('weight_max');
             $service->agent_id = $admin_id;
             $service->active = $request->input('active');
 
             if ($service->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Service modifiée avec succès !');
+                return back()->with('success', 'Service modifiée avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce service !');
+            return back()->with('failed', 'Impossible de modifier ce service !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce service !');
+        return back()->with('failed', 'Impossible de trouver ce service !');
     }
 
     ################################################################################################################
@@ -148,6 +177,11 @@ class SettingController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Delais d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting43 = "side-menu--active";
 
         $delais = DelaiExpedition::paginate(10);
 
@@ -160,6 +194,11 @@ class SettingController extends Controller
             'page_title',
             'app_name',
             'delais',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting43',
         ));
     }
 
@@ -173,6 +212,11 @@ class SettingController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Delais d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting43 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -187,6 +231,11 @@ class SettingController extends Controller
             'page_title',
             'app_name',
             'delais',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting43',
         ));
     }
 
@@ -212,9 +261,9 @@ class SettingController extends Controller
         if ($delai->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau delai créee avec succès !');
+            return back()->with('success', 'Nouveau delai créee avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce delai !');
+        return back()->with('failed', 'Impossible de creer ce delai !');
     }
 
     /**
@@ -241,11 +290,11 @@ class SettingController extends Controller
             if ($delai->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Delai modifiée avec succès !');
+                return back()->with('success', 'Delai modifiée avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce delai !');
+            return back()->with('failed', 'Impossible de modifier ce delai !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce delai !');
+        return back()->with('failed', 'Impossible de trouver ce delai !');
     }
 
     ################################################################################################################
@@ -264,6 +313,11 @@ class SettingController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Statuts d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting42 = "side-menu--active";
 
         $statuts = StatutExpedition::paginate(10);
 
@@ -276,6 +330,11 @@ class SettingController extends Controller
             'page_title',
             'app_name',
             'statuts',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting42',
         ));
     }
 
@@ -289,6 +348,11 @@ class SettingController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Statuts d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting42 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -303,6 +367,11 @@ class SettingController extends Controller
             'page_title',
             'app_name',
             'statuts',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting42',
         ));
     }
 
@@ -329,9 +398,9 @@ class SettingController extends Controller
         if ($statut->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau statut créee avec succès !');
+            return back()->with('success', 'Nouveau statut créee avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce statut !');
+        return back()->with('failed', 'Impossible de creer ce statut !');
     }
 
     /**
@@ -359,18 +428,237 @@ class SettingController extends Controller
             if ($statut->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Statut modifié avec succès !');
+                return back()->with('success', 'Statut modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce statut !');
+            return back()->with('failed', 'Impossible de modifier ce statut !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce statut !');
+        return back()->with('failed', 'Impossible de trouver ce statut !');
     }
 
     ################################################################################################################
     #                                                                                                              #
-    #   PRICING                                                                                                      #
+    #   MODE                                                                                                     #
     #                                                                                                              #
     ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminMode(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Modes d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting45 = "side-menu--active";
+
+        $modes = ModeExpedition::paginate(10);
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+        return view('admin.adminMode', compact(
+            'page_title',
+            'app_name',
+            'modes',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting45',
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchMode(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Modes d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting45 = "side-menu--active";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $modes = ModeExpedition::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);
+
+        return view('admin.adminMode', compact(
+            'page_title',
+            'app_name',
+            'modes',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting45',
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAddMode(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $mode = new ModeExpedition();
+
+        // Récupérer les données du formulaire
+        $mode->code = $request->input('code');
+        $mode->libelle = $request->input('libelle');
+        $mode->description = $request->input('description');
+        $mode->agent_id = $admin_id;
+        $mode->active = $request->input('active');
+
+        if ($mode->save()) {
+
+            // Redirection
+            return back()->with('success', 'Nouveau mode créee avec succès !');
+        }
+        return back()->with('failed', 'Impossible de creer ce mode !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEditMode(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get statut by id
+        $mode = ModeExpedition::find($request->input('mode_id'));
+        if (!empty($mode)) {
+
+            // Récupérer les données du formulaire
+            $mode->code = $request->input('code');
+            $mode->libelle = $request->input('libelle');
+            $mode->description = $request->input('description');
+            $mode->agent_id = $admin_id;
+            $mode->active = $request->input('active');
+
+            if ($mode->save()) {
+
+                // Redirection
+                return back()->with('success', 'Mode modifié avec succès !');
+            }
+            return back()->with('failed', 'Impossible de modifier ce mode !');
+        }
+        return back()->with('failed', 'Impossible de trouver ce mode !');
+    }
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   PRICING                                                                                                    #
+    #                                                                                                              #
+    ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminPrice(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Tarifs d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting44 = "side-menu--active";
+
+        $prices = PriceExpedition::paginate(10);
+
+        $zones = Zone::all();
+        $services = ServiceExpedition::all();
+        $modes = ModeExpedition::all();
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        return view('admin.adminPrice', compact(
+            'page_title',
+            'app_name',
+            'prices',
+            'zones',
+            'services',
+            'modes',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting44',
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchPrice(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Tarifs d'expedition";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub4 = "side-menu__sub-open";
+        $setting4 = "side-menu--active";
+        $setting44 = "side-menu--active";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $prices = PriceExpedition::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);
+        $zones = Zone::all();
+        $services = ServiceExpedition::all();
+        $modes = ModeExpedition::all();
+
+        return view('admin.adminPrice', compact(
+            'page_title',
+            'app_name',
+            'princes',
+            'zones',
+            'services',
+            'modes',
+            'setting',
+            'setting_sub',
+            'setting_sub4',
+            'setting4',
+            'setting44',
+        ));
+    }
 
     /**
      * Display a listing of the resource.
@@ -387,6 +675,11 @@ class SettingController extends Controller
         $price->code = $request->input('code');
         $price->weight = $request->input('weight');
         $price->price = $request->input('price');
+        $price->type = $request->input('type');
+        $price->first = $request->input('first');
+        $price->service_id = $request->input('service_id');
+        $price->zone_id = $request->input('zone_id');
+        $price->mode_id = $request->input('mode_id');
         $price->agent_id = $admin_id;
         $price->active = $request->input('active');
 
@@ -414,6 +707,11 @@ class SettingController extends Controller
             $price->code = $request->input('code');
             $price->weight = $request->input('weight');
             $price->price = $request->input('price');
+            $price->type = $request->input('type');
+            $price->first = $request->input('first');
+            $price->service_id = $request->input('service_id');
+            $price->zone_id = $request->input('zone_id');
+            $price->mode_id = $request->input('mode_id');
             $price->agent_id = $admin_id;
             $price->active = $request->input('active');
 
@@ -433,12 +731,26 @@ class SettingController extends Controller
      */
     public function selectData(Request $request)
     {
-        if ($request->target == 'regime') {
-        } elseif ($request->target == 'category') {
-        } elseif ($request->target == 'price') {
-            $organization = PriceExpedition::where('category_id', $request->id)->get();
+        if ($request->target == 'zone') {
+            $organization = Zone::where('reseau_id', $request->id)->get();
             $response = json_encode($organization);
-
+            return response()->json($response);
+        } elseif ($request->target == 'pays') {
+            $organization = Pays::where('zone_id', $request->id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
+        } elseif ($request->target == 'province') {
+            $organization = Province::where('pays_id', $request->id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
+        } elseif ($request->target == 'ville') {
+            $agence = Agence::find(Auth::user()->agence_id);
+            $organization = Ville::where('province_id', $request->id)->where('id', '<>', $agence->ville_id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
+        } elseif ($request->target == 'agence') {
+            $organization = Agence::where('ville_id', $request->id)->where('id', '<>', Auth::user()->agence_id)->get();
+            $response = json_encode($organization);
             return response()->json($response);
         }
     }
@@ -520,7 +832,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function mouchard($ip_adresse, $os_system, $os_navigator, $action_title, $action_system)
+    static function mouchard($ip_adresse, $os_system, $os_navigator, $action_title, $action_system)
     {
         // Get user's
         $author = Auth::user() ? Auth::user()->name : "Admin Inconnu";
@@ -533,7 +845,7 @@ class SettingController extends Controller
         $mouchard->os_system = $os_system;
         $mouchard->os_navigator = $os_navigator;
         $mouchard->action_title = $action_title;
-        $mouchard->action_author = $author;
+        //$mouchard->action_author = $author;
         $mouchard->action_system = $action_system;
 
         // Sauvegarder
@@ -546,7 +858,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getClientIPaddress(Request $request)
+    static function getClientIPaddress(Request $request)
     {
 
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
@@ -573,7 +885,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getDevice()
+    static function getDevice()
     {
 
         $device = Agent::device();
@@ -586,7 +898,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getBrowser()
+    static function getBrowser()
     {
 
         $browser = Agent::browser();
@@ -602,7 +914,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getOS()
+    static function getOS()
     {
 
         $platform = Agent::platform();

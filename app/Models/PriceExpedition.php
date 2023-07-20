@@ -9,18 +9,18 @@ class PriceExpedition extends Model
 {
     use HasFactory;
 
-    public function regime()
+    public function service()
     {
-        return $this->belongsTo(RegimeExpedition::class, 'regime_id');
+        return $this->belongsTo(ServiceExpedition::class, 'service_id');
     }
 
-    public function type()
+    public function zone()
     {
-        return $this->belongsTo(TypeExpedition::class, 'type_id');
+        return $this->belongsTo(Zone::class, 'zone_id');
     }
 
-    public function category()
+    public function mode()
     {
-        return $this->belongsTo(CategoryExpedition::class, 'category_id');
+        return $this->belongsTo(ModeExpedition::class, 'mode_id');
     }
 }

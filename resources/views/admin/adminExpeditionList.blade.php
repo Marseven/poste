@@ -56,8 +56,8 @@
                                 <tr class="intro-x">
                                     <td class="text-center bg-primary">
                                         <a class="text-primary"
-                                            href="{{ route('adminSuiviExpedition', ['code' => $expedition->code_aleatoire]) }}">
-                                            {{ $expedition->code_aleatoire }}
+                                            href="{{ route('adminSuiviExpedition', ['code' => $expedition->code]) }}">
+                                            {{ $expedition->code }}
                                         </a>
                                     </td>
                                     <td class="text-center">
@@ -112,17 +112,17 @@
                                                     <ul class="dropdown-content">
                                                         @if ($expedition->active == 1)
                                                             <li>
-                                                                <a href="{{ route('adminFacturePay', ['code' => $expedition->code_aleatoire]) }}"
+                                                                <a href="{{ route('adminFacturePay', ['code' => $expedition->code]) }}"
                                                                     class="dropdown-item">Ajouter un
                                                                     paiement</a>
                                                             </li>
                                                         @endif
                                                         <li>
-                                                            <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code_aleatoire]) }}"
+                                                            <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code]) }}"
                                                                 class="dropdown-item">Facture</a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code_aleatoire]) }}"
+                                                            <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code]) }}"
                                                                 class="dropdown-item">Etiquette</a>
                                                         </li>
 

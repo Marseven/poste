@@ -6,13 +6,262 @@ use App\Http\Controllers\Controller;
 use App\Models\Agence;
 use App\Models\Pays;
 use App\Models\Province;
+use App\Models\Reseau;
 use App\Models\Ville;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EmplacementContoller extends Controller
 {
     //
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   RESEAUX                                                                                                       #
+    #                                                                                                              #
+    ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminReseaux(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Réseaux";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place1 = "side-menu--active";
+
+        $reseaux = Reseau::paginate(10);
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+        return view('admin.adminReseaux', compact(
+            'page_title',
+            'app_name',
+            'reseaux',
+            'place',
+            'place_sub',
+            'place1'
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAddReseau(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $reseau = new Reseau();
+
+        // Récupérer les données du formulaire
+        $reseau->code = $request->input('code');
+        $reseau->libelle = $request->input('libelle');
+        $reseau->active = $request->input('active');
+
+        if ($reseau->save()) {
+            // Redirection
+            return back()->with('success', 'Nouveau réseau cree avec succès !');
+        }
+        return back()->with('failed', 'Impossible de creer ce pays !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEditReseau(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get pays by id
+        $reseau = Reseau::find($request->input('reseau_id'));
+
+        if (!empty($reseau)) {
+
+            // Récupérer les données du formulaire
+            $reseau->code = $request->input('code');
+            $reseau->libelle = $request->input('libelle');
+            $reseau->active = $request->input('active');
+
+            if ($reseau->save()) {
+
+                // Redirection
+                return back()->with('success', 'Réseau modifié avec succès !');
+            }
+            return back()->with('failed', 'Impossible de modifier ce pays !');
+        }
+        return back()->with('failed', 'Impossible de trouver ce pays !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchReseau(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Réseaux";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $reseaux = Reseau::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);
+
+        return view('admin.adminReseaux', compact(
+            'page_title',
+            'app_name',
+            'reseaux'
+        ));
+    }
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   Zones                                                                                                       #
+    #                                                                                                              #
+    ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminZones(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Zones";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place2 = "side-menu--active";
+
+        $zones = Zone::paginate(10);
+        $reseaux = Reseau::all();
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        return view('admin.adminZones', compact(
+            'page_title',
+            'app_name',
+            'zones',
+            'reseaux',
+            'place',
+            'place_sub',
+            'place2'
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAddZone(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $zone = new Zone();
+
+        // Récupérer les données du formulaire
+        $zone->code = $request->input('code');
+        $zone->libelle = $request->input('libelle');
+        $zone->reseau_id = $request->input('reseau_id');
+        $zone->active = $request->input('active');
+
+        if ($zone->save()) {
+
+            // Redirection
+            return back()->with('success', 'Nouvelle Zone cree avec succès !');
+        }
+        return back()->with('failed', 'Impossible de creer ce pays !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEditZone(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get pays by id
+        $zone = Zone::find($request->input('zone_id'));
+        if (!empty($country)) {
+
+            // Récupérer les données du formulaire
+            $zone->code = $request->input('code');
+            $zone->libelle = $request->input('libelle');
+            $zone->reseau_id = $request->input('reseau_id');
+            $zone->active = $request->input('active');
+
+            if ($country->save()) {
+
+                // Redirection
+                return back()->with('success', 'Zone modifié avec succès !');
+            }
+            return back()->with('failed', 'Impossible de modifier cette zone !');
+        }
+        return back()->with('failed', 'Impossible de trouver cette zone !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchZone(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Zones";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place2 = "side-menu--active";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $zones = Zone::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);
+
+        $reseaux = Reseau::all();
+
+        return view('admin.adminPays', compact(
+            'page_title',
+            'app_name',
+            'zones',
+            'reseaux',
+            'place',
+            'place_sub',
+            'place2'
+        ));
+    }
 
     ################################################################################################################
     #                                                                                                              #
@@ -32,9 +281,11 @@ class EmplacementContoller extends Controller
         $page_title = "Pays";
         $place = "side-menu--active";
         $place_sub = "side-menu__sub-open";
-        $place1 = "side-menu--active";
+        $place3 = "side-menu--active";
 
         $countries = Pays::paginate(10);
+
+        $zones = Zone::all();
 
 
         $admin = Auth::user();
@@ -45,9 +296,10 @@ class EmplacementContoller extends Controller
             'page_title',
             'app_name',
             'countries',
+            'zones',
             'place',
             'place_sub',
-            'place1'
+            'place3'
         ));
     }
 
@@ -66,14 +318,15 @@ class EmplacementContoller extends Controller
         // Récupérer les données du formulaire
         $country->code = $request->input('code');
         $country->libelle = $request->input('libelle');
+        $country->zone_id = $request->input('zone_id');
         $country->active = $request->input('active');
 
         if ($country->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouveau Pays cree avec succès !');
+            return back()->with('success', 'Nouveau Pays cree avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer ce pays !');
+        return back()->with('failed', 'Impossible de creer ce pays !');
     }
 
     /**
@@ -93,16 +346,17 @@ class EmplacementContoller extends Controller
             // Récupérer les données du formulaire
             $country->code = $request->input('code');
             $country->libelle = $request->input('libelle');
+            $country->zone_id = $request->input('zone_id');
             $country->active = $request->input('active');
 
             if ($country->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Pays modifié avec succès !');
+                return back()->with('success', 'Pays modifié avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier ce pays !');
+            return back()->with('failed', 'Impossible de modifier ce pays !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce pays !');
+        return back()->with('failed', 'Impossible de trouver ce pays !');
     }
 
     /**
@@ -145,17 +399,17 @@ class EmplacementContoller extends Controller
                         if ($country->save()) {
 
                             // Redirection
-                            return redirect()->back()->with('success', 'Drapeau modifiée avec succès !');
+                            return back()->with('success', 'Drapeau modifiée avec succès !');
                         }
-                        return redirect()->back()->with('failed', 'Impossible de modifier votre drapeau !');
+                        return back()->with('failed', 'Impossible de modifier votre drapeau !');
                     }
-                    return redirect()->back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
+                    return back()->with('failed', 'Imposible d\'uploader le fichier vers le répertoire défini !');
                 }
-                return redirect()->back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
+                return back()->with('failed', 'L\'extension du fichier doit être soit du jpg ou du png !');
             }
-            return redirect()->back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
+            return back()->with('failed', 'Aucun fichier téléchargé. Veuillez réessayer svp !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver ce pays !');
+        return back()->with('failed', 'Impossible de trouver ce pays !');
     }
 
     /**
@@ -168,6 +422,9 @@ class EmplacementContoller extends Controller
 
         $app_name = "La Poste";
         $page_title = "Pays";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place3 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -177,11 +434,16 @@ class EmplacementContoller extends Controller
         $countries = Pays::where('code', 'LIKE', '%' . $request->input('q') . '%')
             ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
+        $zones = Zone::all();
 
         return view('admin.adminPays', compact(
             'page_title',
             'app_name',
-            'countries'
+            'countries',
+            'zones',
+            'place',
+            'place_sub',
+            'place3'
         ));
     }
 
@@ -203,7 +465,7 @@ class EmplacementContoller extends Controller
         $page_title = "Provinces";
         $place = "side-menu--active";
         $place_sub = "side-menu__sub-open";
-        $place2 = "side-menu--active";
+        $place4 = "side-menu--active";
 
         $provinces = Province::paginate(10);
         $countries = Pays::all();
@@ -220,7 +482,7 @@ class EmplacementContoller extends Controller
             'countries',
             'place',
             'place_sub',
-            'place2'
+            'place4'
         ));
     }
 
@@ -234,6 +496,9 @@ class EmplacementContoller extends Controller
 
         $app_name = "La Poste";
         $page_title = "Provinces";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place4 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -249,7 +514,10 @@ class EmplacementContoller extends Controller
             'page_title',
             'app_name',
             'provinces',
-            'countries'
+            'countries',
+            'place',
+            'place_sub',
+            'place4'
         ));
     }
 
@@ -274,9 +542,9 @@ class EmplacementContoller extends Controller
         if ($province->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouvelle Province créee avec succès !');
+            return back()->with('success', 'Nouvelle Province créee avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer cette province !');
+        return back()->with('failed', 'Impossible de creer cette province !');
     }
 
     /**
@@ -302,11 +570,11 @@ class EmplacementContoller extends Controller
             if ($province->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Province modifiée avec succès !');
+                return back()->with('success', 'Province modifiée avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette province !');
+            return back()->with('failed', 'Impossible de modifier cette province !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette province !');
+        return back()->with('failed', 'Impossible de trouver cette province !');
     }
 
     ################################################################################################################
@@ -327,7 +595,7 @@ class EmplacementContoller extends Controller
         $page_title = "Villes";
         $place = "side-menu--active";
         $place_sub = "side-menu__sub-open";
-        $place3 = "side-menu--active";
+        $place5 = "side-menu--active";
 
         $villes = Ville::paginate(10);
         $provinces = Province::all();
@@ -344,7 +612,7 @@ class EmplacementContoller extends Controller
             'provinces',
             'place',
             'place_sub',
-            'place3'
+            'place5'
         ));
     }
 
@@ -358,6 +626,9 @@ class EmplacementContoller extends Controller
 
         $app_name = "La Poste";
         $page_title = "Villes";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place5 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -373,7 +644,10 @@ class EmplacementContoller extends Controller
             'page_title',
             'app_name',
             'villes',
-            'provinces'
+            'provinces',
+            'place',
+            'place_sub',
+            'place5'
         ));
     }
 
@@ -398,9 +672,9 @@ class EmplacementContoller extends Controller
         if ($ville->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouvelle Ville créee avec succès !');
+            return back()->with('success', 'Nouvelle Ville créee avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer cette ville !');
+        return back()->with('failed', 'Impossible de creer cette ville !');
     }
 
     /**
@@ -426,11 +700,11 @@ class EmplacementContoller extends Controller
             if ($ville->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Ville modifiée avec succès !');
+                return back()->with('success', 'Ville modifiée avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette ville !');
+            return back()->with('failed', 'Impossible de modifier cette ville !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette ville !');
+        return back()->with('failed', 'Impossible de trouver cette ville !');
     }
 
     ################################################################################################################
@@ -448,10 +722,10 @@ class EmplacementContoller extends Controller
     {
 
         $app_name = "La Poste";
-        $page_title = "Agences";
+        $page_title = "Bureaux de Poste";
         $place = "side-menu--active";
         $place_sub = "side-menu__sub-open";
-        $place4 = "side-menu--active";
+        $place6 = "side-menu--active";
 
         $agences = Agence::paginate(10);
         $villes = Ville::all();
@@ -468,7 +742,7 @@ class EmplacementContoller extends Controller
             'villes',
             'place',
             'place_sub',
-            'place4'
+            'place6'
         ));
     }
 
@@ -481,7 +755,10 @@ class EmplacementContoller extends Controller
     {
 
         $app_name = "La Poste";
-        $page_title = "Agences";
+        $page_title = "Bureaux de Poste";
+        $place = "side-menu--active";
+        $place_sub = "side-menu__sub-open";
+        $place6 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -497,7 +774,10 @@ class EmplacementContoller extends Controller
             'page_title',
             'app_name',
             'agences',
-            'villes'
+            'villes',
+            'place',
+            'place_sub',
+            'place6'
         ));
     }
 
@@ -515,7 +795,7 @@ class EmplacementContoller extends Controller
 
         // Récupérer les données du formulaire
         $agence->code = $request->input('code');
-        $agence->ville = $request->input('ville');
+        $agence->ville_id = $request->input('ville_id');
         $agence->libelle = $request->input('libelle');
         $agence->phone = $request->input('phone');
         $agence->adresse = $request->input('adresse');
@@ -524,9 +804,9 @@ class EmplacementContoller extends Controller
         if ($agence->save()) {
 
             // Redirection
-            return redirect()->back()->with('success', 'Nouvelle Agence créee avec succès !');
+            return back()->with('success', 'Nouveau bureau créee avec succès !');
         }
-        return redirect()->back()->with('failed', 'Impossible de creer cette agence !');
+        return back()->with('failed', 'Impossible de creer ce bureau !');
     }
 
     /**
@@ -545,7 +825,7 @@ class EmplacementContoller extends Controller
 
             // Récupérer les données du formulaire
             $agence->code = $request->input('code');
-            $agence->ville = $request->input('ville');
+            $agence->ville_id = $request->input('ville_id');
             $agence->libelle = $request->input('libelle');
             $agence->phone = $request->input('phone');
             $agence->adresse = $request->input('adresse');
@@ -554,10 +834,10 @@ class EmplacementContoller extends Controller
             if ($agence->save()) {
 
                 // Redirection
-                return redirect()->back()->with('success', 'Agence modifiée avec succès !');
+                return back()->with('success', 'Bureau modifiée avec succès !');
             }
-            return redirect()->back()->with('failed', 'Impossible de modifier cette agence !');
+            return back()->with('failed', 'Impossible de modifier ce bureau !');
         }
-        return redirect()->back()->with('failed', 'Impossible de trouver cette agence !');
+        return back()->with('failed', 'Impossible de trouver ce bureau !');
     }
 }

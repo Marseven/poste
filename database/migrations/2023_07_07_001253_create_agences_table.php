@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('libelle');
             $table->string('phone')->nullable();
             $table->string('adresse')->nullable();
-            $table->string('ville')->nullable();
 
+            $table->integer('ville_id')->nullable();
             $table->integer('active')->default('0');
             $table->integer('agent_id')->nullable();
             $table->timestamps();

@@ -29,6 +29,8 @@ return new class extends Migration
             $table->double('largeur')->nullable();
             $table->double('hauteur')->nullable();
 
+            $table->double('amount')->nullable();
+
             $table->string('photo')->default('expeditions/colis/colis.png');
 
             $table->integer('agent_id')->nullable();

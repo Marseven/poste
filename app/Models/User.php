@@ -12,8 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    public function agence(){
-        return $this->hasOne('App\Models\Agence', 'id', 'agence_id');
+    public function agence()
+    {
+        return $this->belongsTo(Agence::class, 'agence_id');
     }
 
     /**

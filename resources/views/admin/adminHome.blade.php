@@ -29,8 +29,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-primary"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                        </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $expeditions->count() }}
@@ -45,8 +45,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-pending"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                        <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                            <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                        </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $paiements->count() }}
@@ -61,8 +61,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                        </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $clients->count() }}
@@ -77,8 +77,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-success"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                        </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $packages->count() }}
@@ -288,8 +288,8 @@
                                     <tr class="intro-x">
                                         <td class="text-center bg-primary">
                                             <a class="text-primary"
-                                                href="{{ route('adminSuiviExpedition', ['code' => $expedition->code_aleatoire]) }}">
-                                                {{ $expedition->code_aleatoire }}
+                                                href="{{ route('adminSuiviExpedition', ['code' => $expedition->code]) }}">
+                                                {{ $expedition->code }}
                                             </a>
                                         </td>
                                         <td class="text-center">
@@ -346,11 +346,11 @@
                                                         <ul class="dropdown-content">
 
                                                             <li>
-                                                                <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code_aleatoire]) }}"
+                                                                <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code]) }}"
                                                                     class="dropdown-item" target="_blank">Facture</a>
                                                             </li>
                                                             <li>
-                                                                <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code_aleatoire]) }}"
+                                                                <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code]) }}"
                                                                     class="dropdown-item" target="_blank">Etiquette</a>
                                                             </li>
 

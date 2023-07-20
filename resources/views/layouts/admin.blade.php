@@ -18,7 +18,6 @@
 
     <title>{{ $app_name ? $app_name : 'LA POSTE' }} | {{ $page_title ? $page_title : '' }}</title>
 
-
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="{{ URL::to('assets/dist/css/app.css') }}" />
 
@@ -119,27 +118,39 @@
                     </a>
                     <ul class="{{ $place_sub ?? '' }}">
                         <li>
-                            <a href="{{ route('adminPays') }}" class="side-menu {{ $place1 ?? '' }}">
+                            <a href="{{ route('adminReseaux') }}" class="side-menu {{ $place1 ?? '' }}">
+                                <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="side-menu__title"> Réseaux </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminZones') }}" class="side-menu {{ $place2 ?? '' }}">
+                                <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="side-menu__title"> Zones </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminPays') }}" class="side-menu {{ $place3 ?? '' }}">
                                 <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                 <div class="side-menu__title"> Pays </div>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('adminProvince') }}" class="side-menu {{ $place2 ?? '' }}">
+                            <a href="{{ route('adminProvince') }}" class="side-menu {{ $place4 ?? '' }}">
                                 <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                 <div class="side-menu__title"> Provinces </div>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('adminVille') }}" class="side-menu {{ $place3 ?? '' }}">
+                            <a href="{{ route('adminVille') }}" class="side-menu {{ $place5 ?? '' }}">
                                 <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                 <div class="side-menu__title"> Villes </div>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('adminAgence') }}" class="side-menu {{ $place4 ?? '' }}">
+                            <a href="{{ route('adminAgence') }}" class="side-menu {{ $place6 ?? '' }}">
                                 <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                <div class="side-menu__title">Agences</div>
+                                <div class="side-menu__title">Bureaux de Poste</div>
                             </a>
                         </li>
                     </ul>
@@ -275,48 +286,25 @@
                                     </a>
                                 </li>
 
-                                {{-- <li>
-                                    <a href="{{ route('adminTarif') }}" class="side-menu">
-                                        <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
-                                        <div class="side-menu__title">Tarifs</div>
-                                    </a>
-                                </li>
+
                                 <li>
-                                    <a href="{{ route('adminForfait') }}" class="side-menu">
-                                        <div class="side-menu__icon"> <i data-lucide="target"></i> </div>
-                                        <div class="side-menu__title">Plage de poids</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('adminDelai') }}" class="side-menu">
-                                        <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                    <a href="{{ route('adminDelai') }}" class="side-menu {{ $setting43 ?? '' }}">
+                                        <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                         <div class="side-menu__title">Delais d'expédition</div>
                                     </a>
-                                </li> --}}
+                                </li>
 
-
                                 <li>
-                                    <a href="{{ route('adminType') }}" class="side-menu {{ $setting43 ?? '' }}">
-                                        <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                        <div class="side-menu__title">Types d'expédition</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('adminRegime') }}" class="side-menu {{ $setting44 ?? '' }}">
-                                        <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                        <div class="side-menu__title">Régimes d'expédition</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('adminCategory') }}" class="side-menu {{ $setting45 ?? '' }}">
-                                        <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                        <div class="side-menu__title">Catégories d'expédition</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('adminPrice') }}" class="side-menu {{ $setting46 ?? '' }}">
+                                    <a href="{{ route('adminPrice') }}" class="side-menu {{ $setting44 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                         <div class="side-menu__title">Tarif d'expédition</div>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('adminMode') }}" class="side-menu {{ $setting45 ?? '' }}">
+                                        <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="side-menu__title">Mode d'expédition</div>
                                     </a>
                                 </li>
                             </ul>
@@ -377,9 +365,7 @@
                         <div class="notification-content__box dropdown-content">
                             <div class="notification-content__title">Notifications</div>
 
-
-
-                            <div class="cursor-pointer relative flex items-center mt-5">
+                            {{-- <div class="cursor-pointer relative flex items-center mt-5">
                                 <div class="w-12 h-12 flex-none image-fit mr-1">
                                     <img alt="Midone - HTML Admin Template" class="rounded-full"
                                         src="{{ URL::to('assets/dist/images/profile-2.jpg') }}">
@@ -396,7 +382,7 @@
                                         Lorem Ipsum is not simply random text. It has roots in a piece of classical
                                         Latin literature from 45 BC, making it over 20</div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -446,7 +432,7 @@
                 @if (Session::get('success'))
                     <div class="alert alert-success alert-dismissible show flex items-center mb-2" role="alert"
                         id="alert"> <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
-                        <strong>Succès!</strong> {{ Session::get('success') }}. <button type="button"
+                        <strong>Succès ! </strong> {{ Session::get('success') }}. <button type="button"
                             class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i
                                 data-lucide="x" class="w-4 h-4"></i> </button>
                     </div>

@@ -7,7 +7,7 @@
             Etiquette Expedition
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="{{ route('EtiquettePrint', ['code' => $expedition->code_aleatoire]) }}"
+            <a href="{{ route('EtiquettePrint', ['code' => $expedition->code]) }}"
                 class="btn btn-primary shadow-md mr-2">Imprimer</a>
         </div>
     </div>
@@ -16,13 +16,13 @@
         <div class="flex flex-col lg:flex-row pt-10 px-5 sm:px-20 sm:pt-20 lg:pb-20 text-center sm:text-left">
             <div class="font-semibold text-primary text-3xl">
                 ETIQUETTE
-                <div class="text-xl text-primary font-medium">#{{ $expedition->code_aleatoire }}</div>
+                <div class="text-xl text-primary font-medium">{{ $expedition->reference }}</div>
 
                 @php
                     $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
                 @endphp
                 <div class="mt-1">
-                    {!! $generator->getBarcode($expedition->code_aleatoire, $generator::TYPE_CODE_128) !!}
+                    {!! $generator->getBarcode($expedition->code, $generator::TYPE_CODE_128) !!}
                 </div>
             </div>
             <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
@@ -56,21 +56,14 @@
             <div class="text-center sm:text-left mt-10 sm:mt-0">
                 <div class="text-base text-slate-500">Informations supplementaires</div>
                 <div class="mt-1">
-                    <strong>Service</strong> :
-                    {{ $expedition->service_exp_id ? $expedition->service->libelle : 'Non defini' }}
+                    <strong>Mode</strong> :
+                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
                 </div>
-                <div class="mt-1">
-                    <strong>Delai de livraison</strong> :
-                    {{ $expedition->temps_exp_id ? $expedition->delai->libelle : 'Non defini' }}
-                </div>
-                <div class="mt-1">
-                    <strong>Plage de poids du colis ou paquet</strong> :
-                    {{ $expedition->forfait_exp_id ? $expedition->forfait->libelle : 'Non defini' }}
-                </div>
+
             </div>
             <div class="text-center sm:text-right sm:ml-auto">
                 <div class="mt-1">
-                    {!! QrCode::size(100)->generate($expedition->code_aleatoire) !!}
+                    {!! QrCode::size(100)->generate($expedition->code) !!}
                 </div>
             </div>
         </div>

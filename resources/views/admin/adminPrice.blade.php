@@ -33,25 +33,59 @@
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-4">
-                                        <label for="modal-form-6" class="form-label">Catégorie d'expédition</label>
-                                        <select id="modal-form-6" class="form-select" name="category_exp" required>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->libelle }}</option>
+                                        <label for="modal-form-6" class="form-label">Service</label>
+                                        <select id="modal-form-6" class="form-select" name="service_id" required>
+                                            @foreach ($services as $service)
+                                                <option value="{{ $service->id }}">{{ $service->libelle }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-span-12 sm:col-span-12">
+                                    <div class="col-span-12 sm:col-span-4">
+                                        <label for="modal-form-6" class="form-label">Zone</label>
+                                        <select id="modal-form-6" class="form-select" name="zone_id" required>
+                                            @foreach ($zones as $zone)
+                                                <option value="{{ $zone->id }}">{{ $zone->libelle }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-4">
+                                        <label for="modal-form-6" class="form-label">Type</label>
+                                        <select id="modal-form-6" class="form-select" name="type" required>
+                                            <option>Standard</option>
+                                            <option>Suppémentaire</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-4">
+                                        <label for="modal-form-6" class="form-label">Mode</label>
+                                        <select id="modal-form-6" class="form-select" name="mode_id" required>
+                                            @foreach ($modes as $mode)
+                                                <option value="{{ $mode->id }}">{{ $mode->libelle }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-4">
                                         <label for="modal-form-2" class="form-label">Poids (KG)</label>
                                         <input type="number" step="0.01" class="form-control" name="weight" required>
                                     </div>
 
-                                    <div class="col-span-12 sm:col-span-12">
+                                    <div class="col-span-12 sm:col-span-4">
                                         <label for="modal-form-2" class="form-label">Prix (FCFA)</label>
                                         <input type="number" class="form-control" name="price" required>
                                     </div>
 
-                                    <div class="col-span-12 sm:col-span-12">
+                                    <div class="col-span-12 sm:col-span-6">
+                                        <label for="modal-form-6" class="form-label">1er Kilo</label>
+                                        <select id="modal-form-6" class="form-select" name="first" required>
+                                            <option value="0">Non</option>
+                                            <option value="1">Oui</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-6">
                                         <label for="modal-form-6" class="form-label">Statut</label>
                                         <select id="modal-form-6" class="form-select" name="active" required>
                                             <option value="1">active</option>
@@ -103,7 +137,10 @@
                     <thead>
                         <tr>
                             <th class="whitespace-nowrap text-center">CODE</th>
-                            <th class="text-center whitespace-nowrap">CATÉGORIE</th>
+                            <th class="text-center whitespace-nowrap">SERVICE</th>
+                            <th class="text-center whitespace-nowrap">ZONE</th>
+                            <th class="text-center whitespace-nowrap">TYPE</th>
+                            <th class="text-center whitespace-nowrap">MODE</th>
                             <th class="text-center whitespace-nowrap">POIDS</th>
                             <th class="text-center whitespace-nowrap">PRIX</th>
                             <th class="text-center whitespace-nowrap">STATUT</th>
@@ -115,14 +152,23 @@
                         @if ($prices)
                             @foreach ($prices as $price)
                                 @php
-                                    $price->load(['category']);
+                                    $price->load(['service', 'zone', 'mode']);
                                 @endphp
                                 <tr class="intro-x">
                                     <td class="text-center">
                                         {{ $price->code }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $price->category->libelle }}
+                                        {{ $price->service->libelle }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $price->zone->libelle }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $price->type }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $price->mode->libelle }}
                                     </td>
                                     <td class="text-center">
                                         {{ $price->weight }} KG
@@ -164,7 +210,7 @@
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
                                                     <div class="col-span-12 sm:col-span-12">
-                                                        <input type="hidden" name="regime_id"
+                                                        <input type="hidden" name="price_id"
                                                             value="{{ $price->id }}">
                                                         <label for="modal-form-1" class="form-label">Code</label>
                                                         <input type="text" class="form-control" placeholder="P05"
@@ -172,36 +218,89 @@
                                                     </div>
 
                                                     <div class="col-span-12 sm:col-span-4">
-                                                        <label for="modal-form-6" class="form-label">Catégorie
-                                                            d'expéditon</label>
-                                                        <select id="modal-form-6" class="form-select" name="regime_exp"
+                                                        <label for="modal-form-6" class="form-label">Service</label>
+                                                        <select id="modal-form-6" class="form-select" name="service_id"
                                                             required>
-                                                            @foreach ($categories as $category)
-                                                                @if ($category->id == $category->regime_id)
-                                                                    <option value="{{ $category->id }}" selected>
-                                                                        {{ $category->libelle }}</option>
+                                                            @foreach ($services as $service)
+                                                                @if ($service->id == $price->service_id)
+                                                                    <option value="{{ $service->id }}" selected>
+                                                                        {{ $service->libelle }}</option>
                                                                 @else
-                                                                    <option value="{{ $category->id }}">
-                                                                        {{ $category->libelle }}</option>
+                                                                    <option value="{{ $service->id }}">
+                                                                        {{ $service->libelle }}</option>
                                                                 @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
 
-                                                    <div class="col-span-12 sm:col-span-12">
+                                                    <div class="col-span-12 sm:col-span-4">
+                                                        <label for="modal-form-6" class="form-label">Zone</label>
+                                                        <select id="modal-form-6" class="form-select" name="zone_id"
+                                                            required>
+                                                            @foreach ($zones as $zone)
+                                                                @if ($zone->id == $price->zone_id)
+                                                                    <option value="{{ $zone->id }}" selected>
+                                                                        {{ $zone->libelle }}</option>
+                                                                @else
+                                                                    <option value="{{ $zone->id }}">
+                                                                        {{ $zone->libelle }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-span-12 sm:col-span-4">
+                                                        <label for="modal-form-6" class="form-label">Type</label>
+                                                        <select id="modal-form-6" class="form-select" name="type"
+                                                            required>
+                                                            <option {{ $price->type == 'Standard' ? 'selected' : '' }}>
+                                                                Standard</option>
+                                                            <option
+                                                                {{ $price->type == 'Suppémentaire' ? 'selected' : '' }}>
+                                                                Suppémentaire</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-span-12 sm:col-span-4">
+                                                        <label for="modal-form-6" class="form-label">Mode</label>
+                                                        <select id="modal-form-6" class="form-select" name="mode_id"
+                                                            required>
+                                                            @foreach ($modes as $mode)
+                                                                @if ($mode->id == $price->mode_id)
+                                                                    <option value="{{ $mode->id }}" selected>
+                                                                        {{ $mode->libelle }}</option>
+                                                                @else
+                                                                    <option value="{{ $mode->id }}">
+                                                                        {{ $mode->libelle }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-span-12 sm:col-span-4">
                                                         <label for="modal-form-2" class="form-label">Poids (KG)</label>
                                                         <input type="text" class="form-control"
                                                             value="{{ $price->weight }}" name="weight" required>
                                                     </div>
 
-                                                    <div class="col-span-12 sm:col-span-12">
+                                                    <div class="col-span-12 sm:col-span-4">
                                                         <label for="modal-form-2" class="form-label">Prix (FCFA)</label>
                                                         <input type="number" class="form-control"
                                                             value="{{ $price->price }}" name="price" required>
                                                     </div>
 
+                                                    <div class="col-span-12 sm:col-span-6">
+                                                        <label for="modal-form-6" class="form-label">1er Kilo</label>
+                                                        <select id="modal-form-6" class="form-select" name="first"
+                                                            required>
+                                                            <option {{ $price->first == 0 ? 'selected' : '' }}
+                                                                value="0">Non</option>
+                                                            <option {{ $price->first == 1 ? 'selected' : '' }}
+                                                                value="1">Oui</option>
+                                                        </select>
+                                                    </div>
 
-                                                    <div class="col-span-12 sm:col-span-12">
+                                                    <div class="col-span-12 sm:col-span-6">
                                                         <label for="modal-form-6" class="form-label">Statut</label>
                                                         <select id="modal-form-6" class="form-select" name="active"
                                                             required>

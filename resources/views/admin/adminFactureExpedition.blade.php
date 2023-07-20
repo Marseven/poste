@@ -8,7 +8,7 @@
             Facture Expedition
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="{{ route('FacturePrint', ['code' => $expedition->code_aleatoire]) }}"
+            <a href="{{ route('FacturePrint', ['code' => $expedition->code]) }}"
                 class="btn btn-primary shadow-md mr-2">Imprimer</a>
         </div>
     </div>
@@ -17,13 +17,13 @@
         <div class="flex flex-col lg:flex-row pt-10 px-5 sm:px-20 sm:pt-20 lg:pb-20 text-center sm:text-left">
             <div class="font-semibold text-primary text-3xl">
                 FACTURE
-                <div class="text-xl text-primary font-medium">#{{ $expedition->code_aleatoire }}</div>
+                <div class="text-xl text-primary font-medium">{{ $expedition->reference }}</div>
 
                 @php
                     $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
                 @endphp
                 <div class="mt-1">
-                    {!! QrCode::size(130)->generate($expedition->code_aleatoire) !!}
+                    {!! QrCode::size(130)->generate($expedition->code) !!}
                 </div>
             </div>
             <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
@@ -57,6 +57,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">SERVICE</th>
                             <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">LIBELLE</th>
                             <th class="border-b-2 dark:border-darkmode-400 whitespace-nowrap">DESCRIPTION</th>
                             <th class="border-b-2 dark:border-darkmode-400  whitespace-nowrap">POIDS</th>
@@ -69,9 +70,14 @@
                         @if ($paquets)
                             @foreach ($paquets as $paquet)
                                 @php
-                                    $paquet->load(['price']);
+                                    $paquet->load(['service']);
                                 @endphp
                                 <tr>
+                                    <td class="border-b dark:border-darkmode-400">
+                                        <div class="font-medium whitespace-nowrap">
+                                            {{ $paquet->service->libelle }}
+                                        </div>
+                                    </td>
                                     <td class="border-b dark:border-darkmode-400">
                                         <div class="font-medium whitespace-nowrap">
                                             {{ $paquet->libelle }}
@@ -83,10 +89,10 @@
                                         </div>
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->price->weight }} KG(s)
+                                        {{ $paquet->poids }} KG(s)
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->price->price }} FCFA
+                                        {{ $paquet->amount }} FCFA
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
                                         @if ($paquet->active == 1)
@@ -132,20 +138,8 @@
             <div class="text-center sm:text-left mt-10 sm:mt-0">
                 <div class="text-base text-slate-500">Informations supplementaires</div>
                 <div class="mt-1">
-                    <strong>Service</strong> :
-                    {{ $expedition->service_exp_id ? $expedition->service->libelle : 'Non defini' }}
-                </div>
-                <div class="mt-1">
-                    <strong>Type d'expédition</strong> :
-                    {{ $expedition->type_exp_id ? $expedition->type->libelle : 'Non defini' }}
-                </div>
-                <div class="mt-1">
-                    <strong>Régime d'expédition</strong> :
-                    {{ $expedition->regime_exp_id ? $expedition->regime->libelle : 'Non defini' }}
-                </div>
-                <div class="mt-1">
-                    <strong>Catégorie d'expédition</strong> :
-                    {{ $expedition->category_exp_id ? $expedition->category->libelle : 'Non defini' }}
+                    <strong>Mode</strong> :
+                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
                 </div>
 
                 <br>
@@ -211,7 +205,7 @@
             doc.html(zoneAImprimer, {
                 callback: function(doc) {
                     // Sauvegarder le PDF
-                    doc.save("facture-{{ $expedition->code_aleatoire }}.pdf");
+                    doc.save("facture-{{ $expedition->code }}.pdf");
                 },
                 x: 12,
                 y: 12

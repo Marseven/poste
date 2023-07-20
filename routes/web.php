@@ -63,6 +63,20 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('recherche-compte', [UserController::class, 'adminSearchCompte'])->name('adminSearchCompte');
     /* End Compte */
 
+    /* Start Reseau */
+    Route::get('liste-des-reseaux', [EmplacementContoller::class, 'adminReseaux'])->name('adminReseaux');
+    Route::post('add-reseau', [EmplacementContoller::class, 'adminAddReseau'])->name('adminAddReseau');
+    Route::post('edit-reseau', [EmplacementContoller::class, 'adminEditReseau'])->name('adminEditReseau');
+    Route::get('recherche-reseau', [EmplacementContoller::class, 'adminSearchReseau'])->name('adminSearchReseau');
+    /* End Reseau */
+
+    /* Start Zone */
+    Route::get('liste-des-zones', [EmplacementContoller::class, 'adminZones'])->name('adminZones');
+    Route::post('add-zone', [EmplacementContoller::class, 'adminAddZone'])->name('adminAddZone');
+    Route::post('edit-zone', [EmplacementContoller::class, 'adminEditZone'])->name('adminEditZone');
+    Route::get('recherche-zone', [EmplacementContoller::class, 'adminSearchZone'])->name('adminSearchZone');
+    /* End Zone */
+
     /* Start Pays */
     Route::get('liste-des-pays', [EmplacementContoller::class, 'adminPays'])->name('adminPays');
     Route::post('add-pays', [EmplacementContoller::class, 'adminAddPays'])->name('adminAddPays');
@@ -164,6 +178,13 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::post('edit-statut', [SettingController::class, 'adminEditStatut'])->name('adminEditStatut');
     Route::get('recherche-statut', [SettingController::class, 'adminSearchStatut'])->name('adminSearchStatut');
     /* End Statut */
+
+    /* Start Mode */
+    Route::get('modes-expedition', [SettingController::class, 'adminMode'])->name('adminMode');
+    Route::post('add-mode', [SettingController::class, 'adminAddMode'])->name('adminAddMode');
+    Route::post('edit-mode', [SettingController::class, 'adminEditMode'])->name('adminEditMode');
+    Route::get('recherche-mode', [SettingController::class, 'adminSearchMode'])->name('adminSearchMode');
+    /* End Mode */
 
     /* Start Price */
     Route::get('prices-expedition', [SettingController::class, 'adminPrice'])->name('adminPrice');
