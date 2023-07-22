@@ -2,6 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
 <!-- BEGIN: Head -->
 
+@php
+    $user = Auth::user();
+@endphp
+
 <head>
     <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -358,32 +362,45 @@
 
                 <!-- BEGIN: Notifications -->
                 <div class="intro-x dropdown mr-auto sm:mr-6">
-                    <div class="dropdown-toggle notification notification--bullet cursor-pointer" role="button"
-                        aria-expanded="false" data-tw-toggle="dropdown"> <i data-lucide="bell"
+                    <div class="dropdown-toggle notification {{ $user->unreadNotifications->count() > 0 ? 'notification--bullet' : '' }} cursor-pointer"
+                        role="button" aria-expanded="false" data-tw-toggle="dropdown"> <i data-lucide="bell"
                             class="notification__icon dark:text-slate-500"></i> </div>
                     <div class="notification-content pt-2 dropdown-menu">
                         <div class="notification-content__box dropdown-content">
                             <div class="notification-content__title">Notifications</div>
+                            @if ($user->unreadNotifications->count() > 0)
+                                @php
+                                    $i = 0;
+                                @endphp
+                                @foreach ($user->unreadNotifications as $notification)
+                                    <div class="cursor-pointer relative flex items-center mt-5">
+                                        <div class="w-12 h-12 flex-none image-fit mr-1">
+                                            <img alt="Midone - HTML Admin Template" class="rounded-full"
+                                                src="{{ URL::to('assets/dist/images/logos/icon_bleu.png') }}">
+                                            <div
+                                                class="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600">
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 overflow-hidden">
+                                            <div class="flex items-center">
 
-                            {{-- <div class="cursor-pointer relative flex items-center mt-5">
-                                <div class="w-12 h-12 flex-none image-fit mr-1">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-full"
-                                        src="{{ URL::to('assets/dist/images/profile-2.jpg') }}">
-                                    <div
-                                        class="w-3 h-3 bg-success absolute right-0 bottom-0 rounded-full border-2 border-white dark:border-darkmode-600">
+                                                <div class="text-xs text-slate-400 ml-auto whitespace-nowrap">
+                                                    {{ date_format(date_create($notification->data['date']), 'd M Y') }}
+                                                </div>
+                                            </div>
+                                            <div class="w-full truncate text-slate-500 mt-0.5">
+                                                {{ $notification->data['title'] ?? '' }}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="cursor-pointer relative flex items-center mt-5">
+                                    <div class="ml-2 overflow-hidden">
+                                        <div class="w-full truncate text-slate-500 mt-0.5">Pas de notifications pour le
+                                            moment</div>
                                     </div>
                                 </div>
-                                <div class="ml-2 overflow-hidden">
-                                    <div class="flex items-center">
-                                        <a href="javascript:;" class="font-medium truncate mr-5">Johnny Depp</a>
-                                        <div class="text-xs text-slate-400 ml-auto whitespace-nowrap">01:10 PM</div>
-                                    </div>
-                                    <div class="w-full truncate text-slate-500 mt-0.5">Contrary to popular belief,
-                                        Lorem Ipsum is not simply random text. It has roots in a piece of classical
-                                        Latin literature from 45 BC, making it over 20</div>
-                                </div>
-                            </div> --}}
-
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -432,7 +449,7 @@
                 @if (Session::get('success'))
                     <div class="alert alert-success alert-dismissible show flex items-center mb-2" role="alert"
                         id="alert"> <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
-                        <strong>Succès ! </strong> {{ Session::get('success') }}. <button type="button"
+                        <strong>Succès !</strong> {{ ' ' . Session::get('success') }}. <button type="button"
                             class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i
                                 data-lucide="x" class="w-4 h-4"></i> </button>
                     </div>
@@ -442,8 +459,9 @@
                 @if (Session::get('failed'))
                     <div class="alert alert-danger alert-dismissible show flex items-center mb-2" role="alert"
                         id="alert"> <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i> <strong>Attention !
-                        </strong> {{ Session::get('failed') }}. <button type="button" class="btn-close text-white"
-                            data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i>
+                        </strong> {{ ' ' . Session::get('failed') }}. <button type="button"
+                            class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i
+                                data-lucide="x" class="w-4 h-4"></i>
                         </button> </div>
                     <br>
                 @endif

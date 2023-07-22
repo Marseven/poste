@@ -328,6 +328,10 @@ class ExpeditionContoller extends Controller
 
                 $facture->save();
 
+
+                //notificaitons - expediteurs
+
+
                 // Redirection
                 return redirect('/expeditions')->with('success', 'Expedition ajoutee avec succès !');
             }

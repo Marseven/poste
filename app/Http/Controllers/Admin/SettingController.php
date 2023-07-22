@@ -12,14 +12,11 @@ use App\Models\Pays;
 use App\Models\PriceExpedition;
 use App\Models\Province;
 use App\Models\ServiceExpedition;
-use App\Models\StatutExpedition;
 use App\Models\Ville;
 use App\Models\Zone;
-use BaconQrCode\Common\Mode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Facades\Agent;
-use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
 class SettingController extends Controller
 {
