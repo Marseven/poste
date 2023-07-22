@@ -173,10 +173,10 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     /* End Delai */
 
     /* Start Statut */
-    Route::get('statuts-expedition', [SettingController::class, 'adminStatut'])->name('adminStatut');
-    Route::post('add-statut', [SettingController::class, 'adminAddStatut'])->name('adminAddStatut');
-    Route::post('edit-statut', [SettingController::class, 'adminEditStatut'])->name('adminEditStatut');
-    Route::get('recherche-statut', [SettingController::class, 'adminSearchStatut'])->name('adminSearchStatut');
+    Route::get('etapes', [SettingController::class, 'adminEtape'])->name('adminEtape');
+    Route::post('add-etape', [SettingController::class, 'adminAddEtape'])->name('adminAddEtape');
+    Route::post('edit-etape', [SettingController::class, 'adminEditEtape'])->name('adminEditEtape');
+    Route::get('recherche-etape', [SettingController::class, 'adminSearchEtape'])->name('adminSearchEtape');
     /* End Statut */
 
     /* Start Mode */

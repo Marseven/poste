@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statut_expeditions', function (Blueprint $table) {
+        Schema::create('etapes', function (Blueprint $table) {
 
             $table->id();
 
@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('libelle');
             $table->mediumText('description');
             $table->string('code_hexa');
+            $table->string('type');
+
+            $table->integer('mode_id')->nullable();
+            $table->integer('position')->nullable();
 
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('statut_expeditions');
+        Schema::dropIfExists('etapes');
     }
 };

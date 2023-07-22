@@ -280,9 +280,9 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('adminStatut') }}" class="side-menu {{ $setting42 ?? '' }}">
+                                    <a href="{{ route('adminEtape') }}" class="side-menu {{ $setting42 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                        <div class="side-menu__title">Statuts</div>
+                                        <div class="side-menu__title">Étapes</div>
                                     </a>
                                 </li>
 

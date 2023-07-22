@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Agence;
 use App\Models\DelaiExpedition;
+use App\Models\Etape;
 use App\Models\ModeExpedition;
 use App\Models\Mouchard;
 use App\Models\Pays;
@@ -14,6 +15,7 @@ use App\Models\ServiceExpedition;
 use App\Models\StatutExpedition;
 use App\Models\Ville;
 use App\Models\Zone;
+use BaconQrCode\Common\Mode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Facades\Agent;
@@ -299,7 +301,7 @@ class SettingController extends Controller
 
     ################################################################################################################
     #                                                                                                              #
-    #   STATUT                                                                                                     #
+    #   ETAPES                                                                                                     #
     #                                                                                                              #
     ################################################################################################################
 
@@ -308,28 +310,32 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adminStatut(Request $request)
+    public function adminEtape(Request $request)
     {
 
         $app_name = "La Poste";
-        $page_title = "Statuts d'expedition";
+        $page_title = "Etapes";
         $setting = "side-menu--active";
         $setting_sub = "side-menu__sub-open";
         $setting_sub4 = "side-menu__sub-open";
         $setting4 = "side-menu--active";
         $setting42 = "side-menu--active";
 
-        $statuts = StatutExpedition::paginate(10);
+        $etapes = Etape::paginate(10);
+        $modes = ModeExpedition::all();
+        $etapes_prev = Etape::all();
 
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
 
-        return view('admin.adminStatut', compact(
+        return view('admin.adminEtape', compact(
             'page_title',
             'app_name',
-            'statuts',
+            'etapes',
+            'etapes_prev',
+            'modes',
             'setting',
             'setting_sub',
             'setting_sub4',
@@ -343,11 +349,11 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adminSearchStatut(Request $request)
+    public function adminSearchEtape(Request $request)
     {
 
         $app_name = "La Poste";
-        $page_title = "Statuts d'expedition";
+        $page_title = "Etapes";
         $setting = "side-menu--active";
         $setting_sub = "side-menu__sub-open";
         $setting_sub4 = "side-menu__sub-open";
@@ -359,14 +365,18 @@ class SettingController extends Controller
 
         $q = $request->input('q');
 
-        $statuts = StatutExpedition::where('code', 'LIKE', '%' . $request->input('q') . '%')
+        $etapes = Etape::where('code', 'LIKE', '%' . $request->input('q') . '%')
             ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
+        $modes = ModeExpedition::all();
+        $etapes_prev = Etape::all();
 
-        return view('admin.adminStatut', compact(
+        return view('admin.adminEtape', compact(
             'page_title',
             'app_name',
-            'statuts',
+            'etapes',
+            'etapes_prev',
+            'modes',
             'setting',
             'setting_sub',
             'setting_sub4',
@@ -380,27 +390,32 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adminAddStatut(Request $request)
+    public function adminAddEtape(Request $request)
     {
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-        $statut = new StatutExpedition();
+        $etape = new Etape();
 
         // Récupérer les données du formulaire
-        $statut->code = $request->input('code');
-        $statut->libelle = $request->input('libelle');
-        $statut->description = $request->input('description');
-        $statut->code_hexa = $request->input('code_hexa');
-        $statut->agent_id = $admin_id;
-        $statut->active = $request->input('active');
+        $etape->code = $request->input('code');
+        $etape->libelle = $request->input('libelle');
+        $etape->description = $request->input('description');
+        $etape->code_hexa = $request->input('code_hexa');
+        $etape->type = $request->input('type');
 
-        if ($statut->save()) {
+        $etape->mode_id = $request->input('mode_id');
+        $etape->position = $request->input('position');
+
+        $etape->agent_id = $admin_id;
+        $etape->active = $request->input('active');
+
+        if ($etape->save()) {
 
             // Redirection
-            return back()->with('success', 'Nouveau statut créee avec succès !');
+            return back()->with('success', 'Nouvelle étape créee avec succès !');
         }
-        return back()->with('failed', 'Impossible de creer ce statut !');
+        return back()->with('failed', 'Impossible de creer cette étape !');
     }
 
     /**
@@ -408,31 +423,36 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adminEditStatut(Request $request)
+    public function adminEditEtape(Request $request)
     {
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
         // Get statut by id
-        $statut = StatutExpedition::find($request->input('statut_id'));
-        if (!empty($statut)) {
+        $etape = Etape::find($request->input('etape_id'));
+        if (!empty($etape)) {
 
             // Récupérer les données du formulaire
-            $statut->code = $request->input('code');
-            $statut->libelle = $request->input('libelle');
-            $statut->description = $request->input('description');
-            $statut->code_hexa = $request->input('code_hexa');
-            $statut->agent_id = $admin_id;
-            $statut->active = $request->input('active');
+            $etape->code = $request->input('code');
+            $etape->libelle = $request->input('libelle');
+            $etape->description = $request->input('description');
+            $etape->code_hexa = $request->input('code_hexa');
+            $etape->type = $request->input('type');
 
-            if ($statut->save()) {
+            $etape->mode_id = $request->input('mode_id');
+            $etape->position = $request->input('position');
+
+            $etape->agent_id = $admin_id;
+            $etape->active = $request->input('active');
+
+            if ($etape->save()) {
 
                 // Redirection
-                return back()->with('success', 'Statut modifié avec succès !');
+                return back()->with('success', 'Etape modifiée avec succès !');
             }
-            return back()->with('failed', 'Impossible de modifier ce statut !');
+            return back()->with('failed', 'Impossible de modifier cette étape !');
         }
-        return back()->with('failed', 'Impossible de trouver ce statut !');
+        return back()->with('failed', 'Impossible de trouver cette étape !');
     }
 
     ################################################################################################################
@@ -750,6 +770,10 @@ class SettingController extends Controller
             return response()->json($response);
         } elseif ($request->target == 'agence') {
             $organization = Agence::where('ville_id', $request->id)->where('id', '<>', Auth::user()->agence_id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
+        } elseif ($request->target == 'next') {
+            $organization = Etape::where('id', '<>', $request->id)->get();
             $response = json_encode($organization);
             return response()->json($response);
         }
