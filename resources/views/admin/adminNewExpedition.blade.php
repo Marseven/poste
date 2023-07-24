@@ -565,31 +565,46 @@
                 success: function(result) {
                     console.log(result);
                     result = JSON.parse(result);
-                    var option_html =
-                        "<tr id='colis-" + result.id +
-                        "' class='intro-x'><td class='text-center'>" +
-                        result.code +
-                        "</td><td class='text-center'>" +
-                        result.service.libelle +
-                        "</td><td class='text-center'>" + result.libelle +
-                        "</td><td class='text-center'>" + result.poids +
-                        " KG(s)</td><td class='text-center'>" + result.amount +
-                        " FCFA</td><td class='text-center'><button id='delete-colis' type='button' target='" +
-                        result.id +
-                        "' onclick='removeElement()' class='btn btn-danger'>Supprimer</button></td> </tr>";
+                    if (result == 0) {
+                        var flash =
+                            "<div class='alert alert-danger show mb-2' role='alert'>Il faut choisir une Zone !</div>"
+                        $('#flash-message').append(flash);
+                    }
 
-                    var flash =
-                        "<div class='alert alert-success show mb-2' role='alert'>Colis ajouté !</div>"
+                    if (result == 1) {
+                        var flash =
+                            "<div class='alert alert-danger show mb-2' role='alert'>Il faut choisir un service !</div>"
+                        $('#flash-message').append(flash);
+                    }
 
-                    amount += parseFloat(result.amount);
-                    var amount_html = "<strong>" + amount + " FCFA</strong>"
-                    $("#amount").val(amount);
-                    $('#content-table').append(option_html);
-                    $('#total').html(amount_html);
-                    $('#paquet-form').trigger("reset");
-                    const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector(
-                        "#colis-preview"));
-                    myModal.hide();
+                    if (result != 0 || result != 1) {
+                        var option_html =
+                            "<tr id='colis-" + result.id +
+                            "' class='intro-x'><td class='text-center'>" +
+                            result.code +
+                            "</td><td class='text-center'>" +
+                            result.service.libelle +
+                            "</td><td class='text-center'>" + result.libelle +
+                            "</td><td class='text-center'>" + result.poids +
+                            " KG(s)</td><td class='text-center'>" + result.amount +
+                            " FCFA</td><td class='text-center'><button id='delete-colis' type='button' target='" +
+                            result.id +
+                            "' onclick='removeElement()' class='btn btn-danger'>Supprimer</button></td> </tr>";
+
+                        var flash =
+                            "<div class='alert alert-success show mb-2' role='alert'>Colis ajouté !</div>"
+
+                        amount += parseFloat(result.amount);
+                        var amount_html = "<strong>" + amount + " FCFA</strong>"
+                        $("#amount").val(amount);
+                        $('#content-table').append(option_html);
+                        $('#total').html(amount_html);
+                        $('#paquet-form').trigger("reset");
+                        const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector(
+                            "#colis-preview"));
+                        myModal.hide();
+                    }
+
                 }
             });
         });

@@ -184,6 +184,17 @@ class ExpeditionContoller extends Controller
     {
         $admin_id = Auth::user()->id;
 
+        dd($request);
+        if ($request->input('zone') == null) {
+            $response = json_encode(0);
+            return response()->json($response);
+        }
+
+        if ($request->input('service') == null) {
+            $response = json_encode(1);
+            return response()->json($response);
+        }
+
         $paquet = new ColisExpedition();
 
         $cd = explode('.', $request->input('code'));
@@ -206,7 +217,7 @@ class ExpeditionContoller extends Controller
         $sup = 0;
         $amount = 0;
 
-        if ($price->first == 1) {
+        if ($price && $price->first == 1) {
             $first = $price->weight;
             $last = $paquet->poids - $first;
             $priceSup = PriceExpedition::where('type', 'Supplémentaire')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
