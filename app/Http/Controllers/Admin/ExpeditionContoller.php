@@ -184,13 +184,12 @@ class ExpeditionContoller extends Controller
     {
         $admin_id = Auth::user()->id;
 
-        dd($request);
-        if ($request->input('zone') == null) {
+        if ($request->input('zone') == 0) {
             $response = json_encode(0);
             return response()->json($response);
         }
 
-        if ($request->input('service') == null) {
+        if ($request->input('service') == 0) {
             $response = json_encode(1);
             return response()->json($response);
         }
