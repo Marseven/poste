@@ -344,7 +344,7 @@ class ExpeditionContoller extends Controller
                     $pq->save();
                 }
 
-                $etapes = Etape::where('type', 'Expédition')->where('mode_id', $expedition->mode_id)->get();
+                $etapes = Etape::where('type', 'Expédition')->where('mode_id', $expedition->mode_exp_id)->get();
 
                 foreach ($etapes as $etp) {
                     $suivi = new SuiviExpedition();
@@ -921,6 +921,19 @@ class ExpeditionContoller extends Controller
         $package->active = $request->input('active');
 
         if ($package->save()) {
+            // $etapes = Etape::where('type', 'Package')->get();
+
+            // foreach ($etapes as $etp) {
+            //     $suivi = new SuiviExpedition();
+            //     $suivi->package_id = $package->id;
+            //     $suivi->etape_id = $etp->id;
+            //     if ($etp->position == 1) {
+            //         $suivi->status = STATUT_PENDING;
+            //     } else {
+            //         $suivi->status = STATUT_TODO;
+            //     }
+            //     $suivi->save();
+            // }
             // Redirection
             return back()->with('success', 'Nouveau Package crée avec succès !');
         }
