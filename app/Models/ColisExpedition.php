@@ -16,6 +16,6 @@ class ColisExpedition extends Model
 
     public function expedition()
     {
-        return $this->belongsTo(Expedition::class, 'code');
+        return $this->belongsTo(Expedition::class, 'expedition_id');
     }
 }

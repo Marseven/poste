@@ -567,17 +567,23 @@
                     result = JSON.parse(result);
                     if (result == 0) {
                         var flash =
-                            "<div class='alert alert-danger show mb-2' role='alert'>Il faut choisir une Zone !</div>"
+                            "<div class='alert alert-danger show mb-2' role='alert'>Il faut choisir une Zone de destination avec d'ajouter une colis !</div>"
                         $('#flash-message').append(flash);
                     }
 
                     if (result == 1) {
                         var flash =
-                            "<div class='alert alert-danger show mb-2' role='alert'>Il faut choisir un service !</div>"
+                            "<div class='alert alert-danger show mb-2' role='alert'>Il faut choisir un service avec d'ajouter une colis !</div>"
                         $('#flash-message').append(flash);
                     }
 
-                    if (result != 0 || result != 1) {
+                    if (result == 2) {
+                        var flash =
+                            "<div class='alert alert-danger show mb-2' role='alert'>Pas de prix disponible pour cette destination ou ce mode d'expédition pour un colis !</div>"
+                        $('#flash-message').append(flash);
+                    }
+
+                    if (result != 0 || result != 1 || result != 2) {
                         var option_html =
                             "<tr id='colis-" + result.id +
                             "' class='intro-x'><td class='text-center'>" +

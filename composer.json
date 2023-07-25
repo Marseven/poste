@@ -20,6 +20,7 @@
         "maatwebsite/excel": "^3.1",
         "picqer/php-barcode-generator": "^2.2",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "twilio/sdk": "^7.5",
         "wisdom-diala/countrypkg-laravel": "^1.0"
     },
     "require-dev": {

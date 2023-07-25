@@ -206,10 +206,10 @@
                                 DATE
                             </th>
                             <th class="whitespace-nowrap">
-                                EMPLACEMENT
+                                ETAPE
                             </th>
                             <th class="text-center whitespace-nowrap">
-                                STATUT COLIS
+                                STATUT
                             </th>
                         </tr>
                     </thead>
@@ -217,33 +217,32 @@
 
                         @if ($historiques)
                             @foreach ($historiques as $historique)
+                                @php
+                                    $historique->load(['etape']);
+                                @endphp
                                 <tr class="intro-x">
                                     <td class="">
-                                        {{ \Carbon\Carbon::parse($historique->created_at)->translatedFormat('l jS F Y') }}
+                                        @if ($historique->status != 0)
+                                            {{ \Carbon\Carbon::parse($historique->updated_at)->translatedFormat('l jS F Y') }}
+                                        @else
+                                            -
+                                        @endif
                                     </td>
                                     <td class="text-left">
-                                        {{ $historique->action }}
+                                        {{ $historique->etape->libelle }}
                                     </td>
                                     <td class="text-center text-right">
-                                        @if ($historique->active == 1)
-                                            <div class="flex items-center justify-center text-warning"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> En attente de
-                                                paiement
+                                        @if ($historique->status == 0)
+                                            <div class="flex items-center justify-center text-primary"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> En attente
                                             </div>
-                                        @elseif($historique->active == 2)
-                                            <div class="flex items-center justify-center text-success"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> En attente de
-                                                livraison
-                                            </div>
-                                        @elseif($historique->active == 3)
-                                            <div class="flex items-center justify-center text-success"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> CNT </div>
-                                        @elseif($historique->active == 4)
-                                            <div class="flex items-center justify-center text-success"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Livre(e) </div>
-                                        @else
+                                        @elseif($historique->status == 1)
                                             <div class="flex items-center justify-center text-warning"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Inactive </div>
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> En Cours
+                                            </div>
+                                        @elseif($historique->status == 2)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Terminé </div>
                                         @endif
                                     </td>
                                 </tr>

@@ -1,3 +1,4 @@
+<!Doctype html>
 <html lang="en">
 
 <head>
@@ -5,68 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $page_title }}</title>
+
+    <style type="text/css">
+        * {
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        table {
+            font-size: x-small;
+        }
+
+        tfoot tr td {
+            font-weight: bold;
+            font-size: x-small;
+        }
+
+        h3 {
+            margin-bottom: -5px;
+        }
+
+        .gray {
+            background-color: lightgray
+        }
+    </style>
+
 </head>
 
 <body>
-    <!-- BEGIN: Invoice -->
-    <div class="intro-y box overflow-hidden mt-5">
-        <div class="flex flex-col lg:flex-row pt-10 px-5 sm:px-20 sm:pt-20 lg:pb-20 text-center sm:text-left">
-            <div class="font-semibold text-primary text-3xl">
-                ETIQUETTE
-                <div class="text-xl text-primary font-medium">{{ $expedition->code }}</div>
+    <table width="100%">
+        <tr>
+            <td valign="top">
+                <img src="{{ URL::to('front/imgs/laposte.png') }}" alt="" width="80" /> <br>
+                <h2 style="color: #204897">ETIQUETTE <br>#{{ $expedition->reference }}</h2>
+                <br>
+            </td>
+            <td align="right">
+                <h2 style="color: #204897">{{ $societe->name }}</h2>
+                <p>
+                    {{ $societe->email }} <br>
+                    {{ $societe->phone1 }}, {{ $societe->phone2 }} <br>
+                    {{ $societe->website }} <br>
+                    {{ $societe->adresse }} <br>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr>
+            <td align="left">
+                <h3>Expéditeur : </h3>
+                <p>
+                    <strong style="color: #204897"> {{ $expedition->name_exp }} </strong><br>
+                    {{ $expedition->email_exp }} <br>
+                    {{ $expedition->phone_exp }} <br>
+                    {{ $expedition->adresse_exp }} <br>
+                </p>
+            </td>
+            <td align="right">
+                <h3>Destinataire : </h3>
+                <p>
+                    <strong style="color: #204897"> {{ $expedition->name_dest }} </strong><br>
+                    {{ $expedition->email_dest }} <br>
+                    {{ $expedition->phone_dest }} <br>
+                    {{ $expedition->adresse_dest }} <br>
+                </p>
+            </td>
+        </tr>
 
-                @php
-                    $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-                @endphp
-                <div class="mt-1">
-                    {!! $generator->getBarcode($expedition->code, $generator::TYPE_CODE_128) !!}
-                </div>
-            </div>
-            <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
-                <div class="text-xl text-primary font-medium">
-                    {{ $societe->name }}
-                </div>
-                <div class="mt-1">{{ $societe->email }}</div>
-                <div class="mt-1">{{ $societe->phone1 }}, {{ $societe->phone2 }}</div>
-                <div class="mt-1">{{ $societe->website }}</div>
-                <div class="mt-1">{{ $societe->adresse }}</div>
-            </div>
-        </div>
-        <div class="flex flex-col lg:flex-row border-b px-5 sm:px-20 pt-10 pb-10 sm:pb-20 text-center sm:text-left">
-            <div>
-                <div class="text-base text-slate-500">Expediteur Details</div>
-                <div class="text-lg font-medium text-primary mt-2">{{ $expedition->name_exp }}</div>
-                <div class="mt-1">{{ $expedition->email_exp }}</div>
-                <div class="mt-1">{{ $expedition->phone_exp }}</div>
-                <div class="mt-1">{{ $expedition->adresse_exp }}</div>
-            </div>
-            <div class="mt-10 lg:mt-0 lg:ml-auto lg:text-right">
-                <div class="text-base text-slate-500">Destinataire Details</div>
-                <div class="text-lg font-medium text-primary mt-2">{{ $expedition->name_dest }}</div>
-                <div class="mt-1">{{ $expedition->email_dest }}</div>
-                <div class="mt-1">{{ $expedition->phone_dest }}</div>
-                <div class="mt-1">{{ $expedition->adresse_dest }}</div>
-            </div>
-        </div>
-        <br><br>
-        <div class="px-5 sm:px-20 pb-10 sm:pb-20 flex flex-col-reverse sm:flex-row">
-            <div class="text-center sm:text-left mt-10 sm:mt-0">
-                <div class="text-base text-slate-500">Informations supplementaires</div>
-                <div class="mt-1">
-                    <strong>Mode</strong> :
-                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
-                </div>
+    </table>
+    <table width="100%">
+        <tr>
+            <td align="left">
+                <h3>Informations supplementaires</h3>
+                <p>
+                    <strong>Mode</strong> : {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
+                    <br>
+                </p>
+            </td>
 
-            </div>
-            <div class="text-center sm:text-right sm:ml-auto">
-                <div class="mt-1">
-                    {!! QrCode::size(100)->generate($expedition->code) !!}
-                </div>
-            </div>
-        </div>
+            <td align="right">
+                <p>
+                    <img src="{{ URL::to('code-qr/' . $expedition->code . '.png') }}" alt="" width="50" />
+                </p>
+            </td>
+        </tr>
 
-    </div>
-    <!-- END: Invoice -->
+    </table>
+
 </body>
 
 </html>

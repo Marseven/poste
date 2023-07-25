@@ -2,11 +2,13 @@
 
 namespace App\Mail;
 
+use App\Models\Expedition;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 
 class RegisterEntity extends Mailable
@@ -18,9 +20,10 @@ class RegisterEntity extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(protected Expedition $expedition)
     {
         //
+
     }
 
     /**
@@ -31,7 +34,8 @@ class RegisterEntity extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Register Entity',
+            from: new Address('no_reply@lapostegabonaise.ga', 'La Poste Gabonaise'),
+            subject: 'La Poste - Nouvelle Expédition',
         );
     }
 
@@ -43,7 +47,10 @@ class RegisterEntity extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'mail.mail_new_exp',
+            with: [
+                'expedition' => $this->expedition,
+            ],
         );
     }
 

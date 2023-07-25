@@ -9,14 +9,19 @@ class Expedition extends Model
 {
     use HasFactory;
 
-    public function agence()
+    public function agence_dest()
     {
-        return $this->hasOne('App\Models\Agence', 'id', 'agence_id');
+        return $this->belongsTo(Agence::class, 'agence_dest_id');
+    }
+
+    public function agence_exp()
+    {
+        return $this->belongsTo(Agence::class, 'agence_exp_id');
     }
 
     public function delai()
     {
-        return $this->hasOne('App\Models\TempsExpedition', 'id', 'temps_exp_id');
+        return $this->hasOne(DelaiExpedition::class, 'temps_exp_id');
     }
 
     public function mode()

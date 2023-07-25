@@ -16,16 +16,10 @@ return new class extends Migration
         Schema::create('suivi_expeditions', function (Blueprint $table) {
 
             $table->id();
-
-            $table->string('code');
-            $table->string('action');
-
-            $table->integer('expedition_id')->nullable();
-            $table->integer('status_id')->nullable();
-
+            $table->integer('expedition_id');
+            $table->integer('etape_id');
+            $table->integer('status');
             $table->integer('user_id')->nullable();
-            $table->integer('active')->default('0');
-
             $table->timestamps();
         });
     }

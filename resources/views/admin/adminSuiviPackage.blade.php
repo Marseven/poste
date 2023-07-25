@@ -26,18 +26,20 @@
                             <strong><u>Libelle</u></strong> : {{ $package->libelle }}
                         </div>
                         <div class="text-black">
-                            <strong><u>Nombre de colis</u></strong> : {{ $package->nbre_colis }}
+                            <strong><u>Nombre de colis</u></strong> : {{ $package->colis->count() }}
                         </div>
 
                         <br>
 
                         <div class="text-black">
-                            <strong><u>Agence Origine</u></strong> : <br>
-                            {{ $package->agence_origine_id ? $package->agence_origine->libelle : 'Non defini' }}
+                            <strong><u>Agence Expéditeur</u></strong> : <br>
+                            {{ $package->agence_exp_id ? $package->agence_exp->libelle : 'Non defini' }}
                         </div>
+                        <br>
+
                         <div class="text-black">
                             <strong><u>Agence Destination</u></strong> : <br>
-                            {{ $package->agence_destination_id ? $package->agence_destination->libelle : 'Non defini' }}
+                            {{ $package->agence_dest_id ? $package->agence_dest->libelle : 'Non defini' }}
                         </div>
 
                         <br>
@@ -77,9 +79,10 @@
             <!-- END: File Manager Filter -->
 
             <!-- BEGIN: Directory & Files -->
-            <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
 
-                @if ($today_paquets)
+
+            @if ($today_paquets->count() != 0)
+                <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
                     @foreach ($today_paquets as $paquet)
                         <div class="intro-y col-span-6 sm:col-span-4 md:col-span-4 2xl:col-span-4">
                             <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
@@ -119,13 +122,17 @@
                             </div>
                         </div>
                     @endforeach
-                @else
+                </div>
+            @else
+                <br>
+                <div class="flex items-center mb-2">
                     <div class="alert alert-pending show flex items-center mb-2" role="alert"> <i
                             data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun colis pour le moment ! </div>
-                @endif
+                </div>
+            @endif
 
 
-            </div>
+
             <!-- END: Directory & Files -->
 
             <!-- BEGIN: Pagination -->

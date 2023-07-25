@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegisterEntity;
 use App\Models\Agence;
 use App\Models\ColisExpedition;
 use App\Models\DelaiExpedition;
 use App\Models\DocumentExpedition;
+use App\Models\Etape;
 use App\Models\Expedition;
 use App\Models\FactureExpedition;
 use App\Models\ModeExpedition;
@@ -22,10 +24,14 @@ use App\Models\SuiviExpedition;
 use App\Models\User;
 use App\Models\Ville;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use PDF;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Twilio\Rest\Client;
 
 class ExpeditionContoller extends Controller
 {
@@ -216,6 +222,11 @@ class ExpeditionContoller extends Controller
         $sup = 0;
         $amount = 0;
 
+        if ($price == null) {
+            $response = json_encode(2);
+            return response()->json($response);
+        }
+
         if ($price && $price->first == 1) {
             $first = $price->weight;
             $last = $paquet->poids - $first;
@@ -327,8 +338,28 @@ class ExpeditionContoller extends Controller
                     ->where('code', $code_aleatoire)
                     ->update(['expedition_id' => $expedition->id]);
 
+                foreach ($paquets as $pq) {
+                    $pq->code = Carbon::now()->timestamp;
+                    $pq->expedition_id = $expedition->id;
+                    $pq->save();
+                }
+
                 // Get Sum Poids des colis
                 $poids_total = ColisExpedition::where('code', $code_aleatoire)->sum('poids');
+
+                $etapes = Etape::where('type', 'Expédition')->where('mode_id', $expedition->mode_id)->get();
+
+                foreach ($etapes as $etp) {
+                    $suivi = new SuiviExpedition();
+                    $suivi->expedition_id = $expedition->id;
+                    $suivi->etape_id = $etp->id;
+                    if ($etp->position == 1) {
+                        $suivi->status = STATUT_PENDING;
+                    } else {
+                        $suivi->status = STATUT_TODO;
+                    }
+                    $suivi->save();
+                }
 
                 // New Facture
                 $facture = new FactureExpedition();
@@ -337,13 +368,29 @@ class ExpeditionContoller extends Controller
                 $facture->expedition_id = $expedition->id;
 
                 $facture->save();
-
+                $expedition->load(['agence_dest', 'agence_exp']);
 
                 //notificaitons - expediteurs
+                Mail::to($expedition->email_exp)->send(new RegisterEntity($expedition));
 
+                $receiverNumber = "+241" . $expedition->phone_exp;
+                $message = "Bonjour M./Mme. " . $expedition->name_exp . ", Merci pour votre confiance en La Poste Gabonaise. Votre expédition N° " . $expedition->reference . " a été crée et sera enregistré pour l'expédion à " . $expedition->agence_dest->libelle . ".";
+                try {
+                    $account_sid = getenv("TWILIO_SID");
+                    $auth_token = getenv("TWILIO_TOKEN");
+                    $twilio_number = getenv("TWILIO_FROM");
+                    $client = new Client($account_sid, $auth_token);
+                    $client->messages->create($receiverNumber, [
+                        'from' => $twilio_number,
+                        'body' => $message
+                    ]);
+                    return redirect('admin/expeditions')->with('failed', 'Expedition ajoutee avec succès !');
+                } catch (Exception $e) {
+                    return redirect('admin/expeditions')->with('success', "Error: " . $e->getMessage());
+                }
 
                 // Redirection
-                return redirect('/expeditions')->with('success', 'Expedition ajoutee avec succès !');
+                return redirect('admin/expeditions')->with('success', 'Expedition ajoutee avec succès !');
             }
             return back()->with('failed', 'Impossible de rajouter cette expedition !');
         } else {
@@ -437,7 +484,7 @@ class ExpeditionContoller extends Controller
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
 
             $expedition->load(['mode']);
 
@@ -488,7 +535,9 @@ class ExpeditionContoller extends Controller
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
+
+
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -539,10 +588,12 @@ class ExpeditionContoller extends Controller
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
+
+            $qrcode = QrCode::format('png')->size(100)->generate($expedition->code, '../public/code-qr/' . $expedition->code . '.png');
 
             $data = compact(
                 'page_title',
@@ -550,6 +601,7 @@ class ExpeditionContoller extends Controller
                 'facture',
                 'expedition',
                 'societe',
+                'qrcode',
                 'paquets',
                 'exp',
                 'exp_sub',
@@ -590,7 +642,7 @@ class ExpeditionContoller extends Controller
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -633,7 +685,8 @@ class ExpeditionContoller extends Controller
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
+
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -676,7 +729,7 @@ class ExpeditionContoller extends Controller
 
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -741,8 +794,8 @@ class ExpeditionContoller extends Controller
             $expedition->load(['mode']);
             // Récupérer les données
             $expedition_id = intval($expedition->id);
-            $paquets = ColisExpedition::where('code', $code)->get();
-            $historiques = SuiviExpedition::where('code', $code)->get();
+            $paquets = ColisExpedition::where('expedition_id', $expedition->id)->get();
+            $historiques = SuiviExpedition::where('expedition_id', $expedition->id)->get();
 
             // Get facture by expedition_id
             $facture = FactureExpedition::where('expedition_id', $expedition_id)->first();
@@ -1062,7 +1115,9 @@ class ExpeditionContoller extends Controller
             // Get colis du jours
             $today_paquets = PackageExpedition::where('package_id', $package->id)->paginate(10);
 
-            if (!empty($today_paquets)) {
+            $package->load(['agence_dest', 'agence_exp', 'colis']);
+
+            if ($today_paquets->count() == 0) {
                 $today_paquets->load(['colis']);
                 // Redirection
                 return view('admin.adminSuiviPackage', compact(

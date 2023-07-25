@@ -9,21 +9,19 @@ class Package extends Model
 {
     use HasFactory;
 
-
-
     public function agence_exp()
     {
-        return $this->hasOne('App\Models\Agence', 'id', 'agence_exp_id');
+        return $this->belongsTo(Agence::class, 'agence_exp_id');
     }
 
     public function agence_dest()
     {
-        return $this->hasOne('App\Models\Agence', 'id', 'agence_dest_id');
+        return $this->belongsTo(Agence::class, 'agence_dest_id');
     }
 
     public function agent()
     {
-        return $this->hasOne('App\Models\User', 'id', 'agent_id');
+        return $this->belongsTo(User::class, 'agent_id');
     }
 
     public function colis()
