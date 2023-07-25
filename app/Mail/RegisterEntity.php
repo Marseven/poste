@@ -34,7 +34,7 @@ class RegisterEntity extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('no_reply@lapostegabonaise.ga', 'La Poste Gabonaise'),
+            from: new Address('support@jobs-conseil.tech', 'La Poste Gabonaise'),
             subject: 'La Poste - Nouvelle Expédition',
         );
     }
