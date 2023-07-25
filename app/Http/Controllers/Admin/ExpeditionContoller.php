@@ -370,22 +370,23 @@ class ExpeditionContoller extends Controller
                 //notificaitons - expediteurs
                 try {
                     Mail::to($expedition->email_exp)->send(new RegisterEntity($expedition));
+                    return redirect('admin/expeditions')->with('success', 'Expedition ajoutee avec succès !');
 
-                    $receiverNumber = "+241" . $expedition->phone_exp;
-                    $message = "Bonjour M./Mme. " . $expedition->name_exp . ", Merci pour votre confiance en La Poste Gabonaise. Votre expédition N° " . $expedition->reference . " a été crée et sera enregistré pour l'expédion à " . $expedition->agence_dest->libelle . ".";
-                    try {
-                        $account_sid = getenv("TWILIO_SID");
-                        $auth_token = getenv("TWILIO_TOKEN");
-                        $twilio_number = getenv("TWILIO_FROM");
-                        $client = new Client($account_sid, $auth_token);
-                        $client->messages->create($receiverNumber, [
-                            'from' => $twilio_number,
-                            'body' => $message
-                        ]);
-                        return redirect('admin/expeditions')->with('failed', 'Expedition ajoutee avec succès !');
-                    } catch (Exception $e) {
-                        return redirect('admin/expeditions')->with('success', "Error: " . $e->getMessage());
-                    }
+                    // $receiverNumber = "+241" . $expedition->phone_exp;
+                    // $message = "Bonjour M./Mme. " . $expedition->name_exp . ", Merci pour votre confiance en La Poste Gabonaise. Votre expédition N° " . $expedition->reference . " a été crée et sera enregistré pour l'expédion à " . $expedition->agence_dest->libelle . ".";
+                    // try {
+                    //     $account_sid = getenv("TWILIO_SID");
+                    //     $auth_token = getenv("TWILIO_TOKEN");
+                    //     $twilio_number = getenv("TWILIO_FROM");
+                    //     $client = new Client($account_sid, $auth_token);
+                    //     $client->messages->create($receiverNumber, [
+                    //         'from' => $twilio_number,
+                    //         'body' => $message
+                    //     ]);
+                    //     return redirect('admin/expeditions')->with('success', 'Expedition ajoutee avec succès !');
+                    // } catch (Exception $e) {
+                    //     return redirect('admin/expeditions')->with('failed', "Error: " . $e->getMessage());
+                    // }
                 } catch (Exception $e) {
                     return redirect('admin/expeditions')->with('success', "Error: " . $e->getMessage());
                 }

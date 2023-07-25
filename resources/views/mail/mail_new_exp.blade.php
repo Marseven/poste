@@ -3,7 +3,7 @@
 
     Merci pour votre confiance en La Poste Gabonaise.
 
-    Votre expédition N° {{ $expedition->reference }} a été crée et sera enregistré pour l'expédion à
+    Votre expédition N° {{ $expedition->reference }} a été crée et sera enregistré pour l'expédion au
     {{ $expedition->agence_dest->libelle ?? '' }}.
 
     Cordialement,
