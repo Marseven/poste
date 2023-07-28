@@ -11,6 +11,7 @@ use App\Models\DocumentExpedition;
 use App\Models\Etape;
 use App\Models\Expedition;
 use App\Models\FactureExpedition;
+use App\Models\MethodePaiement;
 use App\Models\ModeExpedition;
 use App\Models\Package;
 use App\Models\PackageExpedition;
@@ -64,6 +65,7 @@ class ExpeditionContoller extends Controller
         $exp2 = "side-menu--active";
 
         $expeditions = Expedition::orderBy('id', 'DESC')->paginate(10);
+        $methodes = MethodePaiement::all();
 
 
         $admin = Auth::user();
@@ -74,6 +76,7 @@ class ExpeditionContoller extends Controller
             'page_title',
             'app_name',
             'expeditions',
+            'methodes',
             'exp',
             'exp_sub',
             'exp2'
@@ -102,6 +105,7 @@ class ExpeditionContoller extends Controller
         $reseaux = Reseau::all();
         $services = ServiceExpedition::all();
         $modes = ModeExpedition::all();
+        $prices = PriceExpedition::where('service_id', 1)->get();
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -119,6 +123,7 @@ class ExpeditionContoller extends Controller
             'reseaux',
             'services',
             'modes',
+            'prices',
             'societe',
             'exp',
             'exp1',
@@ -190,12 +195,12 @@ class ExpeditionContoller extends Controller
     {
         $admin_id = Auth::user()->id;
 
-        if ($request->input('zone') == 0) {
+        if ($request->input('zone') == -1) {
             $response = json_encode(0);
             return response()->json($response);
         }
 
-        if ($request->input('service') == 0) {
+        if ($request->input('service') == -1) {
             $response = json_encode(1);
             return response()->json($response);
         }
@@ -212,34 +217,27 @@ class ExpeditionContoller extends Controller
         $paquet->libelle = $request->input('libelle');
         $paquet->description = $request->input('description');
         $paquet->service_exp_id = $request->input('service');
-        $paquet->poids = $request->input('poids');
-        if ($request->input('type') != 0) $paquet->type = $request->input('type');
 
-        $price = PriceExpedition::where('type', 'Standard')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
+        if ($request->input('type') != 0) $paquet->type = $request->input('type');
 
         $first = 0;
         $last = 0;
         $sup = 0;
         $amount = 0;
 
+        if ($request->input('service') == 1 || $request->input('service') == 2 || $request->input('service') == 6 || $request->input('service') == 7) {
+            $price = PriceExpedition::find($request->poids_id);
+            $paquet->poids = $price->weight;
+            $amount = $price->price;
+        } else {
+            $price = PriceExpedition::where('type', 'Standard')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
+            $paquet->poids = $request->input('weight');
+            $amount = round($paquet->poids * $price->price, 1);
+        }
+
         if ($price == null) {
             $response = json_encode(2);
             return response()->json($response);
-        }
-
-        if ($price && $price->first == 1) {
-            $first = $price->weight;
-            $last = $paquet->poids - $first;
-            $priceSup = PriceExpedition::where('type', 'Supplémentaire')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
-            //dd($priceSup);
-            if (!$priceSup) {
-                $sup = 0;
-            } else {
-                $sup = $priceSup->price;
-            };
-            $amount = $price->price + (round($last / $price->weight, 1) * $sup);
-        } else {
-            $amount = round($paquet->poids / $price->weight, 1) * $price->price;
         }
 
         $paquet->amount = $amount;
@@ -508,6 +506,10 @@ class ExpeditionContoller extends Controller
             return back()->with('failed', 'Impossible de modifier cette expedition !');
         }
         return back()->with('failed', 'Impossible de trouver cette expedition !');
+    }
+
+    public function adminFacturePay(Request $request, $code)
+    {
     }
 
     /**
@@ -835,7 +837,7 @@ class ExpeditionContoller extends Controller
     {
 
         $app_name = "La Poste";
-        $page_title = "Packages";
+        $page_title = "Dépêches";
         $exp = "side-menu--active";
         $exp_sub = "side-menu__sub-open";
         $exp3 = "side-menu--active";
@@ -866,7 +868,7 @@ class ExpeditionContoller extends Controller
     {
 
         $app_name = "La Poste";
-        $page_title = "Packages";
+        $page_title = "Dépêches";
         $exp = "side-menu--active";
         $exp_sub = "side-menu__sub-open";
         $exp3 = "side-menu--active";
@@ -936,9 +938,9 @@ class ExpeditionContoller extends Controller
             //     $suivi->save();
             // }
             // Redirection
-            return back()->with('success', 'Nouveau Package crée avec succès !');
+            return back()->with('success', 'Nouvelle Dépêche crée avec succès !');
         }
-        return back()->with('failed', 'Impossible de creer ce package !');
+        return back()->with('failed', 'Impossible de creer cette dépêche !');
     }
 
     /**
@@ -971,11 +973,11 @@ class ExpeditionContoller extends Controller
             if ($package->save()) {
 
                 // Redirection
-                return back()->with('success', 'Package modifié avec succès !');
+                return back()->with('success', 'Dépêche modifié avec succès !');
             }
-            return back()->with('failed', 'Impossible de modifier ce package !');
+            return back()->with('failed', 'Impossible de modifier cette dépêche !');
         }
-        return back()->with('failed', 'Impossible de trouver ce package !');
+        return back()->with('failed', 'Impossible de trouver cette dépêche !');
     }
 
     /**
@@ -989,7 +991,7 @@ class ExpeditionContoller extends Controller
         $admin_id = Auth::user()->id;
 
         $app_name = "La Poste";
-        $page_title = "Detail Package";
+        $page_title = "Detail Dépêche";
         $exp = "side-menu--active";
         $exp_sub = "side-menu__sub-open";
         $exp3 = "side-menu--active";
@@ -1110,7 +1112,7 @@ class ExpeditionContoller extends Controller
         $admin_id = Auth::user()->id;
 
         $app_name = "La Poste";
-        $page_title = "Suivi Package";
+        $page_title = "Suivi Dépêche";
         $exp = "side-menu--active";
         $exp_sub = "side-menu__sub-open";
         $exp3 = "side-menu--active";

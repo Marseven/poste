@@ -15,17 +15,17 @@ return new class extends Migration
     {
         Schema::create('price_expeditions', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-
-            $table->double('weight');
-            $table->double('price');
-
-            $table->string('type');
-            $table->integer('first');
-
             $table->integer('zone_id');
             $table->integer('service_id');
             $table->integer('mode_id');
+
+            $table->string('type')->nullable();
+            $table->integer('first')->nullable();
+            $table->string('type_element')->nullable();
+            $table->double('weight')->nullable();
+            $table->double('price');
+            $table->string('fees_sup')->nullable();
+            $table->string('label_fees')->nullable();
 
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');

@@ -133,10 +133,10 @@
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        {{ $country->zone->libelle }}
+                                        {{ $country->code }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $country->code }}
+                                        {{ $country->zone->libelle }}
                                     </td>
                                     <td class="text-center">
                                         {{ $country->libelle }}
@@ -264,8 +264,6 @@
                                 <td class="text-center">ras</td>
                             </tr>
                         @endif
-
-
                     </tbody>
                 </table>
             </div>
@@ -278,13 +276,5 @@
             </div>
             <!-- END: Pagination -->
         </div>
-
     </div>
-
-
-
-
-
-
-
 @endsection

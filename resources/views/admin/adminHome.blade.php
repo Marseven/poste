@@ -6,9 +6,10 @@
         <div class="grid grid-cols-12 gap-6">
             <!-- BEGIN: General Report -->
             <div class="col-span-12 mt-8">
+
                 <div class="intro-y flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">
-                        Statistiques
+                        Tableau de Bord
                     </h2>
 
                     <div class="ml-auto flex items-center">
@@ -19,18 +20,77 @@
                             {{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->translatedFormat('l jS F Y') }}
                         </a>
                     </div>
-
                 </div>
 
+                <br>
+
+                <div class="intro-y block sm:flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">
+                        <strong>Le Jour J</strong>
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-12 gap-6 mt-5">
+                    <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
+                        <div class="report-box zoom-in">
+                            <div class="box p-5">
+                                <div class="flex">
+                                    <i data-lucide="package" class="report-box__icon text-danger"></i>
+                                    <!--div class="ml-auto">
+                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>                                                                                                                                                                                                                        </div-->
+                                </div>
+                                <div class="text-3xl font-medium leading-8 mt-6">
+                                    {{ $expeditions->count() }}
+                                </div>
+                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions Aujourd'hui</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
+                        <div class="report-box zoom-in">
+                            <div class="box p-5">
+                                <div class="flex">
+                                    <i data-lucide="package" class="report-box__icon text-danger"></i>
+                                    <!--div class="ml-auto">
+                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                            </div-->
+                                </div>
+                                <div class="text-3xl font-medium leading-8 mt-6">
+                                    0
+                                </div>
+                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions en cours</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
+                        <div class="report-box zoom-in">
+                            <div class="box p-5">
+                                <div class="flex">
+                                    <i data-lucide="package" class="report-box__icon text-danger"></i>
+                                    <!--div class="ml-auto">
+                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                            </div-->
+                                </div>
+                                <div class="text-3xl font-medium leading-8 mt-6">
+                                    0
+                                </div>
+                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions livrées</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <hr>
+                <br>
                 <div class="grid grid-cols-12 gap-6 mt-5">
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-primary"></i>
+                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $expeditions->count() }}
@@ -43,10 +103,10 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-pending"></i>
+                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                            <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -61,8 +121,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -75,10 +135,10 @@
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-success"></i>
+                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                            </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -200,13 +260,13 @@
                                 <div class="flex">
                                     <i data-lucide="clock" class="report-box__icon text-primary"></i>
                                     <div class="ml-auto">
-                                        <div class="report-box__indicator bg-danger tooltip cursor-pointer"> 0% <svg
+                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                icon-name="chevron-down" data-lucide="chevron-down"
-                                                class="lucide lucide-chevron-down w-4 h-4 ml-0.5">
-                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                                icon-name="chevron-up" data-lucide="chevron-up"
+                                                class="lucide lucide-chevron-up w-4 h-4 ml-0.5">
+                                                <polyline points="18 15 12 9 6 15"></polyline>
                                             </svg> </div>
                                     </div>
                                 </div>
@@ -260,6 +320,23 @@
                 </div>
             </div>
             <!-- END: General Report -->
+
+            <!-- BEGIN: Sales Report -->
+            <div class="col-span-12 lg:col-span-12 mt-8">
+                <div class="intro-y block sm:flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">
+                        Rapport Expedition ({{ date('Y') }})
+                    </h2>
+                </div>
+                <div class="intro-y box p-5 mt-12 sm:mt-5">
+                    <div class="report-chart">
+                        <div class="h-[275px]">
+                            <canvas id="report-line-chart" class="mt-6 -mb-6"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Sales Report -->
 
             <!-- BEGIN: Weekly Top Products -->
             <div class="col-span-12 mt-6">
@@ -378,24 +455,6 @@
             </div>
             <!-- END: Weekly Top Products -->
 
-
-
-            <!-- BEGIN: Sales Report -->
-            <div class="col-span-12 lg:col-span-12 mt-8">
-                <div class="intro-y block sm:flex items-center h-10">
-                    <h2 class="text-lg font-medium truncate mr-5">
-                        Rapport Expedition (2023)
-                    </h2>
-                </div>
-                <div class="intro-y box p-5 mt-12 sm:mt-5">
-                    <div class="report-chart">
-                        <div class="h-[275px]">
-                            <canvas id="report-line-chart" class="mt-6 -mb-6"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END: Sales Report -->
 
 
         </div>

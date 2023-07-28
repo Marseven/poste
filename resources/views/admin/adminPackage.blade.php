@@ -4,13 +4,13 @@
 
     <div class="col-span-12 2xl:col-span-12">
         <h2 class="intro-y text-lg font-medium mt-10">
-            Packages
+            Dépêches
         </h2>
         <div class="grid grid-cols-12 gap-12 mt-5">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#large-modal-size-preview"
-                    class="btn btn-primary shadow-md mr-2">Nouveau Package</a>
+                    class="btn btn-primary shadow-md mr-2">Nouveau Dépêche</a>
 
                 <!-- BEGIN: Large Modal Content -->
                 <!-- BEGIN: Modal Content -->

@@ -160,7 +160,7 @@
                                 <label for="modal-form-1" class="form-label">Adresse*</label>
                                 <input type="text" class="form-control" placeholder="Ex. Rond point democratie"
                                     name="adresse_dest" required>
-                                <small>NB : <strong>Cette adresse est celle ou sera livre le colis !</strong></small>
+                                <small>NB : <strong>Cette adresse est celle ou sera livré le colis !</strong></small>
                             </div>
                         </div>
                     </div>
@@ -191,15 +191,22 @@
 
                             <div class="col-span-12 sm:col-span-6">
                                 <label for="modal-form-1" class="form-label">Livraison à domicile</label>
-                                <select class="form-control" name="address" onChange="afficherBp()" required>
+                                <select class="form-control" name="address" id="address" onChange="afficherBp()"
+                                    required>
                                     <option value="1">Oui</option>
                                     <option value="0" selected>Non</option>
                                 </select>
                             </div>
 
-                            <div id="bp" class="col-span-12 sm:col-span-6" style="display: none;">
-                                <label for="modal-form-1" class="form-label">Boîte Postal</label>
-                                <input type="text" class="form-control" placeholder="BP. 12345" name="bp">
+                            <div class="col-span-12 sm:col-span-6">
+                                <div id="bp" style="display: none;">
+                                    <label for="modal-form-1" class="form-label">Boîte Postal</label>
+                                    <input type="text" class="form-control" placeholder="BP. 12345" name="bp">
+                                </div>
+                            </div>
+
+                            <div id="poste_rest" class="col-span-12 sm:col-span-6">
+                                <i>POSTE RESTANTE : 1 500 FCFA</i>
                             </div>
 
                             <br><br>
@@ -271,6 +278,7 @@
 
                                     </tbody>
                                     <thead>
+
                                         <tr>
                                             <th class="text-center whitespace-nowrap"></th>
                                             <th class="text-center whitespace-nowrap"></th>
@@ -415,8 +423,8 @@
 
                         <div class="col-span-12 sm:col-span-6">
                             <label for="modal-form-1" class="form-label">Service d'expédition</label>
-                            <select class="form-control" id="service" onChange="maxWeight()" name="service_exp_id"
-                                required>
+                            <select class="form-control" target="poids_range" id="service" onChange="afficherPoids()"
+                                name="service_exp_id" required>
                                 @foreach ($services as $service)
                                     <option value="{{ $service->id }}">{{ $service->libelle }}</option>
                                 @endforeach
@@ -438,20 +446,26 @@
                                 name="libelle" required>
                         </div>
 
-                        <div class="col-span-12 sm:col-span-6">
+                        <div id="p_value" class="col-span-12 sm:col-span-6" style="display: none">
+                            <label id="label_poids" for="modal-form-1" class="form-label">Poids *</label>
+                            <input type="number" step="0.01" id="poids" class="form-control" max="20"
+                                name="weight">
+                        </div>
 
+
+                        <div id="p_list" class="col-span-12 sm:col-span-6" style="display: block">
                             <label for="modal-form-1" class="form-label">Poids*</label>
-                            <input type="number" step="0.01" id="poids" class="form-control" max="2"
-                                name="weight" required>
+                            <select class="form-control" id="poids_range" name="poids_id">
+                                @foreach ($prices as $prix)
+                                    <option value="{{ $prix->id }}">{{ $prix->weight }} KG</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="col-span-12 sm:col-span-12">
                             <label for="modal-form-1" class="form-label">Description*</label>
                             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                         </div>
-
-
-
                     </div> <!-- END: Modal Body -->
                     <!-- BEGIN: Modal Footer -->
                     <div class="modal-footer">
@@ -472,12 +486,90 @@
     <script>
         function afficherBp() {
             var bp = document.getElementById("bp");
+            var poste_rest = document.getElementById("poste_rest");
 
             if (document.form_exp.address.value != "1") {
                 bp.style.display = "none";
+                poste_rest.style.display = "block";
             } else {
                 bp.style.display = "block";
+                poste_rest.style.display = "none";
             }
+        }
+
+        function afficherPoids() {
+
+            var id = $("#service").val();
+            var target = $("#service").attr('target');
+
+            $.ajax({
+                url: "{{ route('adminSelect') }}",
+                data: {
+                    'id': id,
+                    'target': target,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    console.log(result);
+                    result = JSON.parse(result);
+                    var option_html = "<option value='0'>Choisir</option>";
+
+                    for (i = 0; i < result.length; i++) {
+                        is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
+                        option_html += "<option " + is_selected + "  value='" + result[i].id +
+                            "'>" +
+                            result[i].weight +
+                            " KG</option>";
+                    }
+
+                    $("#" + target).html(option_html);
+                    $("#" + target).change();
+                }
+            });
+
+            var p_value = document.getElementById("p_value");
+            var p_list = document.getElementById("p_list");
+            var monElement = document.getElementById("poids");
+            var service = $('#service').val();
+
+            if (service == 1) {
+                p_list.style.display = "block";
+                p_value.style.display = "none";
+            }
+
+            if (service == 2) {
+                p_list.style.display = "block";
+                p_value.style.display = "none";
+            }
+
+            if (service == 3) {
+                p_list.style.display = "none";
+                p_value.style.display = "block";
+                $("#label_poids").html("Nombre d'exemplaire");
+            }
+
+            if (service == 4) {
+                p_list.style.display = "none";
+                p_value.style.display = "block";
+                monElement.setAttribute("max", "20");
+                $("#label_poids").html("Poids (KG)");
+            }
+
+            if (service == 5) {
+                p_list.style.display = "none";
+                p_value.style.display = "none";
+            }
+
+            if (service == 6) {
+                p_list.style.display = "block";
+                p_value.style.display = "none";
+            }
+
+            if (service == 7) {
+                p_list.style.display = "block";
+                p_value.style.display = "none";
+            }
+
         }
 
         function maxWeight() {
@@ -502,17 +594,21 @@
         $(".linked-select").change(function() {
             var id = $(this).val();
             var target = $(this).attr('target');
+            var reseau = $('#reseau').val();
+            var zone = $('#zone').val();
             $.ajax({
                 url: "{{ route('adminSelect') }}",
                 data: {
                     'id': id,
                     'target': target,
+                    'reseau': reseau,
+                    'zone': zone,
                 },
                 dataType: 'json',
                 success: function(result) {
                     console.log(result);
                     result = JSON.parse(result);
-                    var option_html = "<option value='0'>Choisir</option>";
+                    var option_html = "<option value='-1'>Choisir</option>";
 
                     for (i = 0; i < result.length; i++) {
                         is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
@@ -537,6 +633,7 @@
             var code = $('#code').val();
             var libelle = $('#libelle').val();
             var poids = $('#poids').val();
+            var poids_id = $('#poids_range').val();
             var description = $('#description').val();
             var type = $('#type').val();
             var mode = $('#mode').val();
@@ -556,6 +653,7 @@
                     code: code,
                     libelle: libelle,
                     poids: poids,
+                    poids_id: poids_id,
                     zone: zone,
                     service: service,
                     mode: mode,
@@ -601,6 +699,9 @@
                             "<div class='alert alert-success show mb-2' role='alert'>Colis ajouté !</div>"
 
                         amount += parseFloat(result.amount);
+                        if ($("#address").val() == 0) {
+                            amount += 1500;
+                        }
                         var amount_html = "<strong>" + amount + " FCFA</strong>"
                         $("#amount").val(amount);
                         $('#content-table').append(option_html);

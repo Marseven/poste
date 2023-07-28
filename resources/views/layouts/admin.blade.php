@@ -80,7 +80,7 @@
                         <li>
                             <a href="{{ route('adminPackage') }}" class="side-menu {{ $exp3 ?? '' }}">
                                 <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                <div class="side-menu__title"> Liste des packages </div>
+                                <div class="side-menu__title"> Liste des Dépêches </div>
                             </a>
                         </li>
                     </ul>
@@ -236,15 +236,9 @@
                             </a>
                             <ul class="{{ $setting_sub2 ?? '' }}">
                                 <li>
-                                    <a href="" class="side-menu {{ $setting21 ?? '' }}">
+                                    <a href="{{ route('adminMethode') }}" class="side-menu {{ $setting21 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                         <div class="side-menu__title">Méthodes de paiement</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="" class="side-menu {{ $setting22 ?? '' }}">
-                                        <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                        <div class="side-menu__title">Modes de paiement</div>
                                     </a>
                                 </li>
                             </ul>

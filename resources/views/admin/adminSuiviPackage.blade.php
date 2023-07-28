@@ -4,7 +4,7 @@
 
     <div class="intro-y flex items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Suivi Package - {{ $package->code }}
+            Suivi Dépêche - {{ $package->code }}
         </h2>
     </div>
 
@@ -15,7 +15,7 @@
             <div class="intro-y box bg-warning mt-5 lg:mt-0">
                 <div class="relative flex items-center p-5">
                     <div class="ml-4 mr-auto">
-                        <div class="font-medium text-base">Details Package</div>
+                        <div class="font-medium text-base">Details Dépêche</div>
 
                         <br>
 
@@ -53,7 +53,7 @@
 
             <div class="intro-y box p-5 bg-warning text-black mt-5">
                 <div class="flex items-center">
-                    <div class="font-medium text-lg">Types de packages</div>
+                    <div class="font-medium text-lg">Types de Dépêches</div>
                 </div>
                 <div class="mt-4">
                     1. Type 1 [ Agence vers CNT ] <br>

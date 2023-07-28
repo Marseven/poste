@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Agence;
 use App\Models\DelaiExpedition;
 use App\Models\Etape;
+use App\Models\MethodePaiement;
 use App\Models\ModeExpedition;
 use App\Models\Mouchard;
 use App\Models\Pays;
 use App\Models\PriceExpedition;
 use App\Models\Province;
+use App\Models\Reseau;
 use App\Models\ServiceExpedition;
 use App\Models\Ville;
 use App\Models\Zone;
@@ -590,6 +592,142 @@ class SettingController extends Controller
 
     ################################################################################################################
     #                                                                                                              #
+    #   METHODE DE PAIEMENT                                                                                                     #
+    #                                                                                                              #
+    ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminMethode(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Méthode de paiement";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub2 = "side-menu__sub-open";
+        $setting2 = "side-menu--active";
+        $setting21 = "side-menu--active";
+
+        $methodes = MethodePaiement::paginate(10);
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+        return view('admin.adminMethode', compact(
+            'page_title',
+            'app_name',
+            'methodes',
+            'setting',
+            'setting_sub',
+            'setting_sub2',
+            'setting2',
+            'setting21',
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchMethode(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Modes de paiement";
+        $setting = "side-menu--active";
+        $setting_sub = "side-menu__sub-open";
+        $setting_sub2 = "side-menu__sub-open";
+        $setting2 = "side-menu--active";
+        $setting21 = "side-menu--active";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $methodes = MethodePaiement::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);
+
+        return view('admin.adminMethode', compact(
+            'page_title',
+            'app_name',
+            'methodes',
+            'setting',
+            'setting_sub',
+            'setting_sub2',
+            'setting2',
+            'setting21',
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminAddMethode(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $methode = new MethodePaiement();
+
+        // Récupérer les données du formulaire
+        $methode->code = $request->input('code');
+        $methode->libelle = $request->input('libelle');
+        $methode->description = $request->input('description');
+        $methode->agent_id = $admin_id;
+        $methode->active = $request->input('active');
+
+        if ($methode->save()) {
+
+            // Redirection
+            return back()->with('success', 'Nouvelle méthode de paiement créee avec succès !');
+        }
+        return back()->with('failed', 'Impossible de creer ce mode !');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminEditMethode(Request $request)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        // Get statut by id
+        $methode = MethodePaiement::find($request->input('methode_id'));
+        if (!empty($methode)) {
+
+            // Récupérer les données du formulaire
+            $methode->code = $request->input('code');
+            $methode->libelle = $request->input('libelle');
+            $methode->description = $request->input('description');
+            $methode->agent_id = $admin_id;
+            $methode->active = $request->input('active');
+
+            if ($methode->save()) {
+
+                // Redirection
+                return back()->with('success', 'Méthode modifié avec succès !');
+            }
+            return back()->with('failed', 'Impossible de modifier cette méthode !');
+        }
+        return back()->with('failed', 'Impossible de trouver cette méthode !');
+    }
+
+    ################################################################################################################
+    #                                                                                                              #
     #   PRICING                                                                                                    #
     #                                                                                                              #
     ################################################################################################################
@@ -689,14 +827,29 @@ class SettingController extends Controller
         $price = new PriceExpedition();
 
         // Récupérer les données du formulaire
-        $price->code = $request->input('code');
-        $price->weight = $request->input('weight');
+
         $price->price = $request->input('price');
+
         $price->type = $request->input('type');
         $price->first = $request->input('first');
+
+        if ($request->input('fees_sup') == 1) {
+            $price->label_fees = $request->input('label_fees');
+        }
+        if ($request->input('type_element') == "null") {
+            $price->type_element = null;
+            $price->weight = $request->input('weight');
+        } else {
+            $price->type_element = $request->input('type_element');
+        }
+
+        $price->fees_sup = $request->input('fees_sup');
+
         $price->service_id = $request->input('service_id');
         $price->zone_id = $request->input('zone_id');
         $price->mode_id = $request->input('mode_id');
+
+
         $price->agent_id = $admin_id;
         $price->active = $request->input('active');
 
@@ -748,16 +901,50 @@ class SettingController extends Controller
      */
     public function selectData(Request $request)
     {
+        $agence = Agence::find(Auth::user()->agence_id);
+        $ville = Ville::find($agence->ville_id);
+        $province = Province::find($ville->province_id);
+        $pays = Pays::find($province->pays_id);
+        if ($pays->code == "GA") {
+            if ($province->code == "ES") {
+                $zone = Zone::find(1);
+            } elseif ($province->code == "OM") {
+                $zone = Zone::find(2);
+            } else {
+                $zone = Zone::find(3);
+            }
+        } else {
+            $zone = Zone::find($pays->zone_id);
+        }
+
+        $reseau = Reseau::find($zone->reseau_id);
         if ($request->target == 'zone') {
             $organization = Zone::where('reseau_id', $request->id)->get();
             $response = json_encode($organization);
             return response()->json($response);
         } elseif ($request->target == 'pays') {
-            $organization = Pays::where('zone_id', $request->id)->get();
+            if ($request->reseau == 1) {
+                $organization = Pays::where('id', 1)->get();
+            } else {
+                $organization = Pays::where('zone_id', $request->id)->get();
+            }
             $response = json_encode($organization);
             return response()->json($response);
         } elseif ($request->target == 'province') {
-            $organization = Province::where('pays_id', $request->id)->get();
+            if ($province->id == 1) {
+                if ($request->zone == 1) {
+                    $organization = Province::where('code', "ES")->get();
+                } elseif ($request->zone == 2) {
+                    $organization = Province::Where('code', "OM")->get();
+                } elseif ($request->zone == 3) {
+                    $organization = Province::Where('code', '<>', "OM")->Where('code', '<>', "ES")->get();
+                } else {
+                    $organization = Province::where('pays_id', $request->id)->get();
+                }
+            } else {
+                $organization = Province::where('id', '<>', $province->id)->get();
+            }
+
             $response = json_encode($organization);
             return response()->json($response);
         } elseif ($request->target == 'ville') {
@@ -771,6 +958,10 @@ class SettingController extends Controller
             return response()->json($response);
         } elseif ($request->target == 'next') {
             $organization = Etape::where('id', '<>', $request->id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
+        } elseif ($request->target == 'poids_range') {
+            $organization = PriceExpedition::where('service_id', $request->id)->get();
             $response = json_encode($organization);
             return response()->json($response);
         }

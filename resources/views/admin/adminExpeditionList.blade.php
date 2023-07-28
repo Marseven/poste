@@ -112,7 +112,8 @@
                                                     <ul class="dropdown-content">
                                                         @if ($expedition->active == 1)
                                                             <li>
-                                                                <a href="{{ route('adminFacturePay', ['code' => $expedition->code]) }}"
+                                                                <a href="javascript:;" data-tw-toggle="modal"
+                                                                    data-tw-target="#pay-expedition-{{ $expedition->id }}"
                                                                     class="dropdown-item">Ajouter un
                                                                     paiement</a>
                                                             </li>
@@ -132,6 +133,81 @@
                                         </div>
                                     </td>
                                 </tr>
+
+                                <!-- BEGIN: Modal Content -->
+                                <div id="pay-expedition-{{ $expedition->id }}" class="modal">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+
+                                            <form id="pay-form-{{ $expedition->id }}"
+                                                name="pay_form_{{ $expedition->id }}" method="POST"
+                                                action="{{ route('adminFacturePay', ['code' => $expedition->code]) }}">
+                                                @csrf
+                                                <!-- BEGIN: Modal Header -->
+                                                <div class="modal-header">
+                                                    <h2 class="font-medium text-base mr-auto">Paiement de l'expedition N°
+                                                        {{ $expedition->code }}
+                                                    </h2>
+                                                    <a data-tw-dismiss="modal" href="javascript:;"> <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                            icon-name="x" data-lucide="x"
+                                                            class="lucide lucide-x w-8 h-8 text-slate-400">
+                                                            <line x1="18" y1="6" x2="6"
+                                                                y2="18"></line>
+                                                            <line x1="6" y1="6" x2="18"
+                                                                y2="18"></line>
+                                                        </svg> </a>
+                                                </div> <!-- END: Modal Header -->
+                                                <div id="flash-message" style="padding: 7px;">
+
+                                                </div>
+                                                <!-- BEGIN: Modal Body -->
+                                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+
+                                                    <div class="col-span-12 sm:col-span-12">
+                                                        <label for="modal-form-1" class="form-label">Moyen de
+                                                            Paiement</label>
+                                                        <select class="form-control" id="methode"
+                                                            onChange="afficherEbForm()" name="methode" required>
+                                                            @foreach ($methodes as $methode)
+                                                                <option value="{{ $methode->code }}">
+                                                                    {{ $methode->libelle }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div id="eb" class="col-span-12 sm:col-span-12"
+                                                        style="display:none">
+                                                        <div class="col-span-12 sm:col-span-6">
+                                                            <label for="modal-form-1" class="form-label">Opérateur
+                                                            </label>
+                                                            <select class="form-control" name="type" id="operator">
+                                                                <option value="airtelmoney">Airtel Money</option>
+                                                                <option value="moovmoney4">Moov Money</option>
+                                                            </select>
+                                                        </div>
+                                                        <br>
+                                                        <div class="col-span-12 sm:col-span-6">
+                                                            <label for="modal-form-1" class="form-label">Numéro de
+                                                                Téléphone*</label>
+                                                            <input type="tel" class="form-control" id="phone"
+                                                                placeholder="Ex. 077010203" name="phone">
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- END: Modal Body -->
+                                                <!-- BEGIN: Modal Footer -->
+                                                <div class="modal-footer">
+                                                    <button type="button" data-id="{{ $expedition->id }}"
+                                                        class="btn btn-primary shadow-md mr-2 valider">Valider</button>
+                                                </div>
+                                                <!-- END: Modal Footer -->
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div> <!-- END: Modal Content -->
+                                <!-- END: Large Modal Content -->
                             @endforeach
                         @else
                             <tr class="intro-x">
@@ -142,8 +218,6 @@
                                 <td class="text-center">ras</td>
                             </tr>
                         @endif
-
-
                     </tbody>
                 </table>
             </div>
@@ -156,6 +230,44 @@
             </div>
             <!-- END: Pagination -->
         </div>
-
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function afficherEbForm() {
+            var eb = document.getElementById("eb");
+            if ($("#methode").val() != "EB") {
+                eb.style.display = "none";
+            } else {
+                eb.style.display = "block";
+            }
+        }
+
+        $(document).on("click", ".valider", function() {
+            var id = $(this).data('id');
+            var methode = document.pay_form_ + id.methode.value;
+            var action = $("#pay-form-" + id).getAttribute("action");
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                url: action, // Chemin vers votre script PHP de traitement
+                type: 'POST',
+                data: {
+                    id: id,
+                    methode: methode,
+                },
+                success: function(result) {
+                    console.log(result);
+                    result = JSON.parse(result);
+
+                }
+            });
+        });
+    </script>
+@endpush

@@ -186,6 +186,13 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('recherche-mode', [SettingController::class, 'adminSearchMode'])->name('adminSearchMode');
     /* End Mode */
 
+    /* Start Methode de paiement */
+    Route::get('methode-paiements', [SettingController::class, 'adminMethode'])->name('adminMethode');
+    Route::post('add-methode', [SettingController::class, 'adminAddMethode'])->name('adminAddMethode');
+    Route::post('edit-methode', [SettingController::class, 'adminEditMethode'])->name('adminEditMethode');
+    Route::get('recherche-methode', [SettingController::class, 'adminSearchMethode'])->name('adminSearchMethode');
+    /* End Methode de paiement */
+
     /* Start Price */
     Route::get('prices-expedition', [SettingController::class, 'adminPrice'])->name('adminPrice');
     Route::post('add-price', [SettingController::class, 'adminAddPrice'])->name('adminAddPrice');
