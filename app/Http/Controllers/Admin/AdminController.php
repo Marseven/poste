@@ -9,6 +9,7 @@ use App\Models\Package;
 use App\Models\Paiement;
 use App\Models\Pays;
 use App\Models\Province;
+use App\Models\Reclamation;
 use App\Models\Societe;
 use App\Models\Ville;
 
@@ -39,15 +40,25 @@ class AdminController extends Controller
         $page_title = "Tableau de bord";
         $home = "side-menu--active";
 
+        // Get today carbon date
+        $today = Carbon::today();
+
         $expeditions = Expedition::orderBy('id', 'DESC')->limit(10)->get();
         $paiements = Paiement::where('status', STATUT_PAID)->get();
         $packages = Package::all();
 
-        $exp_j = Expedition::all();
-        $exp_j_pending = Expedition::all();
-        $exp_j_todo = Expedition::all();
+        $exp_j = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->get();
+        $exp_j_pending = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->where('etape_id', '<>', 4)->get();
+        $exp_j_do = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->where('etape_id', 4)->get();
 
+        $exp = Expedition::all();
+        $exp_pending = Expedition::where('etape_id', '<>', 4)->get();
+        $exp_do = Expedition::where('etape_id', 4)->get();
 
+        $reservations = Expedition::where('client_id', '<>', null)->get();
+        $reclamations = Reclamation::all();
+
+        $ca = Paiement::selectRaw("SUM(amount) as am")->where('status', 3)->first();
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
@@ -64,7 +75,6 @@ class AdminController extends Controller
             avec l'adresse IP suivante : " .
                 SettingController::getClientIPaddress($request) . " le navigateur suivant : " .  SettingController::getBrowser() . "
             depuis la machine : " .  SettingController::getDevice() . " ayant pour systeme d'exploitation : " . SettingController::getOS() . "."
-
         );
 
 
@@ -74,7 +84,16 @@ class AdminController extends Controller
             'expeditions',
             'paiements',
             'packages',
-            'home'
+            'home',
+            'exp_j',
+            'exp_j_pending',
+            'exp_j_do',
+            'exp',
+            'exp_pending',
+            'exp_do',
+            'reservations',
+            'reclamations',
+            'ca',
         ));
     }
 

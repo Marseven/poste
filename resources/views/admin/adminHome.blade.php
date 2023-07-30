@@ -34,51 +34,54 @@
 
                 <div class="grid grid-cols-12 gap-6 mt-5">
                     <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-danger"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>                                                                                                                                                                                                                        </div-->
+                        <a href="{{ route('adminExpeditionJ') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-danger"></i>
+                                        <!--div class="ml-auto"> <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>                                                                                                                                                                                                                        </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $exp_j->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre d'expéditions Aujourd'hui</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    {{ $expeditions->count() }}
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions Aujourd'hui</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-danger"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                </div-->
+                        <a href="{{ route('adminExpeditionJ') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-danger"></i>
+                                        <!--div class="ml-auto">                                                                                                                                                                                                                                                                                                 </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $exp_j_pending->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre d'expéditions en cours</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    0
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions en cours</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-danger"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                </div-->
+                        <a href="{{ route('adminExpeditionJ') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-danger"></i>
+                                        <!--div class="ml-auto">
+                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $exp_j_do->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre d'expéditions livrées</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    0
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions livrées</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <br><br>
@@ -86,72 +89,78 @@
                 <br>
                 <div class="grid grid-cols-12 gap-6 mt-5">
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                </div-->
+                        <a href="{{ route('adminExpeditionList') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-warning"></i>
+                                        <!--div class="ml-auto">
+                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $exp->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre d'expéditions</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    {{ $expeditions->count() }}
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                </div-->
+                        <a href="{{ route('adminExpeditionList') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-warning"></i>
+                                        <!--div class="ml-auto">
+                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $exp_pending->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre d'expéditions en cours</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    0
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions en cours</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                </div-->
+                        <a href="{{ route('adminExpeditionList') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-warning"></i>
+                                        <!--div class="ml-auto">
+                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $exp_do->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre d'expéditions livrées</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    0
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre d'expéditions livrées</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="package" class="report-box__icon text-warning"></i>
-                                    <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                </div-->
+                        <a href="{{ route('adminExpeditionList') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="package" class="report-box__icon text-warning"></i>
+                                        <!--div class="ml-auto">                                                                                                                                                                                                                                                                                                            </div-->
+                                    </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6">
+                                        {{ $reservations->count() }}
+                                    </div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre de réservations</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">
-                                    0
-                                </div>
-                                <div class="text-base text-slate-500 mt-1">Nbre de réservations</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
-                <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
+                {{-- <div class="col-span-12 grid grid-cols-12 gap-6 mt-8">
                     <div class="col-span-12 sm:col-span-6 2xl:col-span-3 intro-y">
                         <div class="box p-5 zoom-in">
                             <div class="flex items-center">
@@ -232,29 +241,31 @@
                         </div>
                     </div>
 
-                </div>
+                </div> --}}
 
                 <div class="grid grid-cols-12 gap-6 mt-5">
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="dollar-sign" class="report-box__icon text-primary"></i>
-                                    <div class="ml-auto">
-                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                icon-name="chevron-up" data-lucide="chevron-up"
-                                                class="lucide lucide-chevron-up w-4 h-4 ml-0.5">
-                                                <polyline points="18 15 12 9 6 15"></polyline>
-                                            </svg> </div>
+                        <a href="{{ route('adminPaiement') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="dollar-sign" class="report-box__icon text-primary"></i>
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    icon-name="chevron-up" data-lucide="chevron-up"
+                                                    class="lucide lucide-chevron-up w-4 h-4 ml-0.5">
+                                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                                </svg> </div>
+                                        </div>
                                     </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6"> {{ $ca->am ?? '0' }} FCFA</div>
+                                    <div class="text-base text-slate-500 mt-1">Chiffre d'Affaire des expéditions</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">0 FCFA</div>
-                                <div class="text-base text-slate-500 mt-1">Chiffre d'Affaire des expéditions</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                         <div class="report-box zoom-in">
@@ -278,25 +289,27 @@
                         </div>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <div class="report-box zoom-in">
-                            <div class="box p-5">
-                                <div class="flex">
-                                    <i data-lucide="message-square" class="report-box__icon text-primary"></i>
-                                    <div class="ml-auto">
-                                        <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                icon-name="chevron-up" data-lucide="chevron-up"
-                                                class="lucide lucide-chevron-up w-4 h-4 ml-0.5">
-                                                <polyline points="18 15 12 9 6 15"></polyline>
-                                            </svg> </div>
+                        <a href="{{ route('adminReclamationAgent') }}">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i data-lucide="message-square" class="report-box__icon text-primary"></i>
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator bg-success tooltip cursor-pointer"> 0% <svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    icon-name="chevron-up" data-lucide="chevron-up"
+                                                    class="lucide lucide-chevron-up w-4 h-4 ml-0.5">
+                                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                                </svg> </div>
+                                        </div>
                                     </div>
+                                    <div class="text-3xl font-medium leading-8 mt-6"> {{ $reclamations->count() }}</div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre de réclamations</div>
                                 </div>
-                                <div class="text-3xl font-medium leading-8 mt-6">0</div>
-                                <div class="text-base text-slate-500 mt-1">Nbre de réclamations</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                         <div class="report-box zoom-in">
@@ -327,14 +340,12 @@
             <div class="col-span-12 lg:col-span-12 mt-8">
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">
-                        Rapport Expedition ({{ date('Y') }})
+                        Rapport Paiement ({{ date('Y') }})
                     </h2>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
                     <div class="report-chart">
-                        <div class="h-[275px]">
-                            <canvas id="report-line-chart" class="mt-6 -mb-6"></canvas>
-                        </div>
+                        <div class="h-[400px]"> <canvas id="vertical-bar-chart-widget"></canvas> </div>
                     </div>
                 </div>
             </div>
@@ -426,9 +437,6 @@
                 </div>
             </div>
             <!-- END: Weekly Top Products -->
-
-
-
         </div>
     </div>
 @endsection

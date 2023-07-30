@@ -90,6 +90,42 @@ class ExpeditionContoller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function adminExpeditionJ(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Expeditions";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
+
+        // Get today carbon date
+        $today = Carbon::today();
+
+        $expeditions = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->paginate(10);
+        $methodes = MethodePaiement::all();
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+        return view('admin.adminExpeditionJ', compact(
+            'page_title',
+            'app_name',
+            'expeditions',
+            'methodes',
+            'exp',
+            'exp_sub',
+            'exp2'
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function adminNewExpedition(Request $request)
     {
 
