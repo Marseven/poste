@@ -15,6 +15,7 @@ use App\Models\MethodePaiement;
 use App\Models\ModeExpedition;
 use App\Models\Package;
 use App\Models\PackageExpedition;
+use App\Models\Paiement;
 use App\Models\Pays;
 use App\Models\PriceExpedition;
 use App\Models\Province;
@@ -29,6 +30,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use PDF;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -329,6 +331,8 @@ class ExpeditionContoller extends Controller
             $expedition->agent_id = $admin_id;
             $expedition->active = 1;
 
+            $expedition->status = STATUT_PENDING;
+
             if ($expedition->save()) {
 
                 // Mise a jour Documents et colis
@@ -510,6 +514,59 @@ class ExpeditionContoller extends Controller
 
     public function adminFacturePay(Request $request, $code)
     {
+        $expedition = Expedition::where('code', $code)->first();
+        $methode = MethodePaiement::where('code', $request->methode)->first();
+
+        if ($request->methode == "CA") {
+            $payment = new Paiement();
+            $payment->expedition_id = $expedition->id;
+            $payment->reference = PaymentController::str_reference(6);
+            $payment->description = "Paiement en cash.";
+            $payment->amount = $expedition->amount;
+            $payment->status = STATUT_PAID;
+            $payment->methode_id = $methode->id;
+            if ($payment->save()) {
+                $expedition->status = STATUT_PAID;
+                $expedition->save();
+                $data['payment'] = $payment;
+                return $this->sendResponse($data, 'Envoyé !');
+            } else {
+                return $this->sendError('Erreur', ['error' => 'Failed']);
+            }
+        } else {
+
+            $billing_id = PaymentController::ebilling($expedition);
+            $auth = env('USER_NAME') . ':' . env('SHARED_KEY');
+            $base64 = base64_encode($auth);
+            $response = Http::withHeaders([
+                "Authorization" => "Basic " . $base64
+            ])->post(env('URL_EB') . 'e_bills/' . $billing_id . '/ussd_push', [
+                "payment_system_name" => $request->operator,
+                "payer_msisdn" => $request->phone,
+            ]);
+            $response = json_decode($response->body());
+            if ($response) {
+                if ($response->message == "Accepted") {
+                    $data['bill_id'] = $billing_id;
+                    return $this->sendResponse($data, 'Envoyé !');
+                } else {
+                    return $this->sendError($response->message, ['error' => 'Failed']);
+                }
+            } else {
+                return $this->sendError("Echec du Push USSD.", ['error' => 'Failed']);
+            }
+        }
+    }
+
+    public function check_payment(Request $request)
+    {
+        $payment = Paiement::where('ebilling_id', $request->bill_id)->first();
+        if ($payment != null && $payment->status == STATUT_PAID) {
+            $data['billing'] = $payment;
+            return $this->sendResponse($data, 'Payée !');
+        } else {
+            return $this->sendError("Facture non payée.", ['error' => 'Failed']);
+        }
     }
 
     /**
@@ -1148,5 +1205,37 @@ class ExpeditionContoller extends Controller
             return back()->with('failed', 'Aucun colis expedie pour le moment !');
         }
         return back()->with('failed', 'Impossible de trouver cette expedition !');
+    }
+
+    /**
+     * success response method.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendResponse($result, $message)
+    {
+        $response = [
+            'success' => true,
+            'data'    => $result,
+            'message' => $message,
+        ];
+        return response()->json($response, 200);
+    }
+
+    /**
+     * return error response.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendError($error, $errorMessages = [], $code = 406)
+    {
+        $response = [
+            'success' => false,
+            'message' => $error,
+        ];
+        if (!empty($errorMessages)) {
+            $response['data'] = $errorMessages;
+        }
+        return response()->json($response, $code);
     }
 }

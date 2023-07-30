@@ -46,7 +46,6 @@ return new class extends Migration
 
             $table->integer('agence_id')->nullable();
 
-
             $table->rememberToken();
             $table->timestamps();
         });

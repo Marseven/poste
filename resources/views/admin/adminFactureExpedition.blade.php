@@ -96,7 +96,7 @@
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
                                         @if ($paquet->active == 1)
-                                            <div class="flex items-center justify-center text-warning"> <i
+                                            <div class="flex items-center justify-center text-primary"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> Enregistre(e)
                                             </div>
                                         @elseif($paquet->active == 2)
@@ -139,7 +139,10 @@
                 <div class="text-base text-slate-500">Informations supplementaires</div>
                 <div class="mt-1">
                     <strong>Mode</strong> :
-                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
+                    <span
+                        class="text-md px-1 bg-{{ $expedition->mode_exp_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
+                        style="padding:5px; font-weight: 600;">
+                        {{ $expedition->mode->libelle }}</span>
                 </div>
 
                 <br>
@@ -154,7 +157,8 @@
             </div>
             <div class="text-center sm:text-right sm:ml-auto">
                 <div class="text-base text-slate-500">Montant Total</div>
-                <div class="text-xl text-primary font-medium mt-2">{{ $expedition->amount }} FCFA</div>
+                <div class="text-xl text-primary font-medium mt-2" style="font-weight: 700">{{ $expedition->amount }} FCFA
+                </div>
                 <div class="mt-1">Taxes inclues</div>
             </div>
         </div>
@@ -162,7 +166,7 @@
         <br>
 
         <div class="px-5 sm:px-20 pb-10 sm:pb-20 flex flex-col-reverse sm:flex-row">
-            <div class="text-center sm:text-left mt-10 sm:mt-0">
+            <div class="text-center sm:text-left mt-10 sm:mt-0" style="text-align: justify">
                 <div class="text-base text-slate-500"><strong>Conditions</strong></div>
                 <div class="mt-1">
                     L'expéditeur déclare qu'il n'envoie pas d'argent, d'explosifs, d'armes, de bijoux ou de produits

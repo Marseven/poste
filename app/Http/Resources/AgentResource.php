@@ -3,11 +3,11 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
-use App\Models\ColisExpedition;
+use App\Models\Agence;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
 
-class ColisExpeditionResource extends JsonResource
+class AgentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,17 +21,22 @@ class ColisExpeditionResource extends JsonResource
         Carbon::setLocale('fr');
         
         // Get relation data
-        $agent = User::find($this->agent_id);
+        $bureau = Agence::find($this->agence_id);
 
         return [
             'id' => $this->id,
-            'code' => $this->code,
-            'libelle' => $this->libelle,
-            'description' => $this->description,
-            'modele' => $this->modele,
-            'poids' => $this->poids,
+            'name' => $this->name,
+            'noms' => $this->noms,
+            'prenoms' => $this->prenoms,
+            'genre' => $this->genre,
+            'email ' => $this->email ,
+            'phone' => $this->phone,
+            'role' => $this->role,
+            'adresse' => $this->adresse,
 
-            'agent' => $agent->name,
+            'bureau_id' => $this->agence_id,
+            'bureau' => $bureau ? $bureau->libelle : 'Non attribué',
+
 
             'active' => $this->active,
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y'),

@@ -68,9 +68,6 @@ class ExpeditionResource extends JsonResource
             
             'amount' => $this->amount,
 
-            'suivis' => SuiviExpeditionResource::collection($suivis),
-            'colis' => ColisExpeditionResource::collection($colis),
-
             'agent' => $agent->name,
 
             'active' => $this->active,

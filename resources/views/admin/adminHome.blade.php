@@ -26,7 +26,9 @@
 
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">
-                        <strong>Le Jour J</strong>
+                        <strong>Le Jour J</strong> <span class="text-md px-1 bg-danger text-white mr-1"
+                            style="padding:5px; font-weight: 600;">
+                            Mode : Accéléré</span>
                     </h2>
                 </div>
 
@@ -37,7 +39,7 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-danger"></i>
                                     <!--div class="ml-auto">
-                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>                                                                                                                                                                                                                        </div-->
+                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>                                                                                                                                                                                                                        </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $expeditions->count() }}
@@ -52,8 +54,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-danger"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -68,8 +70,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-danger"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -89,8 +91,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     {{ $expeditions->count() }}
@@ -105,8 +107,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -121,8 +123,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -137,8 +139,8 @@
                                 <div class="flex">
                                     <i data-lucide="package" class="report-box__icon text-warning"></i>
                                     <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="22% Higher than last month"> 22% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                </div-->
                                 </div>
                                 <div class="text-3xl font-medium leading-8 mt-6">
                                     0
@@ -351,11 +353,11 @@
                             <tr>
                                 <th class="whitespace-nowrap text-center">SUIVI</th>
                                 <th class="text-center whitespace-nowrap">DATE</th>
+                                <th class="text-center whitespace-nowrap">MODE</th>
                                 <th class="text-center whitespace-nowrap">EXPEDITEUR</th>
                                 <th class="text-center whitespace-nowrap">DESTINATAIRE</th>
                                 <th class="text-center whitespace-nowrap">COUT TOTAL</th>
                                 <th class="text-center whitespace-nowrap">STATUT FACTURE</th>
-                                <th class="text-center whitespace-nowrap">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -370,7 +372,13 @@
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            {{ \Carbon\Carbon::parse($expedition->created_at)->translatedFormat('l jS F Y') }}
+                                            {{ \Carbon\Carbon::parse($expedition->created_at)->translatedFormat('d-m-Y') }}
+                                        </td>
+                                        <td class="text-center">
+                                            <span
+                                                class="text-md px-1 bg-{{ $expedition->mode_exp_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
+                                                style="padding:5px; font-weight: 600;">
+                                                {{ $expedition->mode->libelle }}</span>
                                         </td>
                                         <td class="text-center">
                                             <a href="" class="font-medium whitespace-nowrap">
@@ -392,50 +400,16 @@
                                             {{ $expedition->amount ? $expedition->amount : 0 }} FCFA
                                         </td>
                                         <td class="w-40">
-                                            @if ($expedition->active == 1)
+                                            @if ($expedition->status == 3)
+                                                <div class="flex items-center justify-center text-success"> <i
+                                                        data-lucide="check-square" class="w-4 h-4 mr-2"></i> Payée </div>
+                                            @else
                                                 <div class="flex items-center justify-center text-warning"> <i
                                                         data-lucide="check-square" class="w-4 h-4 mr-2"></i> En attente de
                                                     paiement </div>
-                                            @elseif($expedition->active == 2)
-                                                <div class="flex items-center justify-center text-success"> <i
-                                                        data-lucide="check-square" class="w-4 h-4 mr-2"></i> Paye(e)
-                                                </div>
-                                            @elseif($expedition->active == 3)
-                                                <div class="flex items-center justify-center text-success"> <i
-                                                        data-lucide="check-square" class="w-4 h-4 mr-2"></i> CNT </div>
-                                            @elseif($expedition->active == 2)
-                                                <div class="flex items-center justify-center text-success"> <i
-                                                        data-lucide="check-square" class="w-4 h-4 mr-2"></i> Livre(e)
-                                                </div>
-                                            @else
-                                                <div class="flex items-center justify-center text-warning"> <i
-                                                        data-lucide="check-square" class="w-4 h-4 mr-2"></i> Inactive
-                                                </div>
                                             @endif
                                         </td>
-                                        <td class="table-report__action w-56">
-                                            <div class="flex justify-center items-center">
-                                                <div class="dropdown">
-                                                    <button class="dropdown-toggle btn btn-warning" aria-expanded="false"
-                                                        data-tw-toggle="dropdown">Actions
-                                                    </button>
-                                                    <div class="dropdown-menu w-40">
-                                                        <ul class="dropdown-content">
 
-                                                            <li>
-                                                                <a href="{{ route('adminFactureExpedition', ['code' => $expedition->code]) }}"
-                                                                    class="dropdown-item" target="_blank">Facture</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code]) }}"
-                                                                    class="dropdown-item" target="_blank">Etiquette</a>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
                                     </tr>
                                 @endforeach
                             @else
@@ -447,8 +421,6 @@
                                     <td class="text-center">ras</td>
                                 </tr>
                             @endif
-
-
                         </tbody>
                     </table>
                 </div>

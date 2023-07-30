@@ -13,19 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages', function (Blueprint $table) {
+        Schema::create('suivi_packages', function (Blueprint $table) {
 
             $table->id();
 
             $table->string('code');
-            $table->string('libelle');
-            $table->mediumText('description');
+            $table->string('etape_id');
+            $table->string('status');
+            $table->mediumText('rapport');
 
-            $table->integer('agence_exp_id')->nullable();
-            $table->integer('agence_dest_id')->nullable();
-            $table->integer('responsable_id')->nullable();
-            $table->integer('nbre_colis')->default('0');
-            $table->string('etape_id')->nullable();
+            $table->integer('package_id')->nullable();
+
             $table->integer('agent_id')->nullable();
             $table->integer('active')->default('0');
 
@@ -40,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('suivi_packages');
     }
 };

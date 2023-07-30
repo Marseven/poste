@@ -95,7 +95,7 @@
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
                                         @if ($paquet->active == 1)
-                                            <div class="flex items-center justify-center text-warning"> <i
+                                            <div class="flex items-center justify-center text-primary"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> Enregistre(e)
                                             </div>
                                         @elseif($paquet->active == 2)
@@ -163,14 +163,10 @@
                 <div class="text-base text-slate-500">Informations supplementaires</div>
                 <div class="mt-1">
                     <strong>Mode d'expédition</strong> :
-                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
-                </div>
-
-                <div class="mt-1">
-                    <strong>Statut Facture</strong> :
-                </div>
-                <div class="mt-1">
-                    <strong>Statut Colis</strong> :
+                    <span
+                        class="text-md px-1 bg-{{ $expedition->mode_exp_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
+                        style="padding:5px; font-weight: 600;">
+                        {{ $expedition->mode->libelle }}</span>
                 </div>
 
                 <br>

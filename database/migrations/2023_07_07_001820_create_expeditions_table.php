@@ -35,15 +35,16 @@ return new class extends Migration
 
             $table->boolean('address');
             $table->string('bp')->nullable();
-
             $table->integer('mode_exp_id')->nullable();
             $table->integer('delai_exp_id')->nullable();
-
             $table->double('amount')->nullable();
             $table->integer('methode_paiement_id')->nullable();
+            $table->integer('nbre_colis')->nullable();
+            $table->string('etape_id')->nullable();
 
             $table->integer('client_id')->nullable();
             $table->integer('agent_id')->nullable();
+            $table->integer('status')->nullable();
             $table->integer('active')->default('0');
             $table->timestamps();
         });

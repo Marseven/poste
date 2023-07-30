@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EmplacementContoller;
 use App\Http\Controllers\Admin\ExpeditionContoller;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\ReclamationController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Artisan;
@@ -130,12 +132,19 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
 
     /* Start Facture */
     Route::get('facture/expedition/{code}', [ExpeditionContoller::class, 'adminFactureExpedition'])->name('adminFactureExpedition');
-    Route::get('facture/pay/{code}', [ExpeditionContoller::class, 'adminFacturePay'])->name('adminFacturePay');
+    Route::post('facture/pay/{code}', [ExpeditionContoller::class, 'adminFacturePay'])->name('adminFacturePay');
+
+    Route::get('checkBill', [ExpeditionContoller::class, 'check_payment'])->name('checkBill');
+
     Route::get('imprimer/facture/{code}', [ExpeditionContoller::class, 'adminFacturePrint'])->name('adminFacturePrint');
 
     Route::get('/imprimer/facture/{code}', [ExpeditionContoller::class, 'FacturePrint'])->name('FacturePrint');
-
     /* End Facture */
+
+    /* start paiement */
+    Route::get('paiments', [PaymentController::class, 'index'])->name('adminPaiement');
+    Route::get('recherche-paiement', [PaymentController::class, 'searchPaiement'])->name('adminSearchPaiement');
+    /* End paiement */
 
     /* Start Etiquette */
     Route::get('etiquette/expedition/{code}', [ExpeditionContoller::class, 'adminEtiquetteExpedition'])->name('adminEtiquetteExpedition');
@@ -199,6 +208,14 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::post('edit-price', [SettingController::class, 'adminEditPrice'])->name('adminEditPrice');
     Route::get('recherche-price', [SettingController::class, 'adminSearchPrice'])->name('adminSearchPrice');
     /* End Price */
+
+    /* Start Reclemation */
+    Route::get('reclamations-agent', [ReclamationController::class, 'adminReclamationAgent'])->name('adminReclamationAgent');
+    Route::get('reclamations-client', [ReclamationController::class, 'adminReclamationClient'])->name('adminReclamationClient');
+    Route::post('edit-reclamation', [ReclamationController::class, 'adminEditReclemation'])->name('adminEditReclamation');
+    Route::get('recherche-reclamation-agent', [ReclamationController::class, 'adminSearchReclamationAgent'])->name('adminSearchReclamationAgent');
+    Route::get('recherche-reclamation-client', [ReclamationController::class, 'adminSearchReclamationClient'])->name('adminSearchReclamationClient');
+    /* End Reclemation */
 
     Route::get('select-data', [SettingController::class, 'selectData'])->name('adminSelect');
 

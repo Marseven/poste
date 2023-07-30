@@ -13,22 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages', function (Blueprint $table) {
-
+        Schema::create('reclamations', function (Blueprint $table) {
             $table->id();
-
-            $table->string('code');
-            $table->string('libelle');
-            $table->mediumText('description');
-
-            $table->integer('agence_exp_id')->nullable();
-            $table->integer('agence_dest_id')->nullable();
-            $table->integer('responsable_id')->nullable();
-            $table->integer('nbre_colis')->default('0');
-            $table->string('etape_id')->nullable();
+            $table->string('code')->unique();
+            $table->string('libelle')->nullable();
+            $table->mediumText('details')->nullable();
+            $table->integer('client_id')->nullable();
             $table->integer('agent_id')->nullable();
+            $table->integer('expedition_id')->nullable();
+            $table->integer('colis_id')->nullable();
+            $table->integer('package_id')->nullable();
+            $table->integer('status')->default('0');
             $table->integer('active')->default('0');
-
             $table->timestamps();
         });
     }
@@ -40,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('reclamations');
     }
 };

@@ -293,13 +293,15 @@ class ApiClientController extends Controller
                     // Connect user
                     if (Auth::attempt(['email' => $user_exists->email, 'password' => $new_password, 'active' => 1])) {
 
+                        //$user = Auth::user(); 
+
                         // Create token
-                        $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
+                        $token = $user_exists->createToken('Laravel Password Grant Client')->plainTextToken;
             
                         return response([
                             'result' => true, 
                             'status' => 200,
-                            'message' => 'Bienvenue sur La Poste !',
+                            'message' => 'Mot de passe reinitialise !',
                             'token' => $token,
                             'user' => Auth::user()
                         ]);
@@ -324,7 +326,7 @@ class ApiClientController extends Controller
                 'result' => false, 
                 'status' => 500,
                 'message' => 'Les mots de passe ne sont pas identiques !',
-                'user' => $user_exists
+                'user' => []
             ]);
 
         }
@@ -751,6 +753,52 @@ class ApiClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function suivi_expedition(Request $request, $user_id)
+    {
+
+        // Get client by id
+        $client = User::find($user_id);
+
+        if($client){
+
+            // Get id expedition
+            $id_expedition = $request->input('id_expedition');
+
+            // Get client's suivis
+            $suivis = SuiviExpedition::where('expedition_id',  $id_expedition)->get();
+
+            if(!empty($suivis) || $suivis->count() > 0){
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Historique de cette expedition !',
+                    'historique' => SuiviExpeditionResource::collection($suivis),
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Aucun mouvement pour le moment !',
+                'historique' => [],
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible d\'accéder au suivi de cette expedition !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function detail_colis(Request $request, $user_id)
     {
 
@@ -809,18 +857,10 @@ class ApiClientController extends Controller
 	        	// Get code of this expedition
 	        	$code_expedition = $expedition->code;
 
-	        	// Get suivis of this expedition
-		        $suivis = SuiviExpedition::where('expedition_id', $expedition->id)->get();
-
-	        	// Get colis of this expedition
-		        $colis = ColisExpedition::where('code', $request->input('expedition_code'))->get();
-
 	            return response([
 	                'result' => true, 
 	                'status' => 200,
 	                'message' => 'Détails expedition !',
-	                'colis' => ColisExpeditionResource::collection($colis),
-	                'suivis' => SuiviExpeditionResource::collection($suivis),
 	                'expedition' => ExpeditionResource::make($expedition), // When you get only one element and not a collection
 	            ]);
 

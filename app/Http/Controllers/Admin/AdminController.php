@@ -37,12 +37,16 @@ class AdminController extends Controller
 
         $app_name = "La Poste";
         $page_title = "Tableau de bord";
-        $home = "--active";
+        $home = "side-menu--active";
 
-        $expeditions = Expedition::orderBy('id', 'DESC')->limit(5)->get();
-        $paiements = Paiement::all();
+        $expeditions = Expedition::orderBy('id', 'DESC')->limit(10)->get();
+        $paiements = Paiement::where('status', STATUT_PAID)->get();
         $packages = Package::all();
-        $clients = User::where('role', 'Client')->get();
+
+        $exp_j = Expedition::all();
+        $exp_j_pending = Expedition::all();
+        $exp_j_todo = Expedition::all();
+
 
 
         $admin = Auth::user();
@@ -70,7 +74,6 @@ class AdminController extends Controller
             'expeditions',
             'paiements',
             'packages',
-            'clients',
             'home'
         ));
     }

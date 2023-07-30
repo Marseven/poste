@@ -46,7 +46,7 @@
             <ul>
 
                 <li>
-                    <a href="{{ route('adminHome') }}" class="side-menu side-menu{{ $home ?? '' }}">
+                    <a href="{{ route('adminHome') }}" class="side-menu side-menu {{ $home ?? '' }}">
                         <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
                         <div class="side-menu__title">
                             Tableau de bord
@@ -89,34 +89,10 @@
                 <li class="side-nav__devider my-6"></li>
 
                 <li>
-                    <a href="javascript:;" class="side-menu {{ $transaction ?? '' }}">
-                        <div class="side-menu__icon"> <i data-lucide="credit-card"></i> </div>
-                        <div class="side-menu__title">
-                            Transactions
-                            <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
-                        </div>
-                    </a>
-                    <ul class="{{ $transaction_sub ?? '' }}">
-                        <li>
-                            <a href="#" class="side-menu{{ $transaction1 ?? '' }}">
-                                <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                <div class="side-menu__title"> Liste des paiements </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="side-menu{{ $transaction2 ?? '' }}">
-                                <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
-                                <div class="side-menu__title"> Liste des factures </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
                     <a href="javascript:;" class="side-menu {{ $place ?? '' }}">
                         <div class="side-menu__icon"> <i data-lucide="map-pin"></i> </div>
                         <div class="side-menu__title">
-                            Emplacements
+                            Bureaux de Poste
                             <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                         </div>
                     </a>
@@ -155,6 +131,50 @@
                             <a href="{{ route('adminAgence') }}" class="side-menu {{ $place6 ?? '' }}">
                                 <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                 <div class="side-menu__title">Bureaux de Poste</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="side-menu {{ $transaction ?? '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="credit-card"></i> </div>
+                        <div class="side-menu__title">
+                            Transactions
+                            <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $transaction_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminPaiement') }}" class="side-menu {{ $transaction1 ?? '' }}">
+                                <div class="side-menu__icon"><i data-lucide="minus"></i> </div>
+                                <div class="side-menu__title"> Liste des paiements </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="side-menu {{ $reclamation ?? '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="message-square"></i> </div>
+                        <div class="side-menu__title">
+                            Réclamations
+                            <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $reclamation_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminReclamationAgent') }}"
+                                class="side-menu {{ $reclamation1 ?? '' }}">
+                                <div class="side-menu__icon"><i data-lucide="minus"></i> </div>
+                                <div class="side-menu__title"> Liste des réclamations Agent </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminReclamationClient') }}"
+                                class="side-menu {{ $reclamation2 ?? '' }}">
+                                <div class="side-menu__icon"><i data-lucide="minus"></i> </div>
+                                <div class="side-menu__title"> Liste des réclamations Client </div>
                             </a>
                         </li>
                     </ul>

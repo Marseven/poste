@@ -40,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
 	Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'notifications']);
 
+	Route::post('agents-actives/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'agents_actives']);
+	Route::get('bureaux-actifs/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'bureaux_actives']);
+
 	Route::get('packages-actives/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'packages_actives']);
 	Route::get('packages-completes/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'packages_completes']);
 
@@ -47,10 +50,17 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::get('expeditions-du-jour/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'today_packages_expedition']);
 
 	Route::post('assigner-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'assign_colis']);
+	Route::post('supprimer-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'delete_colis']);
 	Route::post('cloturer-assignation/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'close_assignation']);
 
 	Route::post('detail-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'detail_colis']);
 	Route::post('detail-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'detail_package']);
+	Route::post('scan-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'scan_package']);
+	Route::post('operation-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'operation_package']);
+	Route::post('action-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'action_package']);
+	Route::post('suivi-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'suivi_package']);
+	Route::post('complete-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'complete_package']);
+	Route::post('agent-package/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'agent_package']);
 
 
 	Route::get('incidents/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'incidents']);
@@ -80,6 +90,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
 	Route::post('detail-colis/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_colis']);
 	Route::post('colis-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'colis_expedition']);
+	Route::post('suivi-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'suivi_expedition']);
 
 
 	Route::get('reclamations/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'reclamations']);
