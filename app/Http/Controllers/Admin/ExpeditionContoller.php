@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\LinkMessage;
 use App\Mail\RegisterEntity;
 use App\Models\Agence;
 use App\Models\ColisExpedition;
@@ -570,26 +571,37 @@ class ExpeditionContoller extends Controller
                 return $this->sendError('Erreur', ['error' => 'Failed']);
             }
         } else {
-
             $billing_id = PaymentController::ebilling($expedition);
-            $auth = env('USER_NAME') . ':' . env('SHARED_KEY');
-            $base64 = base64_encode($auth);
-            $response = Http::withHeaders([
-                "Authorization" => "Basic " . $base64
-            ])->post(env('URL_EB') . 'e_bills/' . $billing_id . '/ussd_push', [
-                "payment_system_name" => $request->operator,
-                "payer_msisdn" => $request->phone,
-            ]);
-            $response = json_decode($response->body());
-            if ($response) {
-                if ($response->message == "Accepted") {
-                    $data['bill_id'] = $billing_id;
+            if ($request->paylink == "link") {
+                $link = env('POST_URL') . "?invoice_number=" . $billing_id;
+                try {
+                    Mail::to($expedition->email_exp)->send(new LinkMessage($expedition, $link));
+                    $data['link'] = $link;
                     return $this->sendResponse($data, 'Envoyé !');
-                } else {
-                    return $this->sendError($response->message, ['error' => 'Failed']);
+                } catch (Exception $e) {
+                    $data['link'] = $link;
+                    return $this->sendResponse($data, 'Envoyé !');
                 }
             } else {
-                return $this->sendError("Echec du Push USSD.", ['error' => 'Failed']);
+                $auth = env('USER_NAME') . ':' . env('SHARED_KEY');
+                $base64 = base64_encode($auth);
+                $response = Http::withHeaders([
+                    "Authorization" => "Basic " . $base64
+                ])->post(env('URL_EB') . 'e_bills/' . $billing_id . '/ussd_push', [
+                    "payment_system_name" => $request->operator,
+                    "payer_msisdn" => $request->phone,
+                ]);
+                $response = json_decode($response->body());
+                if ($response) {
+                    if ($response->message == "Accepted") {
+                        $data['bill_id'] = $billing_id;
+                        return $this->sendResponse($data, 'Envoyé !');
+                    } else {
+                        return $this->sendError($response->message, ['error' => 'Failed']);
+                    }
+                } else {
+                    return $this->sendError("Echec du Push USSD.", ['error' => 'Failed']);
+                }
             }
         }
     }

@@ -179,26 +179,60 @@
 
                                                     <div id="eb" class="col-span-12 sm:col-span-12"
                                                         style="display:none">
-                                                        <div class="col-span-12 sm:col-span-6">
-                                                            <label for="modal-form-1" class="form-label">Opérateur
-                                                            </label>
-                                                            <select class="form-control" name="operator"
-                                                                id="operator-{{ $expedition->id }}">
-                                                                <option value="airtelmoney">Airtel Money</option>
-                                                                <option value="moovmoney4">Moov Money</option>
-                                                            </select>
+
+                                                        <div class="mt-3"> <label>Choisissez une option</label>
+                                                            <div class="flex flex-col sm:flex-row mt-2">
+                                                                <div class="form-check mr-2"> <input
+                                                                        class="form-check-input paylink-{{ $expedition->id }}"
+                                                                        type="radio" name="paylink" value="direct"
+                                                                        onChange="afficherLinkForm()">
+                                                                    <label class="form-check-label"
+                                                                        for="radio-switch-4">Paiement Direct</label>
+                                                                </div>
+                                                                <div class="form-check mr-2 mt-2 sm:mt-0"> <input
+                                                                        class="form-check-input paylink-{{ $expedition->id }}"
+                                                                        type="radio" name="paylink" value="link"
+                                                                        onChange="afficherLinkForm()">
+                                                                    <label class="form-check-label"
+                                                                        for="radio-switch-5">Lien de Paiement</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <br>
-                                                        <div class="col-span-12 sm:col-span-6">
-                                                            <label for="modal-form-1" class="form-label">Numéro de
-                                                                Téléphone*</label>
-                                                            <input type="tel" class="form-control"
-                                                                id="phone-{{ $expedition->id }}"
-                                                                placeholder="Ex. 077XXXXXX / 066XXXXXX " name="phone"
-                                                                maxlength="9" oninput="verifierEtAfficherErreur()">
-                                                            <span id="messageErreur-{{ $expedition->id }}"
-                                                                style="color: red; display: none;"></span>
+
+                                                        <div id="direct-form">
+                                                            <div class="col-span-12 sm:col-span-6">
+                                                                <label for="modal-form-1" class="form-label">Opérateur
+                                                                </label>
+                                                                <select class="form-control" name="operator"
+                                                                    id="operator-{{ $expedition->id }}">
+                                                                    <option value="airtelmoney">Airtel Money</option>
+                                                                    <option value="moovmoney4">Moov Money</option>
+                                                                </select>
+                                                            </div>
+                                                            <br>
+                                                            <div class="col-span-12 sm:col-span-6">
+                                                                <label for="modal-form-1" class="form-label">Numéro de
+                                                                    Téléphone*</label>
+                                                                <input type="tel" class="form-control"
+                                                                    id="phone-{{ $expedition->id }}"
+                                                                    placeholder="Ex. 077XXXXXX / 066XXXXXX "
+                                                                    name="phone" maxlength="9"
+                                                                    oninput="verifierEtAfficherErreur()">
+                                                                <span id="messageErreur-{{ $expedition->id }}"
+                                                                    style="color: red; display: none;"></span>
+                                                            </div>
                                                         </div>
+
+                                                        <div id="link-form">
+                                                            <div class="col-span-12 sm:col-span-6">
+                                                                <label for="modal-form-1"
+                                                                    class="form-label">Email*</label>
+                                                                <input type="email" class="form-control"
+                                                                    id="email-{{ $expedition->id }}"
+                                                                    placeholder="axy@test.com" name="email">
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div> <!-- END: Modal Body -->
                                                 <!-- BEGIN: Modal Footer -->
@@ -315,6 +349,20 @@
             }
         }
 
+        function afficherLinkForm() {
+            const link = document.getElementById("link-form");
+            const direct = document.getElementById("direct-form");
+            const id = $("#id").val();
+
+            if ($(".paylink-" + id).val() != "link") {
+                direct.style.display = "none";
+                link.style.display = "block";
+            } else {
+                direct.style.display = "block";
+                link.style.display = "none";
+            }
+        }
+
         function setId(idexp) {
             $("#id").val(idexp);
         }
@@ -373,6 +421,7 @@
 
             const operator = $("#operator-" + id).val();
             const phone = $("#phone-" + id).val();
+            const paylink = $(".paylink-" + id).val();
             const action = $("#pay-form-" + id).attr('action');
 
             if (methode == "CA") {
@@ -433,6 +482,7 @@
                         methode: methode,
                         operator: operator,
                         phone: phone,
+                        paylink: paylink,
                     },
                     success: function(result) {
                         console.log(result);

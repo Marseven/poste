@@ -29,6 +29,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/signin', [App\Http\Controllers\HomeController::class, 'login'])->name('signin');
 /* Fin routage du site */
 
+//notification ebilling
+Route::post('/notification/ebilling', [PaymentController::class, 'notify_ebilling'])->name('notification-ebilling-payments');
+
+
 Route::middleware(['auth'])->group(function () {
 });
 

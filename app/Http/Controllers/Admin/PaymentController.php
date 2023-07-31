@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaidMessage;
 use App\Models\Expedition;
 use App\Models\Paiement;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -248,8 +251,12 @@ class PaymentController extends Controller
                 $expedition->updated_at = date('Y-m-d H:i');
                 $expedition->created_at = date('Y-m-d H:i');
                 $expedition->save();
-                $expedition->load(['user']);
 
+                try {
+                    Mail::to($expedition->email_exp)->send(new PaidMessage($payment));
+                } catch (Exception $e) {
+                    return http_response_code(201);
+                }
                 return http_response_code(200);
             } else {
                 return http_response_code(402);
