@@ -3,9 +3,7 @@
 
     Cliquez sur le bouton ci-dessous pour payer l'expédition N° {{ $expedition->reference }}.
 
-    @component('mail::button', ['url' => $link])
-        Payer l'expédition
-    @endcomponent
+    <a href="{{ $link }}" target="_blank">Payer l'expédition</a>
 
     Cordialement,
     La Poste Gaboanaise
