@@ -618,7 +618,7 @@
                             } else {
                                 link = result.data.link;
                                 linkElement.textContent = link;
-                                var shareElement = document.getElementById("share-link");
+                                var shareElement = document.getElementById("link-share");
                                 // Modifiez l'attribut href avec le nouveau lien
                                 shareElement.setAttribute("href", "mailto:" + email);
                                 const form = tailwind.Modal
