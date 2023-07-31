@@ -199,7 +199,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div id="direct-form">
+                                                        <div id="direct-form" style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1" class="form-label">Opérateur
                                                                 </label>
@@ -223,7 +223,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div id="link-form">
+                                                        <div id="link-form" style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1"
                                                                     class="form-label">Email*</label>
