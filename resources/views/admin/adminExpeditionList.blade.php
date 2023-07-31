@@ -539,6 +539,9 @@
                                                 "#countdown"));
 
                                         count.hide();
+
+                                        $(".valider").prop('disabled',
+                                            false);
                                     }
                                 }, 1000);
 
@@ -620,6 +623,9 @@
                                         $(".valider").prop('disabled', false);
                                     }
                                 }, 5000);
+
+                                $(".valider").prop('disabled',
+                                    false);
                             } else {
                                 link = result.data.link;
                                 linkElement.textContent = link;
@@ -642,6 +648,21 @@
                                 $(".valider").prop('disabled', false);
                             }
                         }
+
+                        $(".valider").prop('disabled',
+                            false);
+                    },
+                    error: function(xhr, status, error) {
+                        // Une erreur s'est produite lors de la requête AJAX
+                        console.log(
+                            'Erreur lors de la requête AJAX : ' +
+                            error);
+                        // Continuez le compte à rebours même en cas d'erreur
+                        $(".valider").prop('disabled', false);
+                    },
+                    complete: function() {
+                        // Réactivez le bouton une fois que la requête AJAX est terminée
+                        $(".valider").prop('disabled', false);
                     }
                 });
             }
