@@ -198,7 +198,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        <br><br>
                                                         <div id="direct-form" style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1" class="form-label">Opérateur
@@ -355,11 +355,11 @@
             const id = $("#id").val();
 
             if ($(".paylink-" + id).val() != "link") {
-                direct.style.display = "none";
-                link.style.display = "block";
-            } else {
                 direct.style.display = "block";
                 link.style.display = "none";
+            } else {
+                direct.style.display = "none";
+                link.style.display = "block";
             }
         }
 
