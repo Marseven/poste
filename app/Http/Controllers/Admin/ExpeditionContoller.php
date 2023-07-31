@@ -734,7 +734,10 @@ class ExpeditionContoller extends Controller
         $admin_id = Auth::user()->id;
 
         $app_name = "La Poste";
-        $page_title = "Facture Expedition";
+        $page_title = "Etiquette Expedition";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
 
         $societe = Societe::find(1);
 
@@ -758,7 +761,10 @@ class ExpeditionContoller extends Controller
                     'facture',
                     'expedition',
                     'societe',
-                    'paquets'
+                    'paquets',
+                    'exp',
+                    'exp_sub',
+                    'exp2'
                 ));
             }
             return back()->with('failed', 'Impossible de modifier cette expedition !');

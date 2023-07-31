@@ -131,7 +131,8 @@ class PaymentController extends Controller
 
     static function ebilling($data)
     {
-        // Fetch all data (including those not optional) from session
+        $payment = Paiement::where('expedition_id', $data->id)->first();
+
         $eb_name = $data->name_exp;
         $eb_amount = $data->amount * 1.025;
         $eb_shortdescription = "Paiment de l'expéditon N°" . $data->code;
@@ -144,9 +145,9 @@ class PaymentController extends Controller
         // Creating invoice for a merchant
         $merchant_name = config('app.name');
 
-        $payment = Paiement::where('reference', $eb_reference)->first();
+        $ref_pay = Paiement::where('reference', $eb_reference)->first();
 
-        if ($payment) {
+        if ($ref_pay) {
             $eb_reference = PaymentController::str_reference(10);
         }
 
@@ -196,19 +197,25 @@ class PaymentController extends Controller
         // Get unique transaction id
         $bill_id = $response['e_bill']['bill_id'];
 
+        if ($payment == null) {
+            // Fetch all data (including those not optional) from session
+            $data = [
+                'expedition' => $data->id,
+                'amount' => $eb_amount,
+                'description' => $eb_shortdescription,
+                'reference' => $eb_reference,
+                'status' => STATUT_PENDING,
+                'time_out' => $expiry_period,
+                'description' => $eb_shortdescription,
+                'billing_id' => $bill_id,
+            ];
 
-        $data = [
-            'expedition' => $data->id,
-            'amount' => $eb_amount,
-            'description' => $eb_shortdescription,
-            'reference' => $eb_reference,
-            'status' => STATUT_PENDING,
-            'time_out' => $expiry_period,
-            'description' => $eb_shortdescription,
-            'billing_id' => $bill_id,
-        ];
-
-        PaymentController::create($data);
+            PaymentController::create($data);
+        } else {
+            $payment->reference = PaymentController::str_reference(10);
+            $payment->ebilling_id = $bill_id;
+            $payment->save();
+        }
 
         return $bill_id;
     }
