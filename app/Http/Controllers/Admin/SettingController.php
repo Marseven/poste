@@ -961,7 +961,7 @@ class SettingController extends Controller
             $response = json_encode($organization);
             return response()->json($response);
         } elseif ($request->target == 'poids_range') {
-            $organization = PriceExpedition::where('service_id', $request->id)->get();
+            $organization = PriceExpedition::where('mode_id', $request->mode)->where('service_id', $request->id)->get();
             $response = json_encode($organization);
             return response()->json($response);
         }
