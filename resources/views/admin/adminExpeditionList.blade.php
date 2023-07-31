@@ -357,9 +357,11 @@
             if ($(".paylink-" + id).val() != "link") {
                 direct.style.display = "block";
                 link.style.display = "none";
+                $(".paylink-" + id).val("link");
             } else {
                 direct.style.display = "none";
                 link.style.display = "block";
+                $(".paylink-" + id).val("direct");
             }
         }
 
