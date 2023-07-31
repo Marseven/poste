@@ -183,14 +183,16 @@
                                                         <div class="mt-3"> <label>Choisissez une option</label>
                                                             <div class="flex flex-col sm:flex-row mt-2">
                                                                 <div class="form-check mr-2"> <input
-                                                                        class="form-check-input paylink-{{ $expedition->id }}"
+                                                                        class="form-check-input"
+                                                                        id="paylink-direct-{{ $expedition->id }}"
                                                                         type="radio" name="paylink" value="direct"
                                                                         onChange="afficherLinkForm()">
                                                                     <label class="form-check-label"
                                                                         for="radio-switch-4">Paiement Direct</label>
                                                                 </div>
                                                                 <div class="form-check mr-2 mt-2 sm:mt-0"> <input
-                                                                        class="form-check-input paylink-{{ $expedition->id }}"
+                                                                        class="form-check-input"
+                                                                        id="paylink-link-{{ $expedition->id }}"
                                                                         type="radio" name="paylink" value="link"
                                                                         onChange="afficherLinkForm()">
                                                                     <label class="form-check-label"
@@ -369,9 +371,8 @@
         function afficherLinkForm() {
             const link = document.getElementById("link-form");
             const direct = document.getElementById("direct-form");
-            const id = $("#id").val();
-            alert($(".paylink-" + id).val());
-            if ($(".paylink-" + id).val() != "link") {
+            var selectedValue = $("input[name='paylink']:checked").val();
+            if (selectedValue == "direct") {
                 direct.style.display = "block";
                 link.style.display = "none";
                 $(".paylink-" + id).val("link");
