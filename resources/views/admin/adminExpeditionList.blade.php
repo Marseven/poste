@@ -361,7 +361,7 @@
         function afficherEbForm() {
             const eb = document.getElementById("eb");
             const id = $("#id").val();
-            alert($("#methode-" + id).val());
+            alert(id);
             if ($("#methode-" + id).val() != "EB") {
                 eb.style.display = "none";
             } else {
