@@ -361,6 +361,7 @@
         function afficherEbForm() {
             const eb = document.getElementById("eb");
             const id = $("#id").val();
+            alert($("#methode-" + id).val());
             if ($("#methode-" + id).val() != "EB") {
                 eb.style.display = "none";
             } else {
@@ -476,6 +477,7 @@
                                 "#error-modal"));
                             error.show();
                         }
+                        $(".valider").prop('disabled', false);
 
                     },
                     error: function(xhr, status, error) {
@@ -584,12 +586,16 @@
                                                                 "#success-modal"));
                                                     success.show();
                                                 }
+                                                $(".valider").prop('disabled',
+                                                    false);
                                             },
                                             error: function(xhr, status, error) {
                                                 // Une erreur s'est produite lors de la requête AJAX
                                                 console.log(
                                                     'Erreur lors de la requête AJAX : ' +
                                                     error);
+                                                $(".valider").prop('disabled',
+                                                    false);
                                                 // Continuez le compte à rebours même en cas d'erreur
                                             },
                                             complete: function() {
@@ -613,6 +619,8 @@
                                         var flash =
                                             "<div class='alert alert-warning show mb-2' role='alert'>Paiement non validée !</div>"
                                         $('#flash-message').append(flash);
+
+                                        $(".valider").prop('disabled', false);
                                     }
                                 }, 5000);
                             } else {
@@ -633,6 +641,8 @@
                                         document.querySelector(
                                             "#link-response"));
                                 success.show();
+
+                                $(".valider").prop('disabled', false);
                             }
                         }
                     }
