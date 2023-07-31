@@ -169,7 +169,8 @@
                                                         <label for="modal-form-1" class="form-label">Moyen de
                                                             Paiement</label>
                                                         <select class="form-control" id="methode-{{ $expedition->id }}"
-                                                            onChange="afficherEbForm()" name="methode" required>
+                                                            onChange="afficherEbForm({{ $expedition->id }})"
+                                                            name="methode" required>
                                                             @foreach ($methodes as $methode)
                                                                 <option value="{{ $methode->code }}">
                                                                     {{ $methode->libelle }}</option>
@@ -358,11 +359,11 @@
         integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        function afficherEbForm() {
+        function afficherEbForm(idexp) {
             const eb = document.getElementById("eb");
-            const id = $("input[name='id']").val();
-            console.log(id);
-            if ($("#methode-" + id).val() != "EB") {
+            const id = $("#id").val();
+
+            if ($("#methode-" + idexp).val() != "EB") {
                 eb.style.display = "none";
             } else {
                 eb.style.display = "block";
