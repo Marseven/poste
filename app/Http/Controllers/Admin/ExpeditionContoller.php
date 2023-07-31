@@ -273,9 +273,14 @@ class ExpeditionContoller extends Controller
         } else {
             if ($request->input('service') == 1) {
                 $price = PriceExpedition::where('type', 'Standard')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
-                if ($price->first == 1) $price_sup = PriceExpedition::where('type', 'Supplémentaire')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
-                $paquet->poids = $price->weight;
-                $amount = $price->price;
+                if ($price && $price->first == 1) $price_sup = PriceExpedition::where('type', 'Supplémentaire')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
+
+                $first = 0.5;
+                $last = $request->poids - $first;
+
+                $paquet->poids = $request->poids;
+
+                $amount = round(($price->price * $first) + (($price_sup->price * $first) / $price_sup->weight));
             }
         }
 
