@@ -360,6 +360,7 @@
     <script>
         function afficherEbForm() {
             const eb = document.getElementById("eb");
+            console.log($("#id").val());
             const id = $("#id").val();
             if ($("#methode-" + id).val() != "EB") {
                 eb.style.display = "none";
@@ -382,9 +383,7 @@
         }
 
         function setId(idexp) {
-            alert(idexp);
             $("#id").val(idexp);
-            alert($("#id").val());
         }
 
         function verifierNumeroAirtel(numero) {
