@@ -164,7 +164,7 @@
                                                 </div>
                                                 <!-- BEGIN: Modal Body -->
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                                    <input type="hidden" id="id">
+                                                    <input type="hidden" id="id" name="id">
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-1" class="form-label">Moyen de
                                                             Paiement</label>
@@ -360,8 +360,8 @@
     <script>
         function afficherEbForm() {
             const eb = document.getElementById("eb");
-            console.log($("#id").val());
-            const id = $("#id").val();
+            const id = $("input[name='id']").val();
+            console.log(id);
             if ($("#methode-" + id).val() != "EB") {
                 eb.style.display = "none";
             } else {
