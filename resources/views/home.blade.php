@@ -147,7 +147,7 @@
                                             <p class="font-md color-white mb-15 wow animate__animated animate__fadeIn"
                                                 data-wow-delay=".0s">Poste aux lettres & Fret</p>
                                             <h1 class="color-white mb-25 wow animate__animated animate__fadeInUp"
-                                                data-wow-delay=".0s">opérateur postal universel <br
+                                                data-wow-delay=".0s">Opérateur postal universel <br
                                                     class="d-none d-lg-block">du Gabon</h1>
                                             <div class="row">
                                                 <div class="col-lg-6">
@@ -174,7 +174,7 @@
                                             <p class="font-md color-white mb-15 wow animate__animated animate__fadeIn"
                                                 data-wow-delay=".0s">Poste aux lettres & Fret</p>
                                             <h1 class="color-white mb-25 wow animate__animated animate__fadeInUp"
-                                                data-wow-delay=".0s">opérateur postal universel <br
+                                                data-wow-delay=".0s">Opérateur postal universel <br
                                                     class="d-none d-lg-block">du Gabon</h1>
                                             <div class="row">
                                                 <div class="col-lg-6">
