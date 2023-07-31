@@ -284,8 +284,6 @@ class ExpeditionContoller extends Controller
             }
         }
 
-
-
         if ($price == null) {
             $response = json_encode(2);
             return response()->json($response);
