@@ -433,6 +433,7 @@
 
             let timeLeft = 70; // Temps restant en secondes
             let bill_id = "0";
+            let link = "#";
             const id = $(this).data('id');
             const countdownElement = document.getElementById('countdown-text');
             const linkElement = document.getElementById('link-text');
@@ -441,7 +442,7 @@
             const operator = $("#operator-" + id).val();
             const phone = $("#phone-" + id).val();
             const email = $("#email-" + id).val();
-            const paylink = $(".paylink-" + id).val();
+            const paylink = $("input[name='paylink']:checked").val();
             const action = $("#pay-form-" + id).attr('action');
 
             if (methode == "CA") {
@@ -616,13 +617,10 @@
                                 }, 5000);
                             } else {
                                 link = result.data.link;
-
                                 linkElement.textContent = link;
-
                                 var shareElement = document.getElementById("share-link");
                                 // Modifiez l'attribut href avec le nouveau lien
                                 shareElement.setAttribute("href", "mailto:" + email);
-
                                 const form = tailwind.Modal
                                     .getInstance(document
                                         .querySelector(
