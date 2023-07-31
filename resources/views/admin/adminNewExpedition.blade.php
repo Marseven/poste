@@ -182,7 +182,8 @@
 
                             <div class="col-span-12 sm:col-span-6">
                                 <label for="modal-form-1" class="form-label">Mode d'expédition</label>
-                                <select class="form-control" name="mode_exp_id" id="mode" required>
+                                <select class="form-control" name="mode_exp_id" id="mode" onchange="poidsAffiche()"
+                                    required>
                                     @foreach ($modes as $mode)
                                         <option value="{{ $mode->id }}">{{ $mode->libelle }}</option>
                                     @endforeach
@@ -497,38 +498,8 @@
             }
         }
 
-        function afficherPoids() {
-
-            var id = $("#service").val();
-            var target = $("#service").attr('target');
+        function poidsAffiche() {
             var mode = $('#mode').val();
-
-            $.ajax({
-                url: "{{ route('adminSelect') }}",
-                data: {
-                    'id': id,
-                    'target': target,
-                    'mode': mode,
-                },
-                dataType: 'json',
-                success: function(result) {
-                    console.log(result);
-                    result = JSON.parse(result);
-                    var option_html = "<option value='0'>Choisir</option>";
-
-                    for (i = 0; i < result.length; i++) {
-                        is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
-                        option_html += "<option " + is_selected + "  value='" + result[i].id +
-                            "'>" +
-                            result[i].weight +
-                            " KG</option>";
-                    }
-
-                    $("#" + target).html(option_html);
-                    $("#" + target).change();
-                }
-            });
-
             var p_value = document.getElementById("p_value");
             var p_list = document.getElementById("p_list");
             var monElement = document.getElementById("poids");
@@ -578,6 +549,40 @@
                     p_value.style.display = "block";
                 }
             }
+        }
+
+        function afficherPoids() {
+            var id = $("#service").val();
+            var target = $("#service").attr('target');
+            var mode = $('#mode').val();
+
+            $.ajax({
+                url: "{{ route('adminSelect') }}",
+                data: {
+                    'id': id,
+                    'target': target,
+                    'mode': mode,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    console.log(result);
+                    result = JSON.parse(result);
+                    var option_html = "<option value='0'>Choisir</option>";
+
+                    for (i = 0; i < result.length; i++) {
+                        is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
+                        option_html += "<option " + is_selected + "  value='" + result[i].id +
+                            "'>" +
+                            result[i].weight +
+                            " KG</option>";
+                    }
+
+                    $("#" + target).html(option_html);
+                    $("#" + target).change();
+                }
+            });
+
+            poidsAffiche();
 
 
 
