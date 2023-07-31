@@ -332,6 +332,23 @@
             </div>
         </div>
     </div> <!-- END: Modal Content -->
+
+
+    <div id="link-response" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-10 text-center">
+                    <div class="col-span-6 sm:col-span-3 xl:col-span-2 flex flex-col justify-end items-center">
+                        <div class="text-center text-md text-primary mt-2" id="link-text"
+                            style="font-size: 2em; font-weight: 800;"></div>
+                        <br>
+                        <div class="px-5 pb-8 text-center"><a href="#" id="link-share" data-tw-dismiss="modal"
+                                class="btn btn-primary w-24">Partager le lien par mail</a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- END: Modal Content -->
 @endsection
 
 @push('scripts')
@@ -419,6 +436,7 @@
             let bill_id = "0";
             const id = $(this).data('id');
             const countdownElement = document.getElementById('countdown-text');
+            const linkElement = document.getElementById('link-text');
             const methode = $("#methode-" + id).val();
 
             const operator = $("#operator-" + id).val();
@@ -490,123 +508,135 @@
                     },
                     success: function(result) {
                         console.log(result);
-
                         if (result.success == true) {
+                            if (paylink == "direct") {
+                                bill_id = result.data.bill_id;
 
-                            bill_id = result.data.bill_id;
+                                const count = tailwind.Modal.getInstance(document.querySelector(
+                                    "#countdown"));
+                                count.show();
 
-                            const count = tailwind.Modal.getInstance(document.querySelector(
-                                "#countdown"));
-                            count.show();
+                                const countdownInterval = setInterval(function() {
+                                    if (timeLeft > 0) {
+                                        // Affichez le nombre de secondes restantes
+                                        console.log(`Temps restant : ${timeLeft} secondes`);
+                                        countdownElement.textContent = timeLeft;
+                                        timeLeft--;
 
-                            // Mettre à jour l'affichage du compte à rebours
-                            function updateCountdown() {
+                                    } else {
+                                        // Le compte à rebours est terminé, mais le statut n'est toujours pas bon
+                                        console.log(
+                                            'Compte à rebours terminé, mais statut incorrect'
+                                        );
+                                        // Faites ce que vous devez faire lorsque le statut n'est pas bon à la fin du compte à rebours
+                                        // Par exemple, affichez un message d'erreur ou effectuez une autre action
 
-                                timeLeft--;
+                                        // Arrêtez le compte à rebours
+                                        clearInterval(countdownInterval);
 
-                                // Si le compte à rebours atteint 0, arrêter le décompte et afficher une erreur
-                                if (timeLeft < 0) {
+                                        const count = tailwind.Modal.getInstance(document
+                                            .querySelector(
+                                                "#countdown"));
 
-                                }
-                            }
+                                        count.hide();
+                                    }
+                                }, 1000);
 
-                            function checkStatus() {
+                                const checkInterval = setInterval(function() {
+                                    if (timeLeft > 0) {
+                                        // Affichez le nombre de secondes restantes
+                                        console.log(`Temps restant : ${timeLeft} secondes`);
 
-                            }
+                                        // Effectuez la requête AJAX vers votre script PHP pour vérifier le statut
+                                        $.ajax({
+                                            url: "{{ route('checkBill') }}", // Chemin vers votre script PHP de traitement
+                                            type: 'GET',
+                                            data: {
+                                                bill_id: bill_id,
+                                            },
+                                            dataType: 'json',
+                                            success: function(result) {
+                                                console.log(result);
+                                                if (result.success == true) {
 
-                            const countdownInterval = setInterval(function() {
-                                if (timeLeft > 0) {
-                                    // Affichez le nombre de secondes restantes
-                                    console.log(`Temps restant : ${timeLeft} secondes`);
-                                    countdownElement.textContent = timeLeft;
-                                    timeLeft--;
+                                                    clearInterval(
+                                                        countdownInterval);
+                                                    clearInterval(checkInterval);
 
-                                } else {
-                                    // Le compte à rebours est terminé, mais le statut n'est toujours pas bon
-                                    console.log(
-                                        'Compte à rebours terminé, mais statut incorrect');
-                                    // Faites ce que vous devez faire lorsque le statut n'est pas bon à la fin du compte à rebours
-                                    // Par exemple, affichez un message d'erreur ou effectuez une autre action
+                                                    const count = tailwind.Modal
+                                                        .getInstance(
+                                                            document.querySelector(
+                                                                "#countdown"));
+                                                    count.hide();
 
-                                    // Arrêtez le compte à rebours
-                                    clearInterval(countdownInterval);
+                                                    const form = tailwind.Modal
+                                                        .getInstance(document
+                                                            .querySelector(
+                                                                "#pay-expedition-" +
+                                                                id)
+                                                        );
+                                                    form.hide();
 
-                                    const count = tailwind.Modal.getInstance(document
-                                        .querySelector(
-                                            "#countdown"));
-
-                                    count.hide();
-                                }
-                            }, 1000);
-
-                            const checkInterval = setInterval(function() {
-                                if (timeLeft > 0) {
-                                    // Affichez le nombre de secondes restantes
-                                    console.log(`Temps restant : ${timeLeft} secondes`);
-
-                                    // Effectuez la requête AJAX vers votre script PHP pour vérifier le statut
-                                    $.ajax({
-                                        url: "{{ route('checkBill') }}", // Chemin vers votre script PHP de traitement
-                                        type: 'GET',
-                                        data: {
-                                            bill_id: bill_id,
-                                        },
-                                        dataType: 'json',
-                                        success: function(result) {
-                                            console.log(result);
-                                            if (result.success == true) {
-
-                                                clearInterval(countdownInterval);
-                                                clearInterval(checkInterval);
-
-                                                const count = tailwind.Modal
-                                                    .getInstance(
-                                                        document.querySelector(
-                                                            "#countdown"));
-                                                count.hide();
-
-                                                const form = tailwind.Modal
-                                                    .getInstance(document
-                                                        .querySelector(
-                                                            "#pay-expedition-" + id)
-                                                    );
-                                                form.hide();
-
-                                                const success = tailwind.Modal
-                                                    .getInstance(
-                                                        document.querySelector(
-                                                            "#success-modal"));
-                                                success.show();
+                                                    const success = tailwind.Modal
+                                                        .getInstance(
+                                                            document.querySelector(
+                                                                "#success-modal"));
+                                                    success.show();
+                                                }
+                                            },
+                                            error: function(xhr, status, error) {
+                                                // Une erreur s'est produite lors de la requête AJAX
+                                                console.log(
+                                                    'Erreur lors de la requête AJAX : ' +
+                                                    error);
+                                                // Continuez le compte à rebours même en cas d'erreur
+                                            },
+                                            complete: function() {
+                                                // Réactivez le bouton une fois que la requête AJAX est terminée
+                                                $(".valider").prop('disabled',
+                                                    false);
                                             }
-                                        },
-                                        error: function(xhr, status, error) {
-                                            // Une erreur s'est produite lors de la requête AJAX
-                                            console.log(
-                                                'Erreur lors de la requête AJAX : ' +
-                                                error);
-                                            // Continuez le compte à rebours même en cas d'erreur
-                                        },
-                                        complete: function() {
-                                            // Réactivez le bouton une fois que la requête AJAX est terminée
-                                            $(".valider").prop('disabled', false);
-                                        }
-                                    });
-                                    console.log("check");
-                                } else {
-                                    // Le compte à rebours est terminé, mais le statut n'est toujours pas bon
-                                    console.log(
-                                        'Compte à rebours terminé, mais statut incorrect');
-                                    // Faites ce que vous devez faire lorsque le statut n'est pas bon à la fin du compte à rebours
-                                    // Par exemple, affichez un message d'erreur ou effectuez une autre action
+                                        });
+                                        console.log("check");
+                                    } else {
+                                        // Le compte à rebours est terminé, mais le statut n'est toujours pas bon
+                                        console.log(
+                                            'Compte à rebours terminé, mais statut incorrect'
+                                        );
+                                        // Faites ce que vous devez faire lorsque le statut n'est pas bon à la fin du compte à rebours
+                                        // Par exemple, affichez un message d'erreur ou effectuez une autre action
 
-                                    // Arrêtez le compte à rebours
-                                    clearInterval(checkInterval);
+                                        // Arrêtez le compte à rebours
+                                        clearInterval(checkInterval);
 
-                                    var flash =
-                                        "<div class='alert alert-warning show mb-2' role='alert'>Paiement non validée !</div>"
-                                    $('#flash-message').append(flash);
-                                }
-                            }, 5000);
+                                        var flash =
+                                            "<div class='alert alert-warning show mb-2' role='alert'>Paiement non validée !</div>"
+                                        $('#flash-message').append(flash);
+                                    }
+                                }, 5000);
+                            } else {
+                                link = result.data.link;
+
+                                linkElement.textContent = link;
+
+                                var shareElement = document.getElementById("share-link");
+                                // Modifiez l'attribut href avec le nouveau lien
+                                shareElement.setAttribute("href", "mailto:" + email);
+
+                                const form = tailwind.Modal
+                                    .getInstance(document
+                                        .querySelector(
+                                            "#pay-expedition-" +
+                                            id)
+                                    );
+                                form.hide();
+
+                                const success = tailwind.Modal
+                                    .getInstance(
+                                        document.querySelector(
+                                            "#link-response"));
+                                success.show();
+                            }
                         }
                     }
                 });
