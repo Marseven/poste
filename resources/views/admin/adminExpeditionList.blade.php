@@ -367,15 +367,15 @@
         }
 
         function afficherLinkForm() {
-            const link = document.getElementById("link-form");
-            const direct = document.getElementById("direct-form");
-            var selectedValue = $("input[name='paylink']:checked").val();
-            if (selectedValue == "direct") {
-                direct.style.display = "block";
-                link.style.display = "none";
+            const link = $("#link-form");
+            const direct = $("#direct-form");
+            const selectedValue = $("input[name='paylink']:checked").val();
+            if (selectedValue === "direct") {
+                direct.show();
+                link.hide();
             } else {
-                direct.style.display = "none";
-                link.style.display = "block";
+                direct.hide();
+                link.show();
             }
         }
 
