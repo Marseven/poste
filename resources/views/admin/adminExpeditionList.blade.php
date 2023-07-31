@@ -361,7 +361,6 @@
         function afficherEbForm() {
             const eb = document.getElementById("eb");
             const id = $("#id").val();
-            alert(id);
             if ($("#methode-" + id).val() != "EB") {
                 eb.style.display = "none";
             } else {
@@ -383,7 +382,9 @@
         }
 
         function setId(idexp) {
+            alert(idexp);
             $("#id").val(idexp);
+            alert($("#id").val());
         }
 
         function verifierNumeroAirtel(numero) {
