@@ -267,12 +267,13 @@ class ExpeditionContoller extends Controller
                 $amount = $price->price;
             } else {
                 $price = PriceExpedition::where('type', 'Standard')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
-                $paquet->poids = $request->input('weight');
+                $paquet->poids = $request->input('poids');
                 $amount = round($paquet->poids * $price->price, 1);
             }
         } else {
             if ($request->input('service') == 1) {
                 $price = PriceExpedition::where('type', 'Standard')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
+                dd($price);
                 if ($request->poids > 0.5) {
                     if ($price && $price->first == 1) $price_sup = PriceExpedition::where('type', 'Supplémentaire')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
                     $first = 0.5;
