@@ -357,12 +357,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script>
         function afficherEbForm() {
-            const eb = document.getElementById("eb");
+            const eb = $("#eb");
             const id = $("#id").val();
-            if ($("#methode-" + id).val() != "EB") {
-                eb.style.display = "none";
+            if ($("#methode-" + id).val() !== "EB") {
+                eb.hide();
             } else {
-                eb.style.display = "block";
+                eb.show();
             }
         }
 
