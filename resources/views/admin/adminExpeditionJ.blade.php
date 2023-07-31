@@ -259,8 +259,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body p-0">
-                    <div class="p-5 text-center"> <i data-lucide="cross-circle"
-                            class="w-16 h-16 text-danger mx-auto mt-3"></i>
+                    <div class="p-5 text-center"> <i data-lucide="cross" class="w-16 h-16 text-danger mx-auto mt-3"></i>
                         <div class="text-3xl mt-5">Paiment non ajouté</div>
                         <div class="text-slate-500 mt-2"></div>
                     </div>
@@ -292,7 +291,7 @@
                         </svg>
                         <br><br>
                         <div class="text-center text-md text-primary mt-2" id="countdown-text"
-                            style="font-size: 3em; font-weight: 800;">70</div>
+                            style="font-size: 3em; font-weight: 800;">30</div>
                     </div>
                 </div>
             </div>
@@ -365,7 +364,7 @@
 
             $(".valider").prop('disabled', true);
 
-            let timeLeft = 70; // Temps restant en secondes
+            let timeLeft = 30; // Temps restant en secondes
             let bill_id = "0";
             const id = $(this).data('id');
             const countdownElement = document.getElementById('countdown-text');
