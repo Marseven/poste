@@ -332,7 +332,7 @@
 
                     <!-- BEGIN: Daily Sales -->
                     <div class="ml-auto flex items-center">
-                        <button type="submit" class="btn btn-primary shadow-md mr-2">Soumttre</button>
+                        <button type="submit" class="btn btn-primary shadow-md mr-2">Soumettre</button>
                         <button type="reset" class="btn btn-danger shadow-md mr-2">Annueler</button>
                     </div>
                     <!-- END: Daily Sales -->
