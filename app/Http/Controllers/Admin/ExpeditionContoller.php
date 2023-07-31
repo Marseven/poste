@@ -275,7 +275,6 @@ class ExpeditionContoller extends Controller
                 $price = PriceExpedition::where('type', 'Standard')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
                 if ($request->poids > 0.5) {
                     if ($price && $price->first == 1) $price_sup = PriceExpedition::where('type', 'Supplémentaire')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
-                    dd($price_sup);
                     $first = 0.5;
                     $last = $request->poids - $first;
                     $poids_sup = $last / $first;
