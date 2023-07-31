@@ -366,8 +366,6 @@
             if ($("#methode-" + idexp).val() != "EB") {
                 eb.style.display = "none";
             } else {
-                alert(idexp);
-                alert($("#methode-" + idexp).val());
                 eb.style.display = "block";
             }
         }
