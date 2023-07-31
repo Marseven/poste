@@ -68,12 +68,12 @@
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-statuts" action="{{ route('adminSearchStatut') }}" method="GET" class="d-none">
+                        <form id="search-modes" action="{{ route('adminSearchMode') }}" method="GET" class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">
                             <a href=""
-                                onclick="event.preventDefault(); document.getElementById('search-statuts').submit();">
+                                onclick="event.preventDefault(); document.getElementById('search-modes').submit();">
                                 <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                             </a>
                         </form>
