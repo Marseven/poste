@@ -431,7 +431,7 @@
 
             $(".valider").prop('disabled', true);
 
-            let timeLeft = 70; // Temps restant en secondes
+            let timeLeft = 30; // Temps restant en secondes
             let bill_id = "0";
             let link = "#";
             const id = $(this).data('id');
