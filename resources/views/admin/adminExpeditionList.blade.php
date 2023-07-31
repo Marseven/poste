@@ -421,6 +421,7 @@
 
             const operator = $("#operator-" + id).val();
             const phone = $("#phone-" + id).val();
+            const email = $("#email-" + id).val();
             const paylink = $(".paylink-" + id).val();
             const action = $("#pay-form-" + id).attr('action');
 
@@ -479,10 +480,11 @@
                     type: 'POST',
                     data: {
                         id: id,
+                        paylink: paylink,
                         methode: methode,
                         operator: operator,
                         phone: phone,
-                        paylink: paylink,
+                        email: email,
                     },
                     success: function(result) {
                         console.log(result);
