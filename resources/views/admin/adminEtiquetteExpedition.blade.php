@@ -57,7 +57,10 @@
                 <div class="text-base text-slate-500">Informations supplementaires</div>
                 <div class="mt-1">
                     <strong>Mode</strong> :
-                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
+                    <span
+                        class="text-md px-1 bg-{{ $expedition->mode_exp_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
+                        style="padding:5px; font-weight: 600;">
+                        {{ $expedition->mode->libelle }}</span>
                 </div>
 
             </div>

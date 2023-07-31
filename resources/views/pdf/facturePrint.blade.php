@@ -150,8 +150,6 @@
                     <strong>Mode</strong> : <span
                         style="padding:5px; font-weight: 600; color: white; background-color:{{ $expedition->mode_exp_id == 2 ? 'red' : '#204897' }}">
                         {{ $expedition->mode->libelle }}</span>
-
-                    {{ $expedition->mode_exp_id ? $expedition->mode->libelle : 'Non defini' }}
                     <br>
                 </p>
             </td>
