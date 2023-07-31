@@ -186,7 +186,7 @@
                                                                         class="form-check-input"
                                                                         id="paylink-direct-{{ $expedition->id }}"
                                                                         type="radio" name="paylink" value="direct"
-                                                                        onChange="afficherLinkForm()">
+                                                                        onChange="afficherLinkForm()" required>
                                                                     <label class="form-check-label"
                                                                         for="radio-switch-4">Paiement Direct</label>
                                                                 </div>
@@ -194,7 +194,7 @@
                                                                         class="form-check-input"
                                                                         id="paylink-link-{{ $expedition->id }}"
                                                                         type="radio" name="paylink" value="link"
-                                                                        onChange="afficherLinkForm()">
+                                                                        onChange="afficherLinkForm()" required>
                                                                     <label class="form-check-label"
                                                                         for="radio-switch-5">Lien de Paiement</label>
                                                                 </div>
@@ -628,7 +628,6 @@
                                             id)
                                     );
                                 form.hide();
-
                                 const success = tailwind.Modal
                                     .getInstance(
                                         document.querySelector(
