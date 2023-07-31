@@ -573,7 +573,7 @@ class ExpeditionContoller extends Controller
         } else {
             $billing_id = PaymentController::ebilling($expedition);
             if ($request->paylink == "link") {
-                $link = env('POST_URL') . "?invoice_number=" . $billing_id;
+                $link = env('POST_URL') . "?invoice=" . $billing_id;
                 try {
                     Mail::to($expedition->email_exp)->send(new LinkMessage($expedition, $link));
                     $data['link'] = $link;
