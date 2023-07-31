@@ -61,7 +61,7 @@
                                         <label for="modal-form-6" class="form-label">Type</label>
                                         <select id="modal-form-6" class="form-select" name="type" required>
                                             <option>Standard</option>
-                                            <option>Suppémentaire</option>
+                                            <option>Supplémentaire</option>
                                         </select>
                                     </div>
 
