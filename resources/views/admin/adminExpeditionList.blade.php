@@ -198,7 +198,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <br><br>
+                                                        <br>
                                                         <div id="direct-form" style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1" class="form-label">Opérateur
