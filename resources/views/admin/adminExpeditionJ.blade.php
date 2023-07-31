@@ -108,7 +108,7 @@
                                                 </button>
                                                 <div class="dropdown-menu w-40">
                                                     <ul class="dropdown-content">
-                                                        @if ($expedition->active == 1)
+                                                        @if ($expedition->status != 3)
                                                             <li>
                                                                 <a href="javascript:;" data-tw-toggle="modal"
                                                                     data-tw-target="#pay-expedition-{{ $expedition->id }}"

@@ -108,7 +108,7 @@
                                                 </button>
                                                 <div class="dropdown-menu w-40">
                                                     <ul class="dropdown-content">
-                                                        @if ($expedition->active == 1)
+                                                        @if ($expedition->status != 3)
                                                             <li>
                                                                 <a href="javascript:;" data-tw-toggle="modal"
                                                                     data-tw-target="#pay-expedition-{{ $expedition->id }}"
@@ -164,13 +164,12 @@
                                                 </div>
                                                 <!-- BEGIN: Modal Body -->
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                                    <input type="hidden" id="id" name="id">
+                                                    <input type="hidden" id="id">
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-1" class="form-label">Moyen de
                                                             Paiement</label>
                                                         <select class="form-control" id="methode-{{ $expedition->id }}"
-                                                            onChange="afficherEbForm({{ $expedition->id }})"
-                                                            name="methode" required>
+                                                            onChange="afficherEbForm()" name="methode" required>
                                                             @foreach ($methodes as $methode)
                                                                 <option value="{{ $methode->code }}">
                                                                     {{ $methode->libelle }}</option>
@@ -237,7 +236,8 @@
                                                         </div>
 
                                                     </div>
-                                                </div> <!-- END: Modal Body -->
+                                                </div>
+                                                <!-- END: Modal Body -->
                                                 <!-- BEGIN: Modal Footer -->
                                                 <div class="modal-footer">
                                                     <button type="button" data-id="{{ $expedition->id }}"
@@ -354,15 +354,12 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script>
-        function afficherEbForm(idexp) {
+        function afficherEbForm() {
             const eb = document.getElementById("eb");
             const id = $("#id").val();
-
-            if ($("#methode-" + idexp).val() != "EB") {
+            if ($("#methode-" + id).val() != "EB") {
                 eb.style.display = "none";
             } else {
                 eb.style.display = "block";
