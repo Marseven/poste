@@ -501,12 +501,14 @@
 
             var id = $("#service").val();
             var target = $("#service").attr('target');
+            var mode = $('#mode').val();
 
             $.ajax({
                 url: "{{ route('adminSelect') }}",
                 data: {
                     'id': id,
                     'target': target,
+                    'mode': mode,
                 },
                 dataType: 'json',
                 success: function(result) {
@@ -532,43 +534,52 @@
             var monElement = document.getElementById("poids");
             var service = $('#service').val();
 
-            if (service == 1) {
-                p_list.style.display = "block";
-                p_value.style.display = "none";
+            if (mode == 1) {
+                if (service == 1) {
+                    p_list.style.display = "block";
+                    p_value.style.display = "none";
+                }
+
+                if (service == 2) {
+                    p_list.style.display = "block";
+                    p_value.style.display = "none";
+                }
+
+                if (service == 3) {
+                    p_list.style.display = "none";
+                    p_value.style.display = "block";
+                    $("#label_poids").html("Nombre d'exemplaire");
+                }
+
+                if (service == 4) {
+                    p_list.style.display = "none";
+                    p_value.style.display = "block";
+                    monElement.setAttribute("max", "20");
+                    $("#label_poids").html("Poids (KG)");
+                }
+
+                if (service == 5) {
+                    p_list.style.display = "none";
+                    p_value.style.display = "none";
+                }
+
+                if (service == 6) {
+                    p_list.style.display = "block";
+                    p_value.style.display = "none";
+                }
+
+                if (service == 7) {
+                    p_list.style.display = "block";
+                    p_value.style.display = "none";
+                }
+            } else {
+                if (service == 1) {
+                    p_list.style.display = "none";
+                    p_value.style.display = "block";
+                }
             }
 
-            if (service == 2) {
-                p_list.style.display = "block";
-                p_value.style.display = "none";
-            }
 
-            if (service == 3) {
-                p_list.style.display = "none";
-                p_value.style.display = "block";
-                $("#label_poids").html("Nombre d'exemplaire");
-            }
-
-            if (service == 4) {
-                p_list.style.display = "none";
-                p_value.style.display = "block";
-                monElement.setAttribute("max", "20");
-                $("#label_poids").html("Poids (KG)");
-            }
-
-            if (service == 5) {
-                p_list.style.display = "none";
-                p_value.style.display = "none";
-            }
-
-            if (service == 6) {
-                p_list.style.display = "block";
-                p_value.style.display = "none";
-            }
-
-            if (service == 7) {
-                p_list.style.display = "block";
-                p_value.style.display = "none";
-            }
 
         }
 

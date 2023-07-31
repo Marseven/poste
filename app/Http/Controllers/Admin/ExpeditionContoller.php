@@ -260,15 +260,26 @@ class ExpeditionContoller extends Controller
         $sup = 0;
         $amount = 0;
 
-        if ($request->input('service') == 1 || $request->input('service') == 2 || $request->input('service') == 6 || $request->input('service') == 7) {
-            $price = PriceExpedition::find($request->poids_id);
-            $paquet->poids = $price->weight;
-            $amount = $price->price;
+        if ($request->input('mode') == 1) {
+            if ($request->input('service') == 1 || $request->input('service') == 2 || $request->input('service') == 6 || $request->input('service') == 7) {
+                $price = PriceExpedition::find($request->poids_id);
+                $paquet->poids = $price->weight;
+                $amount = $price->price;
+            } else {
+                $price = PriceExpedition::where('type', 'Standard')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
+                $paquet->poids = $request->input('weight');
+                $amount = round($paquet->poids * $price->price, 1);
+            }
         } else {
-            $price = PriceExpedition::where('type', 'Standard')->where('zone_id', $request->input('zone'))->where('service_id', $request->input('service'))->where('mode_id', $request->input('mode'))->first();
-            $paquet->poids = $request->input('weight');
-            $amount = round($paquet->poids * $price->price, 1);
+            if ($request->input('service') == 1) {
+                $price = PriceExpedition::where('type', 'Standard')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
+                if ($price->first == 1) $price_sup = PriceExpedition::where('type', 'Supplémentaire')->where('service_id', $request->input('service'))->where('zone_id', $request->input('zone'))->where('mode_id', $request->input('mode'))->first();
+                $paquet->poids = $price->weight;
+                $amount = $price->price;
+            }
         }
+
+
 
         if ($price == null) {
             $response = json_encode(2);
