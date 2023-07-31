@@ -353,7 +353,7 @@
             const link = document.getElementById("link-form");
             const direct = document.getElementById("direct-form");
             const id = $("#id").val();
-
+            alert($(".paylink-" + id).val());
             if ($(".paylink-" + id).val() != "link") {
                 direct.style.display = "block";
                 link.style.display = "none";
