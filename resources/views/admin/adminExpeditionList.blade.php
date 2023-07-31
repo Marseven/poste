@@ -375,11 +375,9 @@
             if (selectedValue == "direct") {
                 direct.style.display = "block";
                 link.style.display = "none";
-                $(".paylink-" + id).val("link");
             } else {
                 direct.style.display = "none";
                 link.style.display = "block";
-                $(".paylink-" + id).val("direct");
             }
         }
 
@@ -485,6 +483,7 @@
                             'Erreur lors de la requête AJAX : ' +
                             error);
                         // Continuez le compte à rebours même en cas d'erreur
+                        $(".valider").prop('disabled', false);
                     },
                     complete: function() {
                         // Réactivez le bouton une fois que la requête AJAX est terminée
