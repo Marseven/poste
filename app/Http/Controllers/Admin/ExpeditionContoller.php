@@ -140,7 +140,7 @@ class ExpeditionContoller extends Controller
         $reseaux = Reseau::all();
         $services = ServiceExpedition::all();
         $modes = ModeExpedition::all();
-        $prices = PriceExpedition::where('service_id', 1)->get();
+        $prices = PriceExpedition::where('service_id', 1)->where('mode_id', 1)->get();
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
