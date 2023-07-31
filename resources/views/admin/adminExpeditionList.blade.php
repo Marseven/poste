@@ -358,7 +358,9 @@
     <script>
         function afficherEbForm() {
             const eb = $("#eb");
+            console.log(eb);
             const id = $("#id").val();
+            console.log(id);
             if ($("#methode-" + id).val() !== "EB") {
                 eb.hide();
             } else {
