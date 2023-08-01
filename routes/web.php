@@ -169,6 +169,7 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('recherche-package', [ExpeditionContoller::class, 'adminSearchPackage'])->name('adminSearchPackage');
     Route::get('package/{code}', [ExpeditionContoller::class, 'adminDetailPackage'])->name('adminDetailPackage');
     Route::post('assign-package', [ExpeditionContoller::class, 'adminPackageAssign'])->name('adminPackageAssign');
+    Route::post('assign-agent-package', [ExpeditionContoller::class, 'adminPackageAgentAssign'])->name('adminPackageAgentAssign');
     Route::get('suivi/package/{code}', [ExpeditionContoller::class, 'adminSuiviPackage'])->name('adminSuiviPackage');
     /* End Package */
 

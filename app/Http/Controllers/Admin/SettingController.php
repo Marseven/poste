@@ -14,6 +14,7 @@ use App\Models\PriceExpedition;
 use App\Models\Province;
 use App\Models\Reseau;
 use App\Models\ServiceExpedition;
+use App\Models\User;
 use App\Models\Ville;
 use App\Models\Zone;
 use Illuminate\Http\Request;
@@ -962,6 +963,10 @@ class SettingController extends Controller
             return response()->json($response);
         } elseif ($request->target == 'poids_range') {
             $organization = PriceExpedition::where('mode_id', $request->mode)->where('service_id', $request->id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
+        } elseif ($request->target == 'agent') {
+            $organization = User::where('agence_id', $request->agence)->get();
             $response = json_encode($organization);
             return response()->json($response);
         }

@@ -1050,7 +1050,7 @@ class ExpeditionContoller extends Controller
         $package->agence_exp_id = $agence_origine->id;
         $package->agence_dest_id = $agence_destination->id;
 
-        $package->agent_id = $admin_id;
+        $package->responsable_id = $admin_id;
         $package->active = $request->input('active');
 
         if ($package->save()) {
@@ -1224,6 +1224,26 @@ class ExpeditionContoller extends Controller
                     }
                 }
             }
+            // Get colis by id
+        } else {
+            $response = json_encode(1);
+            return response()->json($response);
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminPackageAgentAssign(Request $request)
+    {
+        // Get package by id
+        $package = Package::find($request->input('package'));
+
+        if ($package) {
+            $package->agent_id = $request->input('agent');
+            $package->save();
             // Get colis by id
         } else {
             $response = json_encode(1);

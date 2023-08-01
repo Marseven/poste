@@ -153,13 +153,36 @@
                                     </td>
                                     <td class="table-report__action w-56">
                                         <div class="flex justify-center items-center">
-                                            <a class="flex items-center mr-3" href="javascript:;" data-tw-toggle="modal"
-                                                data-tw-target="#update-{{ $package->id }}"> <i data-lucide="edit"
-                                                    class="w-4 h-4 mr-1"></i> </a>
+                                            <div class="dropdown">
+                                                <button class="dropdown-toggle btn btn-warning" aria-expanded="false"
+                                                    data-tw-toggle="dropdown">Actions
+                                                </button>
+                                                <div class="dropdown-menu w-40">
+                                                    <ul class="dropdown-content">
+                                                        @if ($package->agent_id == null)
+                                                            <li>
+                                                                <a href="javascript:;" data-tw-toggle="modal"
+                                                                    data-tw-target="#assign-{{ $package->id }}"
+                                                                    class="dropdown-item"
+                                                                    onclick="listeAgent({{ $package->id }})">Assigner
+                                                                    un agent</a>
+                                                            </li>
+                                                        @endif
+                                                        <li>
+                                                            <a href="javascript:;" data-tw-toggle="modal"
+                                                                data-tw-target="#update-{{ $package->id }}"
+                                                                class="dropdown-item">Editer</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('adminDetailPackage', ['code' => $package->code]) }}"
+                                                                class="dropdown-item">Voir</a>
+                                                        </li>
 
-                                            <a href="{{ route('adminDetailPackage', ['code' => $package->code]) }}"><i
-                                                    data-lucide="eye" class="w-4 h-4 mr-1"></i></a>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
+
                                     </td>
                                 </tr>
 
@@ -228,6 +251,41 @@
                                     </div>
                                 </div>
                                 <!-- END: Delete Confirmation Modal -->
+
+                                <!-- BEGIN: Delete Confirmation Modal -->
+                                <div id="assign-{{ $package->id }}" class="modal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <form method="POST" action="{{ route('adminPackageAgentAssign') }}">
+                                                @csrf
+                                                <!-- BEGIN: Modal Header -->
+                                                <div class="modal-header">
+                                                    <h2 class="font-medium text-base mr-auto">Assigner un Agent
+                                                    </h2>
+                                                </div> <!-- END: Modal Header -->
+                                                <!-- BEGIN: Modal Body -->
+                                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+
+                                                    <input type="hidden" name="package_id" value="{{ $package->id }}">
+                                                    <input type="hidden" id="agence_id-{{ $package->id }}"
+                                                        value="{{ $package->agence_exp_id }}">
+
+                                                    <div class="col-span-12 sm:col-span-12">
+                                                        <label for="modal-form-6" class="form-label">Agent</label>
+                                                        <select id="agent" class="form-select" name="agent">
+                                                        </select>
+                                                    </div>
+                                                </div> <!-- END: Modal Body -->
+                                                <!-- BEGIN: Modal Footer -->
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary w-20">Soumettre</button>
+                                                </div>
+                                                <!-- END: Modal Footer -->
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END: Delete Confirmation Modal -->
                             @endforeach
                         @else
                             <tr class="intro-x">
@@ -260,5 +318,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
         integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script></script>
+    <script>
+        function listeAgent(id) {
+            var agence_id = $('#agence_id' + id).val();
+            $.ajax({
+                url: "{{ route('adminSelect') }}",
+                data: {
+                    'target': "agent",
+                    'agence': agence_id,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    console.log(result);
+                    result = JSON.parse(result);
+                    var option_html = "<option value='-1'>Choisir</option>";
+
+                    for (i = 0; i < result.length; i++) {
+                        is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
+                        option_html += "<option " + is_selected + "  value='" + result[i].id +
+                            "'>" +
+                            result[i].libelle +
+                            "</option>";
+                    }
+
+                    $("#agent").html(option_html);
+                    $("#agent").change();
+                }
+            });
+        }
+    </script>
 @endpush
