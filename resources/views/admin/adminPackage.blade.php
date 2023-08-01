@@ -272,7 +272,8 @@
 
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-6" class="form-label">Agent</label>
-                                                        <select id="agent" class="form-select" name="agent">
+                                                        <select id="agent-{{ $package->id }}" class="form-select"
+                                                            name="agent">
                                                         </select>
                                                     </div>
                                                 </div> <!-- END: Modal Body -->
@@ -320,7 +321,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function listeAgent(id) {
-            var agence_id = $('#agence_id-' + id).val();
+            const agence_id = $('#agence_id-' + id).val();
             $.ajax({
                 url: "{{ route('adminSelect') }}",
                 data: {
@@ -331,14 +332,14 @@
                 success: function(result) {
                     console.log(result);
                     result = JSON.parse(result);
-                    var option_html = "<option value='-1'>Choisir</option>";
+                    const option_html = "<option value='-1'>Choisir</option>";
                     for (i = 0; i < result.length; i++) {
                         //is_selected = $("#agent").data('val') == result[i].id ? 'selected' : '';
-                        option_html += "<option value='" + result[i].id + "'>" + result[i].libelle +
+                        option_html += "<option value='" + result[i].id + "'>" + result[i].name +
                             "</option>";
                     }
                     console.log(option_html);
-                    $("#agent").html(option_html);
+                    $("#agent-" + id).html(option_html);
                 }
             });
         }
