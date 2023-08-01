@@ -513,10 +513,7 @@ class ApiAgentController extends Controller
             // Get agent's packages
             $packages = Package::where('active', 0)->orWhere('active', 1)->orWhere('active', 2)->orWhere('active', 3)->orderBy('id', 'DESC')->get();
 
-            dd($packages);
-
-            if (!empty($packages) || $packages->count() > 0) {
-
+            if ($packages->count() > 0) {
                 return response([
                     'result' => true,
                     'status' => 200,
