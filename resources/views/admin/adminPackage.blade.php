@@ -321,7 +321,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function listeAgent(id) {
-            const agence_id = $('#agence_id-' + id).val();
+            var agence_id = $('#agence_id-' + id).val();
             $.ajax({
                 url: "{{ route('adminSelect') }}",
                 data: {
@@ -332,7 +332,7 @@
                 success: function(result) {
                     console.log(result);
                     result = JSON.parse(result);
-                    const option_html = "<option value='-1'>Choisir</option>";
+                    var option_html = "<option value='-1'>Choisir</option>";
                     for (i = 0; i < result.length; i++) {
                         //is_selected = $("#agent").data('val') == result[i].id ? 'selected' : '';
                         option_html += "<option value='" + result[i].id + "'>" + result[i].name +
