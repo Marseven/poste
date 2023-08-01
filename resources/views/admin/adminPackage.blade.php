@@ -320,7 +320,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function listeAgent(id) {
-            var agence_id = $('#agence_id' + id).val();
+            var agence_id = $('#agence_id-' + id).val();
             $.ajax({
                 url: "{{ route('adminSelect') }}",
                 data: {
