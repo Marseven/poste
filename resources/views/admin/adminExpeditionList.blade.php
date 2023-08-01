@@ -236,8 +236,7 @@
                                                         </div>
 
                                                     </div>
-                                                </div>
-                                                <!-- END: Modal Body -->
+                                                </div> <!-- END: Modal Body -->
                                                 <!-- BEGIN: Modal Footer -->
                                                 <div class="modal-footer">
                                                     <button type="button" data-id="{{ $expedition->id }}"
@@ -334,50 +333,33 @@
             </div>
         </div>
     </div> <!-- END: Modal Content -->
-
-
-    <div id="link-response" class="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body p-10 text-center">
-                    <div class="col-span-6 sm:col-span-3 xl:col-span-2 flex flex-col justify-end items-center">
-                        <div class="text-center text-md text-primary mt-2" id="link-text"
-                            style="font-size: 1.2em; font-weight: 800;"></div>
-                        <br>
-                        <div class="px-5 pb-8 text-center"><a href="#" id="link-share" data-tw-dismiss="modal"
-                                class="btn-lg btn-primary w-24">Partager le lien par mail</a> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> <!-- END: Modal Content -->
 @endsection
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function afficherEbForm() {
-            const eb = $("#eb");
-            console.log(eb);
+            const eb = document.getElementById("eb");
             const id = $("#id").val();
-            console.log(id);
-            if ($("#methode-" + id).val() !== "EB") {
-                eb.hide();
+            if ($("#methode-" + id).val() != "EB") {
+                eb.style.display = "none";
             } else {
-                eb.show();
+                eb.style.display = "block";
             }
         }
 
         function afficherLinkForm() {
-            const link = $("#link-form");
-            const direct = $("#direct-form");
-            const selectedValue = $("input[name='paylink']:checked").val();
-            if (selectedValue === "direct") {
-                direct.show();
-                link.hide();
+            const link = document.getElementById("link-form");
+            const direct = document.getElementById("direct-form");
+            var selectedValue = $("input[name='paylink']:checked").val();
+            if (selectedValue == "direct") {
+                direct.style.display = "block";
+                link.style.display = "none";
             } else {
-                direct.hide();
-                link.show();
+                direct.style.display = "none";
+                link.style.display = "block";
             }
         }
 
@@ -669,6 +651,7 @@
                 });
             }
         });
+
 
         function reloadPage() {
             location.reload();
