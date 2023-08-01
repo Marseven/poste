@@ -332,17 +332,13 @@
                     console.log(result);
                     result = JSON.parse(result);
                     var option_html = "<option value='-1'>Choisir</option>";
-
                     for (i = 0; i < result.length; i++) {
-                        is_selected = $("#agent").data('val') == result[i].id ? 'selected' : '';
-                        option_html += "<option " + is_selected + "  value='" + result[i].id +
-                            "'>" +
-                            result[i].libelle +
-                            "</option>";
+                        //is_selected = $("#agent").data('val') == result[i].id ? 'selected' : '';
+                        option_html += "<option value='" + result[i].id + "'>" + result[i].libelle +
+                        "</option>";
                     }
 
                     $("#agent").html(option_html);
-                    $("#agent").change();
                 }
             });
         }
