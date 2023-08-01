@@ -335,9 +335,9 @@
                     for (i = 0; i < result.length; i++) {
                         //is_selected = $("#agent").data('val') == result[i].id ? 'selected' : '';
                         option_html += "<option value='" + result[i].id + "'>" + result[i].libelle +
-                        "</option>";
+                            "</option>";
                     }
-
+                    console.log(option_html);
                     $("#agent").html(option_html);
                 }
             });
