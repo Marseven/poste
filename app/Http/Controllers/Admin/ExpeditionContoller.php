@@ -13,6 +13,7 @@ use App\Models\Expedition;
 use App\Models\FactureExpedition;
 use App\Models\MethodePaiement;
 use App\Models\ModeExpedition;
+use App\Models\Onesignal;
 use App\Models\Package;
 use App\Models\PackageExpedition;
 use App\Models\Paiement;
@@ -1244,10 +1245,35 @@ class ExpeditionContoller extends Controller
         if ($package) {
             $package->agent_id = $request->input('agent');
             $package->save();
+
+            $onesignal = Onesignal::where('user_id', $request->input('agent'))->first();
+            $agent = User::find($request->input('agent'));
+
+            $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
+            $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
+
+            $playerIds = [$onesignal->player_id]; // Array of player_ids (device tokens)
+            $notificationTitle = "Package N° " . $package->code . " Assigné";
+            $notificationBody = "M. " . $agent->name . " le package n°" . $package->code . " vous a été assihné pour l'enregistrement des colis.";
+
+            $headers = [
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . $restApiKey,
+            ];
+
+            $data = [
+                'app_id' => $appId,
+                'include_player_ids' => $playerIds,
+                'headings' => ['en' => $notificationTitle],
+                'contents' => ['en' => $notificationBody],
+            ];
+
+            $response = Http::withHeaders($headers)->post('https://onesignal.com/api/v1/notifications', $data);
+
+            return back()->with('success', 'Dépêche assignée avec succès !');
             // Get colis by id
         } else {
-            $response = json_encode(1);
-            return response()->json($response);
+            return back()->with('failed', 'Impossible d\'assigner cette dépêche !');
         }
     }
 
@@ -1330,5 +1356,37 @@ class ExpeditionContoller extends Controller
             $response['data'] = $errorMessages;
         }
         return response()->json($response, $code);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sendNotification($title, $body, $idPlayer)
+    {
+        $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
+        $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
+
+        $playerIds = [$idPlayer]; // Array of player_ids (device tokens)
+        $notificationTitle = $title;
+        $notificationBody = $body;
+
+        $headers = [
+            'Content-Type' => 'application/json; charset=utf-8',
+            'Authorization' => 'Basic ' . $restApiKey,
+        ];
+
+        $data = [
+            'app_id' => $appId,
+            'include_player_ids' => $playerIds,
+            'headings' => ['en' => $notificationTitle],
+            'contents' => ['en' => $notificationBody],
+        ];
+
+        $response = Http::withHeaders($headers)->post('https://onesignal.com/api/v1/notifications', $data);
+
+        return $response->json();
     }
 }

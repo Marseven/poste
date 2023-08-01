@@ -266,7 +266,7 @@
                                                 <!-- BEGIN: Modal Body -->
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
-                                                    <input type="hidden" name="package_id" value="{{ $package->id }}">
+                                                    <input type="hidden" name="package" value="{{ $package->id }}">
                                                     <input type="hidden" id="agence_id-{{ $package->id }}"
                                                         value="{{ $package->agence_exp_id }}">
 

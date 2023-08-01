@@ -44,8 +44,7 @@ use App\Http\Resources\PackageResource;
 use App\Http\Resources\SuiviPackageResource;
 use App\Http\Resources\AgentResource;
 use App\Http\Resources\AgenceResource;
-
-
+use App\Models\Onesignal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +54,7 @@ use Carbon\Carbon;
 use Jenssegers\Agent\Facades\Agent;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 use WisdomDiala\Countrypkg\Models\Country;
@@ -1394,8 +1394,60 @@ class ApiAgentController extends Controller
     {
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function onesignal_agent(Request $request)
+    {
+        // Check if this player or user id already exists !
+        $check_player = Onesignal::where('user_id', $request->input('user_id'))->first();
 
-    public function sendNotification(Request $request, $title, $body, $idPlayer)
+        if (empty($check_player)) {
+            # code...
+            // Instancier une nouvelle one signal
+            $player = new Onesignal();
+
+            // Préparer la requete
+            $player->user_id = $request->input('user_id');
+            $player->player_id = $request->input('player_id');
+            $player->role = $request->input('role');
+            $player->active = 1;
+
+            // Sauvegarde
+            if ($player->save()) {
+
+                // Send notification to this player
+                $title = "Bienvenue";
+                $body = "La Poste, votre agence postale en ligne";
+                $idPlayer = $request->input('player_id');
+                $this->sendNotification($title, $body, $idPlayer);
+
+                // Reponse
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Player ID soumis avec succès !'
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 501,
+                'message' => 'Impossible de soumettre ce Player ID !'
+            ]);
+        } else {
+            # code...
+            return response([
+                'result' => false,
+                'status' => 502,
+                'message' => 'Ce player ID existe deja !'
+            ]);
+        }
+    }
+
+    public function sendNotification($title, $body, $idPlayer)
     {
         $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
         $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
@@ -1419,5 +1471,58 @@ class ApiAgentController extends Controller
         $response = Http::withHeaders($headers)->post('https://onesignal.com/api/v1/notifications', $data);
 
         return $response->json();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function onesignal_client(Request $request)
+    {
+        // Check if this player or user id already exists !
+        $check_player = Onesignal::where('user_id', $request->input('user_id'))->first();
+
+        if (empty($check_player)) {
+
+            // Instancier une nouvelle one signal
+            $player = new Onesignal();
+
+            // Préparer la requete
+            $player->user_id = $request->input('user_id');
+            $player->player_id = $request->input('player_id');
+            $player->role = $request->input('role');
+            $player->active = 1;
+
+            // Sauvegarde
+            if ($player->save()) {
+
+                // Send notification to this player
+                $title = "Bienvenue";
+                $body = "La Poste, votre agence postale en ligne";
+                $idPlayer = $request->input('player_id');
+                $this->sendNotification($title, $body, $idPlayer);
+
+                // Reponse
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Player ID soumis avec succès !'
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 501,
+                'message' => 'Impossible de soumettre ce Player ID !'
+            ]);
+        } else {
+            # code...
+            return response([
+                'result' => false,
+                'status' => 502,
+                'message' => 'Ce player ID existe deja !'
+            ]);
+        }
     }
 }
