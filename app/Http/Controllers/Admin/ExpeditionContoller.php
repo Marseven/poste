@@ -1244,6 +1244,7 @@ class ExpeditionContoller extends Controller
 
         if ($package) {
             $package->agent_id = $request->input('agent');
+            $package->active = 2;
             $package->save();
 
             $onesignal = Onesignal::where('user_id', $request->input('agent'))->first();
