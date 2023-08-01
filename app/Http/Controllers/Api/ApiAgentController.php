@@ -709,6 +709,15 @@ class ApiAgentController extends Controller
                         $colis->active = 2;
                         $colis->save();
 
+                        $suivi_exp = SuiviExpedition::where('expedition_id', $expedition->id)->where('status', STATUT_PENDING)->first();
+                        $suivi_exp->status = STATUT_DO;
+                        $suivi_exp->save();
+
+                        $id_next = $suivi_exp->etape_id + 1;
+                        $suivi_exp_next = SuiviExpedition::where('expedition_id', $expedition->id)->where('etape_id', $id_next)->first();
+                        $suivi_exp_next->status = STATUT_PENDING;
+                        $suivi_exp_next->save();
+
                         // Reponse
                         return response([
                             'result' => true,
