@@ -343,10 +343,10 @@
         function afficherEbForm() {
             const eb = document.getElementById("eb");
             const id = $("#id").val();
-            if ($("#methode-" + id).val() != "EB") {
-                eb.style.display = "none";
-            } else {
+            if ($("#methode-" + id).val() == "EB") {
                 eb.style.display = "block";
+            } else {
+                eb.style.display = "none";
             }
         }
 
@@ -524,8 +524,7 @@
 
                                         count.hide();
 
-                                        $(".valider").prop('disabled',
-                                            false);
+                                        $(".valider").prop('disabled', false);
                                     }
                                 }, 1000);
 
@@ -616,25 +615,17 @@
                                 var shareElement = document.getElementById("link-share");
                                 // Modifiez l'attribut href avec le nouveau lien
                                 shareElement.setAttribute("href", "mailto:" + email);
-                                const form = tailwind.Modal
-                                    .getInstance(document
-                                        .querySelector(
-                                            "#pay-expedition-" +
-                                            id)
-                                    );
+                                const form = tailwind.Modal.getInstance(document.querySelector(
+                                    "#pay-expedition-" + id));
                                 form.hide();
                                 const success = tailwind.Modal
-                                    .getInstance(
-                                        document.querySelector(
-                                            "#link-response"));
+                                    .getInstance(document.querySelector("#link-response"));
                                 success.show();
 
                                 $(".valider").prop('disabled', false);
                             }
                         }
-
-                        $(".valider").prop('disabled',
-                            false);
+                        $(".valider").prop('disabled', false);
                     },
                     error: function(xhr, status, error) {
                         // Une erreur s'est produite lors de la requête AJAX
