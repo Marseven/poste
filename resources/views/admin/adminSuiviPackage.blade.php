@@ -20,7 +20,10 @@
                         <br>
 
                         <div class="text-black">
-                            <strong><u>Code</u></strong> : {{ $package->code }}
+                            <strong><u>Code</u></strong> : <a href="javascript:;" data-tw-toggle="modal"
+                                data-tw-target="#package-{{ $package->id }}">
+                                {{ $package->code }}
+                            </a>
                         </div>
                         <div class="text-black">
                             <strong><u>Libelle</u></strong> : {{ $package->libelle }}
@@ -143,8 +146,34 @@
             </div>
             <!-- END: Pagination -->
 
+
+
         </div>
 
     </div>
+
+    <!-- BEGIN: Modal Content -->
+    <div id="package-{{ $package->id }}" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">QR CODE DU PACKAGE</h2>
+                </div> <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+
+                    <div class="col-span-12 sm:col-span-12">
+                        <center>
+                            {!! QrCode::size(250)->generate($package->id) !!}
+                        </center>
+                    </div>
+                    <br><br>
+
+                </div> <!-- END: Modal Body -->
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal Content -->
 
 @endsection
