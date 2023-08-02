@@ -60,7 +60,7 @@
                                             {{ $pay->expedition->code }}</a>
                                     </td>
                                     <td class="text-center">
-                                        {{ $pay->amount }} FCFA
+                                        {{ number_format($pay->amount, 0, ',', ' ') }} XAF
                                     </td>
                                     <td class="text-center">
                                         {{ $pay->operator }}
