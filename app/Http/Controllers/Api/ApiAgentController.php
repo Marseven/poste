@@ -709,15 +709,6 @@ class ApiAgentController extends Controller
                         $colis->active = 2;
                         $colis->save();
 
-                        $suivi_exp = SuiviExpedition::where('expedition_id', $expedition->id)->where('status', STATUT_PENDING)->first();
-                        $suivi_exp->status = STATUT_DO;
-                        $suivi_exp->save();
-
-                        $id_next = $suivi_exp->etape_id + 1;
-                        $suivi_exp_next = SuiviExpedition::where('expedition_id', $expedition->id)->where('etape_id', $id_next)->first();
-                        $suivi_exp_next->status = STATUT_PENDING;
-                        $suivi_exp_next->save();
-
                         // Reponse
                         return response([
                             'result' => true,
@@ -1236,13 +1227,29 @@ class ApiAgentController extends Controller
             // Get package by id
             $package = Package::find($request->input('package_id'));
 
-            if (!empty($package)) {
+            if ($package) {
                 // Update package
-                $package = DB::table('packages')
-                    ->where('id', $request->input('package_id'))
-                    ->update([
-                        'active' => 3
-                    ]);
+                $package->active = 3;
+                $package->save();
+
+                $package_colis = PackageExpedition::where('package_id', $package->id)->get();
+
+                $last_exp = [];
+                foreach ($package_colis as $pc) {
+                    $colis = ColisExpedition::find($pc->colis_id);
+                    if (!in_array($colis->expedition_id, $last_exp)) {
+                        $suivi_exp = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('status', STATUT_PENDING)->first();
+                        $suivi_exp->status = STATUT_DO;
+                        $suivi_exp->save();
+
+                        $id_next = $suivi_exp->etape_id + 1;
+                        $suivi_exp_next = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('etape_id', $id_next)->first();
+                        $suivi_exp_next->status = STATUT_PENDING;
+                        $suivi_exp_next->save();
+
+                        $last_exp[] = $colis->expedition_id;
+                    }
+                }
 
                 // Reponse
                 return response([
