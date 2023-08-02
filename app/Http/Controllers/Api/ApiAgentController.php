@@ -1059,7 +1059,7 @@ class ApiAgentController extends Controller
 
             // Préparer la requete
             $suivi->code = $ext .  '-' . $code;
-            $suivi->position = $request->input('position');
+            $suivi->etape_id = $request->input('position');
             $suivi->statut = $request->input('statut');
             $suivi->rapport = $request->input('rapport');
             $suivi->package_id = $request->input('package_id');
@@ -1072,7 +1072,7 @@ class ApiAgentController extends Controller
 
                 // Update package
                 $package = Package::find($request->input('package_id'));
-                $package->position = $request->input('position');
+                $package->etape_id = $request->input('position');
                 $package->active = 4;
                 $package->save();
 
