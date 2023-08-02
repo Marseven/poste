@@ -7,9 +7,12 @@
         </h2>
 
         <div class="ml-auto flex items-center">
-            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#add-colis"
-                class="btn btn-warning shadow-md mr-2">Ajouter
-                Colis</a>
+            @if ($package->active != 3 && $package->active != 4)
+                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#add-colis"
+                    class="btn btn-warning shadow-md mr-2">Ajouter
+                    Colis</a>
+            @endif
+
         </div>
     </div>
 
