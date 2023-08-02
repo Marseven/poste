@@ -1309,21 +1309,18 @@ class ExpeditionContoller extends Controller
 
             $package->load(['agence_dest', 'agence_exp', 'colis']);
 
-            if ($today_paquets->count() == 0) {
-                $today_paquets->load(['colis']);
-                // Redirection
-                return view('admin.adminSuiviPackage', compact(
-                    'page_title',
-                    'app_name',
-                    'today_paquets',
-                    'societe',
-                    'package',
-                    'exp',
-                    'exp_sub',
-                    'exp3'
-                ));
-            }
-            return back()->with('failed', 'Aucun colis expedie pour le moment !');
+            $today_paquets->load(['colis']);
+            // Redirection
+            return view('admin.adminSuiviPackage', compact(
+                'page_title',
+                'app_name',
+                'today_paquets',
+                'societe',
+                'package',
+                'exp',
+                'exp_sub',
+                'exp3'
+            ));
         }
         return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
