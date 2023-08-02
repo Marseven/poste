@@ -177,7 +177,10 @@
                                                             <a href="{{ route('adminDetailPackage', ['code' => $package->code]) }}"
                                                                 class="dropdown-item">Voir</a>
                                                         </li>
-
+                                                        <li>
+                                                            <a href="{{ route('EtiquettePackagePrint', ['id' => $package->id]) }}"
+                                                                class="dropdown-item">Etiquette</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>

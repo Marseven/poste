@@ -896,6 +896,49 @@ class ExpeditionContoller extends Controller
         }
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function EtiquettePackagePrint($id)
+    {
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $app_name = "La Poste";
+        $page_title = "Etiquette Dépêche";
+
+        $societe = Societe::find(1);
+
+        // Get expedition by id
+        $package = Package::where('id', $id)->first();
+        if ($package) {
+            // Récupérer les données
+            $data = compact(
+                'page_title',
+                'app_name',
+                'facture',
+                'package',
+                'societe',
+            );
+
+            $largeur_etiquette = 5; // en cm
+            $hauteur_etiquette = 3; // en cm
+
+            $pdf = PDF::loadView('pdf.etiquettePackagePrint', $data)->setPaper(array(0, 0, 300, 500), 'landscape');
+
+            //$pdf->setPaper([$largeur_etiquette, $hauteur_etiquette], 'cm');
+
+            return $pdf->download('etiquette-depeche-' . $id . '.pdf');
+            // Redirection
+
+        } else {
+
+            return back()->with('failed', 'Impossible de trouver cette expedition !');
+        }
+    }
+
     ################################################################################################################
     #                                                                                                              #
     #   SUIVI                                                                                                      #

@@ -156,6 +156,8 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('imprimer/etiquette/{code}', [ExpeditionContoller::class, 'adminEtiquettePrint'])->name('adminEtiquettePrint');
 
     Route::get('/imprimer/etiquette/{code}', [ExpeditionContoller::class, 'EtiquettePrint'])->name('EtiquettePrint');
+
+    Route::get('/imprimer/etiquette/package/{id}', [ExpeditionContoller::class, 'EtiquettePackagePrint'])->name('EtiquettePackagePrint');
     /* End Etiquette */
 
     /* Start Suivi */
