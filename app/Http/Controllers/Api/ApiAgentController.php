@@ -1157,7 +1157,7 @@ class ApiAgentController extends Controller
 
                 // Update package
                 $package = Package::find($request->input('package_id'));
-                $package->position = $request->input('position');
+                $package->etape_id = $request->input('position');
                 $package->save();
 
                 // Reponse
