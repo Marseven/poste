@@ -913,14 +913,17 @@ class ExpeditionContoller extends Controller
 
         // Get expedition by id
         $package = Package::where('id', $id)->first();
+
+        $qrcode = QrCode::format('png')->size(100)->generate($package->id, '../public/code-qr/' . $package->id . '.png');
+
         if ($package) {
             // Récupérer les données
             $data = compact(
                 'page_title',
                 'app_name',
-                'facture',
                 'package',
                 'societe',
+                'qrcode'
             );
 
             $largeur_etiquette = 5; // en cm
