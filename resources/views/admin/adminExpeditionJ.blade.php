@@ -88,7 +88,7 @@
                                     </td>
 
                                     <td class="text-center">
-                                        {{ $expedition->amount ? $expedition->amount : 0 }} XAF
+                                        {{ $expedition->amount ? number_format($expedition->amount, 0, ',', ' ') : 0 }} XAF
                                     </td>
                                     <td class="w-40">
                                         @if ($expedition->status == 3)
@@ -177,7 +177,7 @@
                                                         </select>
                                                     </div>
 
-                                                    <div id="eb" class="col-span-12 sm:col-span-12"
+                                                    <div id="eb-{{ $expedition->id }}" class="col-span-12 sm:col-span-12"
                                                         style="display:none">
 
                                                         <div class="mt-3"> <label>Choisissez une option</label>
@@ -201,7 +201,8 @@
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div id="direct-form" style="display: none">
+                                                        <div id="direct-form-{{ $expedition->id }}"
+                                                            style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1" class="form-label">Opérateur
                                                                 </label>
@@ -225,7 +226,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div id="link-form" style="display: none">
+                                                        <div id="link-form-{{ $expedition->id }}" style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1"
                                                                     class="form-label">Email*</label>
@@ -341,25 +342,26 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function afficherEbForm() {
-            const eb = document.getElementById("eb");
-            const id = $("#id").val();
-            if ($("#methode-" + id).val() != "EB") {
-                eb.style.display = "none";
+            var id = $("#id").val();
+            var eb = $("#eb-" + id);
+            if ($("#methode-" + id).val() == "EB") {
+                eb.show();
             } else {
-                eb.style.display = "block";
+                eb.hide();
             }
         }
 
         function afficherLinkForm() {
-            const link = document.getElementById("link-form");
-            const direct = document.getElementById("direct-form");
+            var id = $("#id").val();
+            const link = $("#link-form-" + id);
+            const direct = $("#direct-form-" + id);
             var selectedValue = $("input[name='paylink']:checked").val();
             if (selectedValue == "direct") {
-                direct.style.display = "block";
-                link.style.display = "none";
+                direct.show();
+                link.hide();
             } else {
-                direct.style.display = "none";
-                link.style.display = "block";
+                direct.hide();
+                link.show();
             }
         }
 
@@ -524,8 +526,7 @@
 
                                         count.hide();
 
-                                        $(".valider").prop('disabled',
-                                            false);
+                                        $(".valider").prop('disabled', false);
                                     }
                                 }, 1000);
 
@@ -616,25 +617,17 @@
                                 var shareElement = document.getElementById("link-share");
                                 // Modifiez l'attribut href avec le nouveau lien
                                 shareElement.setAttribute("href", "mailto:" + email);
-                                const form = tailwind.Modal
-                                    .getInstance(document
-                                        .querySelector(
-                                            "#pay-expedition-" +
-                                            id)
-                                    );
+                                const form = tailwind.Modal.getInstance(document.querySelector(
+                                    "#pay-expedition-" + id));
                                 form.hide();
                                 const success = tailwind.Modal
-                                    .getInstance(
-                                        document.querySelector(
-                                            "#link-response"));
+                                    .getInstance(document.querySelector("#link-response"));
                                 success.show();
 
                                 $(".valider").prop('disabled', false);
                             }
                         }
-
-                        $(".valider").prop('disabled',
-                            false);
+                        $(".valider").prop('disabled', false);
                     },
                     error: function(xhr, status, error) {
                         // Une erreur s'est produite lors de la requête AJAX
