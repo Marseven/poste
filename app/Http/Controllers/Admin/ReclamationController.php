@@ -98,7 +98,7 @@ class ReclamationController extends Controller
         $reclamation_sub = "side-menu__sub-open";
         $reclamation2 = "side-menu--active";
 
-        $methodes = Reclamation::where('client_id', '<>', null)->paginate(10);
+        $reclamations = Reclamation::where('client_id', '<>', null)->paginate(10);
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
