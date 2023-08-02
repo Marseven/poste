@@ -22,6 +22,7 @@ use App\Models\Reseau;
 use App\Models\ServiceExpedition;
 use App\Models\Societe;
 use App\Models\SuiviExpedition;
+use App\Models\SuiviPackage;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -1055,19 +1056,19 @@ class ExpeditionContoller extends Controller
         $package->active = $request->input('active');
 
         if ($package->save()) {
-            // $etapes = Etape::where('type', 'Package')->get();
+            $etapes = Etape::where('type', 'Package')->get();
 
-            // foreach ($etapes as $etp) {
-            //     $suivi = new SuiviExpedition();
-            //     $suivi->package_id = $package->id;
-            //     $suivi->etape_id = $etp->id;
-            //     if ($etp->position == 1) {
-            //         $suivi->status = STATUT_PENDING;
-            //     } else {
-            //         $suivi->status = STATUT_TODO;
-            //     }
-            //     $suivi->save();
-            // }
+            foreach ($etapes as $etp) {
+                $suivi = new SuiviPackage();
+                $suivi->package_id = $package->id;
+                $suivi->etape_id = $etp->id;
+                if ($etp->position == 1) {
+                    $suivi->status = STATUT_PENDING;
+                } else {
+                    $suivi->status = STATUT_TODO;
+                }
+                $suivi->save();
+            }
             // Redirection
             return back()->with('success', 'Nouvelle Dépêche crée avec succès !');
         }
