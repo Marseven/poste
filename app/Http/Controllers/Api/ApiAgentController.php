@@ -1060,7 +1060,7 @@ class ApiAgentController extends Controller
             // Préparer la requete
             $suivi->code = $ext .  '-' . $code;
             $suivi->etape_id = $request->input('position');
-            $suivi->statut = $request->input('statut');
+            $suivi->status = $request->input('statut');
             $suivi->rapport = $request->input('rapport');
             $suivi->package_id = $request->input('package_id');
 
