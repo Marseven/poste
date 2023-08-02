@@ -38,7 +38,7 @@
         <tr>
             <td valign="top">
                 <img src="{{ URL::to('front/imgs/laposte.png') }}" alt="" width="80" /> <br>
-                <h2 style="color: #204897">ETIQUETTE <br>#{{ $expedition->reference }}</h2>
+                <h2 style="color: #204897">ETIQUETTE DEPÊCHE<br>#{{ $package->code }}</h2>
                 <br>
             </td>
             <td align="right">
