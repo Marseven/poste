@@ -143,12 +143,23 @@
                                         </a>
                                     </td>
                                     <td class="w-40">
-                                        @if ($package->active == 1)
-                                            <div class="flex items-center justify-center text-success"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Active </div>
-                                        @else
+                                        @if ($package->active == 0)
+                                            <div class="flex items-center justify-center text-info"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Vérification </div>
+                                        @elseif ($package->active == 1)
+                                            <div class="flex items-center justify-center text-primary"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Enregistrement
+                                            </div>
+                                        @elseif ($package->active == 2)
+                                            <div class="flex items-center justify-center text-danger"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> En cours </div>
+                                        @elseif ($package->active == 3)
                                             <div class="flex items-center justify-center text-warning"> <i
-                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Inactive </div>
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Assignation
+                                                clôturé </div>
+                                        @elseif ($package->active == 4)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Clôturé </div>
                                         @endif
                                     </td>
                                     <td class="table-report__action w-56">
