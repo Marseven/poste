@@ -343,7 +343,7 @@
         function afficherEbForm() {
             var eb = document.getElementById("eb");
             var id = $("#id").val();
-            alert(id);
+            alert($("#methode-" + id).val());
             if ($("#methode-" + id).val() == "EB") {
                 eb.style.display = "block";
             } else {
