@@ -177,7 +177,7 @@
                                                         </select>
                                                     </div>
 
-                                                    <div id="eb" class="col-span-12 sm:col-span-12"
+                                                    <div id="eb-{{ $expedition->id }}" class="col-span-12 sm:col-span-12"
                                                         style="display:none">
 
                                                         <div class="mt-3"> <label>Choisissez une option</label>
@@ -201,7 +201,8 @@
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div id="direct-form" style="display: none">
+                                                        <div id="direct-form-{{ $expedition->id }}"
+                                                            style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1" class="form-label">Opérateur
                                                                 </label>
@@ -225,7 +226,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div id="link-form" style="display: none">
+                                                        <div id="link-form-{{ $expedition->id }}" style="display: none">
                                                             <div class="col-span-12 sm:col-span-6">
                                                                 <label for="modal-form-1"
                                                                     class="form-label">Email*</label>
@@ -341,26 +342,26 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function afficherEbForm() {
-            var eb = document.getElementById("eb");
             var id = $("#id").val();
-            alert($("#methode-" + id).val());
+            var eb = $("#eb-" + id);
             if ($("#methode-" + id).val() == "EB") {
-                eb.style.display = "block";
+                eb.show();
             } else {
-                eb.style.display = "none";
+                eb.hide();
             }
         }
 
         function afficherLinkForm() {
-            const link = document.getElementById("link-form");
-            const direct = document.getElementById("direct-form");
+            var id = $("#id").val();
+            const link = $("#link-form-" + id);
+            const direct = $("#direct-form-" + id);
             var selectedValue = $("input[name='paylink']:checked").val();
             if (selectedValue == "direct") {
-                direct.style.display = "block";
-                link.style.display = "none";
+                direct.show();
+                link.hide();
             } else {
-                direct.style.display = "none";
-                link.style.display = "block";
+                direct.hide();
+                link.show();
             }
         }
 
