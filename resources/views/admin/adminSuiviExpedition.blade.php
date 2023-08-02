@@ -91,7 +91,7 @@
                                         {{ $paquet->poids }} KG(s)
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
-                                        {{ $paquet->amount }} FCFA
+                                        {{ number_format($paquet->amount, 0, ',', ' ') }} FCFA
                                     </td>
                                     <td class="text-left border-b dark:border-darkmode-400 w-32">
                                         @if ($paquet->active == 1)
@@ -178,7 +178,8 @@
             </div>
             <div class="text-center sm:text-right sm:ml-auto">
                 <div class="text-base text-slate-500">Montant Total</div>
-                <div class="text-xl text-primary font-medium mt-2">{{ $expedition->amount }} FCFA</div>
+                <div class="text-xl text-primary font-medium mt-2">{{ number_format($expedition->amount, 0, ',', ' ') }}
+                    FCFA</div>
                 <div class="mt-1">Taxes inclues</div>
             </div>
         </div>

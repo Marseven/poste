@@ -88,7 +88,7 @@
                                     </td>
 
                                     <td class="text-center">
-                                        {{ $expedition->amount ? $expedition->amount : 0 }} XAF
+                                        {{ $expedition->amount ? number_format($expedition->amount, 0, ',', ' ') : 0 }} XAF
                                     </td>
                                     <td class="w-40">
                                         @if ($expedition->status == 3)

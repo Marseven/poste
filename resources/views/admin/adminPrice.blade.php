@@ -171,7 +171,7 @@
                                         {{ $price->mode->libelle }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $price->price }} FCFA
+                                        {{ number_format($price->price, 0, ',', ' ') }} FCFA
                                     </td>
                                     <td class="text-center">
                                         {{ $price->type_element != null ? 'Par ' . $price->type_element : $price->weight . ' KG' }}
