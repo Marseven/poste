@@ -51,7 +51,7 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        <input type="hidden" id="id">
                         @if ($expeditions)
                             @foreach ($expeditions as $expedition)
                                 <tr class="intro-x">
@@ -164,7 +164,6 @@
                                                 </div>
                                                 <!-- BEGIN: Modal Body -->
                                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                                    <input type="hidden" id="id">
                                                     <div class="col-span-12 sm:col-span-12">
                                                         <label for="modal-form-1" class="form-label">Moyen de
                                                             Paiement</label>
