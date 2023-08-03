@@ -334,6 +334,22 @@
             </div>
         </div>
     </div> <!-- END: Modal Content -->
+
+    <div id="link-response" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-10 text-center">
+                    <div class="col-span-6 sm:col-span-3 xl:col-span-2 flex flex-col justify-end items-center">
+                        <div class="text-center text-md text-primary mt-2" id="link-text"
+                            style="font-size: 2em; font-weight: 800;"></div>
+                        <br>
+                        <div class="px-5 pb-8 text-center"><a href="#" id="link-share" data-tw-dismiss="modal"
+                                class="btn btn-primary w-24">Partager le lien par mail</a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- END: Modal Content -->
 @endsection
 
 @push('scripts')
