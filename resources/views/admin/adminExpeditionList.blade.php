@@ -620,8 +620,8 @@
                                 const form = tailwind.Modal.getInstance(document.querySelector(
                                     "#pay-expedition-" + id));
                                 form.hide();
-                                const success = tailwind.Modal
-                                    .getInstance(document.querySelector("#link-response"));
+                                const success = tailwind.Modal.getInstance(document.querySelector(
+                                    "#link-response"));
                                 success.show();
 
                                 $(".valider").prop('disabled', false);

@@ -419,8 +419,8 @@
             let bill_id = "0";
             let link = "#";
             const id = $(this).data('id');
-            const countdownElement = document.getElementById('countdown-text');
-            const linkElement = document.getElementById('link-text');
+            const countdownElement = $('#countdown-text');
+            const linkElement = $('#link-text');
             const methode = $("#methode-" + id).val();
 
             const operator = $("#operator-" + id).val();
@@ -613,15 +613,15 @@
                                     false);
                             } else {
                                 link = result.data.link;
-                                linkElement.textContent = link;
-                                var shareElement = document.getElementById("link-share");
+                                linkElement.text(link);
+                                var shareElement = $("#link-share");
                                 // Modifiez l'attribut href avec le nouveau lien
-                                shareElement.setAttribute("href", "mailto:" + email);
+                                shareElement.attr("href", "mailto:" + email);
                                 const form = tailwind.Modal.getInstance(document.querySelector(
                                     "#pay-expedition-" + id));
                                 form.hide();
-                                const success = tailwind.Modal
-                                    .getInstance(document.querySelector("#link-response"));
+                                const success = tailwind.Modal.getInstance(document.querySelector(
+                                    "#link-response"));
                                 success.show();
 
                                 $(".valider").prop('disabled', false);
