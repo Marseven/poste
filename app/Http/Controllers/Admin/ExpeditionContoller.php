@@ -596,6 +596,7 @@ class ExpeditionContoller extends Controller
             if ($request->paylink == "link") {
                 $link = env('POST_URL') . "?invoice=" . $billing_id;
                 try {
+                    Mail::to($request->email)->send(new LinkMessage($expedition, $link));
                     Mail::to($expedition->email_exp)->send(new LinkMessage($expedition, $link));
                     $data['link'] = $link;
                     return $this->sendResponse($data, 'Envoyé !');
