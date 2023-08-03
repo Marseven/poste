@@ -522,7 +522,7 @@
                                     if (timeLeft > 0) {
                                         // Affichez le nombre de secondes restantes
                                         console.log(`Temps restant : ${timeLeft} secondes`);
-                                        countdownElement.textContent = timeLeft;
+                                        countdownElement.text(timeLeft);
                                         timeLeft--;
 
                                     } else {
