@@ -613,6 +613,7 @@
                                     false);
                             } else {
                                 link = result.data.link;
+                                alert(link);
                                 linkElement.textContent = link;
                                 var shareElement = document.getElementById("link-share");
                                 // Modifiez l'attribut href avec le nouveau lien

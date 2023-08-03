@@ -11,6 +11,7 @@ define('STATUT_TODO', 0);     // Largeur max de l'image en pixels
 define('STATUT_PENDING', 1);
 define('STATUT_DO', 2);
 define('STATUT_PAID', 3);
+define('STATUT_PAID_DELIVERY', 4);
 
 class Controller extends BaseController
 {
