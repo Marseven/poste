@@ -614,9 +614,9 @@
                             } else {
                                 link = result.data.link;
                                 linkElement.text(link);
-                                var shareElement = document.getElementById("link-share");
+                                var shareElement = $("#link-share");
                                 // Modifiez l'attribut href avec le nouveau lien
-                                shareElement.setAttribute("href", "mailto:" + email);
+                                shareElement.attr("href", "mailto:" + email);
                                 const form = tailwind.Modal.getInstance(document.querySelector(
                                     "#pay-expedition-" + id));
                                 form.hide();
