@@ -359,8 +359,6 @@
         function afficherEbForm() {
             var id = $("#id").val();
             var eb = $("#eb-" + id);
-            alert(id);
-            alert($("#methode-" + id).val());
             if ($("#methode-" + id).val() == "EB") {
                 eb.show();
             } else {
