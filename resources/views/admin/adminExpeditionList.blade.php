@@ -419,8 +419,8 @@
             let bill_id = "0";
             let link = "#";
             const id = $(this).data('id');
-            const countdownElement = document.getElementById('countdown-text');
-            const linkElement = document.getElementById('link-text');
+            const countdownElement = $('#countdown-text');
+            const linkElement = $('#link-text');
             const methode = $("#methode-" + id).val();
 
             const operator = $("#operator-" + id).val();
@@ -613,8 +613,7 @@
                                     false);
                             } else {
                                 link = result.data.link;
-                                alert(link);
-                                linkElement.textContent = link;
+                                linkElement.text(link);
                                 var shareElement = document.getElementById("link-share");
                                 // Modifiez l'attribut href avec le nouveau lien
                                 shareElement.setAttribute("href", "mailto:" + email);
