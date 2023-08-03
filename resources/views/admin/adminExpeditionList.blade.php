@@ -360,6 +360,7 @@
         function afficherEbForm() {
             var id = $("#id").val();
             var eb = $("#eb-" + id);
+            alert(eb);
             if ($("#methode-" + id).val() == "EB") {
                 eb.show();
             } else {
