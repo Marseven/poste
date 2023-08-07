@@ -83,6 +83,12 @@
                                 <div class="side-menu__title"> Liste des Dépêches </div>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('adminReservationList') }}" class="side-menu {{ $exp4 ?? '' }}">
+                                <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="side-menu__title"> Liste des Réservations </div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

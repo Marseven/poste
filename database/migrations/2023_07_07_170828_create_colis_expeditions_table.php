@@ -35,6 +35,7 @@ return new class extends Migration
 
             $table->integer('agent_id')->nullable();
             $table->integer('expedition_id')->nullable();
+            $table->string('reservation_id')->nullable();
             $table->integer('client_id')->nullable();
             $table->integer('active')->default('0');
             $table->timestamps();

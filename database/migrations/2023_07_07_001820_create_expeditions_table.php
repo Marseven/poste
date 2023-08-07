@@ -43,6 +43,7 @@ return new class extends Migration
             $table->string('etape_id')->nullable();
 
             $table->integer('client_id')->nullable();
+            $table->string('reservation_id')->nullable();
             $table->integer('agent_id')->nullable();
             $table->integer('status')->nullable();
             $table->integer('active')->default('0');

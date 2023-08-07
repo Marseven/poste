@@ -125,15 +125,17 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('expeditions_jour', [ExpeditionContoller::class, 'adminExpeditionJ'])->name('adminExpeditionJ');
     Route::get('nouvelle-expedition', [ExpeditionContoller::class, 'adminNewExpedition'])->name('adminNewExpedition');
 
-    Route::post('new-step1', [ExpeditionContoller::class, 'adminNewStep1'])->name('adminNewStep1');
-    Route::post('new-step2', [ExpeditionContoller::class, 'adminNewStep2'])->name('adminNewStep2');
-    Route::post('new-validation', [ExpeditionContoller::class, 'adminNewValidation'])->name('adminNewValidation');
-
     Route::post('new-document', [ExpeditionContoller::class, 'adminNewDocument'])->name('adminNewDocument');
     Route::post('new-paquet', [ExpeditionContoller::class, 'adminNewPaquet'])->name('adminNewPaquet');
     Route::post('delete-paquet', [ExpeditionContoller::class, 'adminDeletePaquet'])->name('adminDeletePaquet');
     Route::post('add-expedition', [ExpeditionContoller::class, 'adminAddExpedition'])->name('adminAddExpedition');
     /* End Expedition */
+
+    /* Start Réservation */
+    Route::get('reservations', [ExpeditionContoller::class, 'adminReservationList'])->name('adminReservationList');
+    Route::get('recherche-reservation', [ExpeditionContoller::class, 'adminSearchReservation'])->name('adminSearchReservation');
+    Route::post('assign-agent-reservation', [ExpeditionContoller::class, 'adminReservationAgentAssign'])->name('adminReservationAgentAssign');
+    /* End Réservation */
 
     /* Start Facture */
     Route::get('facture/expedition/{code}', [ExpeditionContoller::class, 'adminFactureExpedition'])->name('adminFactureExpedition');

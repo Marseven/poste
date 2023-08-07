@@ -19,6 +19,7 @@ use App\Models\PackageExpedition;
 use App\Models\Paiement;
 use App\Models\PriceExpedition;
 use App\Models\Reseau;
+use App\Models\Reservation;
 use App\Models\ServiceExpedition;
 use App\Models\Societe;
 use App\Models\SuiviExpedition;
@@ -1371,6 +1372,122 @@ class ExpeditionContoller extends Controller
         }
         return back()->with('failed', 'Impossible de trouver cette expedition !');
     }
+
+    ################################################################################################################
+    #                                                                                                              #
+    #   RESERVATION                                                                                                    #
+    #                                                                                                              #
+    ################################################################################################################
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminReservationList(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Dépêches";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp4 = "side-menu--active";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $reservations = Package::orderBy('id', 'DESC')->paginate(10);
+
+        return view('admin.adminReservation', compact(
+            'page_title',
+            'app_name',
+            'reservations',
+            'exp',
+            'exp_sub',
+            'exp4'
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminSearchReservation(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Dépêches";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp3 = "side-menu--active";
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+        $q = $request->input('q');
+
+        $reservations = Reservation::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('name_exp', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('name_dest', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);
+
+        return view('admin.adminReservation', compact(
+            'page_title',
+            'app_name',
+            'reservations',
+            'exp',
+            'exp_sub',
+            'exp4'
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminReseravtionAgentAssign(Request $request)
+    {
+        // Get package by id
+        $reservation = Reservation::find($request->input('package'));
+
+        if ($reservation) {
+            $reservation->agent_id = $request->input('agent');
+            $reservation->active = 2;
+            $reservation->save();
+
+            $onesignal = Onesignal::where('user_id', $request->input('agent'))->first();
+            $agent = User::find($request->input('agent'));
+
+            $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
+            $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
+
+            $playerIds = [$onesignal->player_id]; // Array of player_ids (device tokens)
+            $notificationTitle = "Réservation N° " . $reservation->code . " Assigné";
+            $notificationBody = "M. " . $agent->name . " la réservation n°" . $reservation->code . " vous a été assihné pour l'enregistrement des colis.";
+
+            $headers = [
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Authorization' => 'Basic ' . $restApiKey,
+            ];
+
+            $data = [
+                'app_id' => $appId,
+                'include_player_ids' => $playerIds,
+                'headings' => ['en' => $notificationTitle],
+                'contents' => ['en' => $notificationBody],
+            ];
+
+            $response = Http::withHeaders($headers)->post('https://onesignal.com/api/v1/notifications', $data);
+
+            return back()->with('success', 'Réservation assignée avec succès !');
+            // Get colis by id
+        } else {
+            return back()->with('failed', 'Impossible d\'assigner cette dépêche !');
+        }
+    }
+
 
     /**
      * success response method.
