@@ -1396,7 +1396,7 @@ class ExpeditionContoller extends Controller
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
 
-        $reservations = Package::orderBy('id', 'DESC')->paginate(10);
+        $reservations = Reservation::orderBy('id', 'DESC')->paginate(10);
 
         return view('admin.adminReservation', compact(
             'page_title',
