@@ -19,13 +19,12 @@ return new class extends Migration
             $table->string('code')->nullable();
 
             $table->integer('ville_origine_id')->nullable();
-            $table->integer('ville_destination_id')->nullable();            
+            $table->integer('ville_destination_id')->nullable();
 
             $table->integer('mode_expedition_id')->nullable();
             $table->string('mode_livraison')->nullable();
             $table->string('boite_postale')->nullable();
             $table->string('adresse_livraison')->nullable();
-            $table->double('frais_poste')->nullable();
 
             $table->string('name_exp')->nullable();
             $table->string('email_exp')->nullable();
