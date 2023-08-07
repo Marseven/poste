@@ -279,7 +279,7 @@
                 <div class="modal-body p-0">
                     <div class="p-5 text-center"> <i data-lucide="check-circle"
                             class="w-16 h-16 text-success mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Expédition Payée !</div>
+                        <div class="text-3xl mt-5" id="text-success">Expédition Payée !</div>
                         <div class="text-slate-500 mt-2"></div>
                     </div>
                     <div class="px-5 pb-8 text-center"> <button type="button" data-tw-dismiss="modal"
@@ -340,10 +340,11 @@
                 <div class="modal-body p-10 text-center">
                     <div class="col-span-6 sm:col-span-3 xl:col-span-2 flex flex-col justify-end items-center">
                         <div class="text-center text-md text-primary mt-2" id="link-text"
-                            style="font-size: 2em; font-weight: 800;"></div>
+                            style="font-size: 1.2em; font-weight: 800;"></div>
                         <br>
                         <div class="px-5 pb-8 text-center"><a href="#" id="link-share" data-tw-dismiss="modal"
-                                class="btn btn-primary w-24">Partager le lien par mail</a> </div>
+                                class="btn btn-lg btn-primary w-50">Partager le lien par mail</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -436,6 +437,7 @@
             const id = $(this).data('id');
             const countdownElement = $('#countdown-text');
             const linkElement = $('#link-text');
+            const textSuccess = $('#text-success');
             const methode = $("#methode-" + id).val();
 
             const operator = $("#operator-" + id).val();
@@ -443,6 +445,56 @@
             const email = $("#email-" + id).val();
             const paylink = $("input[name='paylink']:checked").val();
             const action = $("#pay-form-" + id).attr('action');
+
+            if (methode == "PL") {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: action, // Chemin vers votre script PHP de traitement
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        methode: methode,
+                    },
+                    success: function(result) {
+                        console.log(result);
+                        if (result.success == true) {
+                            const form = tailwind.Modal.getInstance(document.querySelector(
+                                "#pay-expedition-" + id));
+                            form.hide();
+
+                            textSuccess.textContent("Expédition à payer à la livraison");
+
+                            const success = tailwind.Modal.getInstance(document.querySelector(
+                                "#success-modal"));
+                            success.show();
+                        } else {
+                            const form = tailwind.Modal.getInstance(document.querySelector(
+                                "#pay-expedition-" + id));
+                            form.hide();
+
+                            const error = tailwind.Modal.getInstance(document.querySelector(
+                                "#error-modal"));
+                            error.show();
+                        }
+                        $(".valider").prop('disabled', false);
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Une erreur s'est produite lors de la requête AJAX
+                        console.log(
+                            'Erreur lors de la requête AJAX : ' +
+                            error);
+                        // Continuez le compte à rebours même en cas d'erreur
+                        $(".valider").prop('disabled', false);
+                    },
+                    complete: function() {
+                        // Réactivez le bouton une fois que la requête AJAX est terminée
+                        $(".valider").prop('disabled', false);
+                    }
+                });
+            }
 
             if (methode == "CA") {
                 $.ajax({
@@ -491,7 +543,9 @@
                         $(".valider").prop('disabled', false);
                     }
                 });
-            } else {
+            }
+
+            if (methode == "EB") {
 
                 $.ajax({
                     headers: {

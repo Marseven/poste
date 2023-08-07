@@ -592,6 +592,22 @@ class ExpeditionContoller extends Controller
             } else {
                 return $this->sendError('Erreur', ['error' => 'Failed']);
             }
+        } elseif ($request->methode == "PL") {
+            $payment = new Paiement();
+            $payment->expedition_id = $expedition->id;
+            $payment->reference = PaymentController::str_reference(6);
+            $payment->description = "Paiement à la livraison.";
+            $payment->amount = $expedition->amount;
+            $payment->status = STATUT_PAID_DELIVERY;
+            $payment->methode_id = $methode->id;
+            if ($payment->save()) {
+                $expedition->status = STATUT_PAID_DELIVERY;
+                $expedition->save();
+                $data['payment'] = $payment;
+                return $this->sendResponse($data, 'Envoyé !');
+            } else {
+                return $this->sendError('Erreur', ['error' => 'Failed']);
+            }
         } else {
             $billing_id = PaymentController::ebilling($expedition);
             if ($request->paylink == "link") {
