@@ -34,10 +34,10 @@ class PackageExpeditionResource extends JsonResource
             'package_code' => $package->code,
             'package_libelle' => $package->libelle,
 
-            'colis_id' => $colis->id ?? '',
+            'colis_id' => $colis->id ?? 0,
             'colis_code' => $colis->code ?? '',
             'colis_libelle' => $colis->libelle ?? '',
-            'colis_poids' => $colis->poids ?? '',
+            'colis_poids' => $colis->poids ?? 0,
 
             'agent' => $agent->name,
 
