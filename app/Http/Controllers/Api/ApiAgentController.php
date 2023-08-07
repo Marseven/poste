@@ -1081,7 +1081,7 @@ class ApiAgentController extends Controller
                 $last_exp = [];
                 foreach ($package_colis as $pc) {
                     $colis = ColisExpedition::find($pc->colis_id);
-                    if (!in_array($colis->expedition_id, $last_exp)) {
+                    if ($colis && !in_array($colis->expedition_id, $last_exp)) {
                         $suivi_exp = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('status', STATUT_PENDING)->first();
                         if ($suivi_exp) {
                             $suivi_exp->status = STATUT_DO;
