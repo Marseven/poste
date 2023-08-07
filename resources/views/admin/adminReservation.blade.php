@@ -63,9 +63,9 @@
                                     </td>
                                     <td class="text-center">
                                         <span
-                                            class="text-md px-1 bg-{{ $reservation->mode_exp_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
+                                            class="text-md px-1 bg-{{ $reservation->mode_expedition_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
                                             style="padding:5px; font-weight: 600;">
-                                            {{ $reservation->mode->libelle }}</span>
+                                            {{ $reservation->mode->libelle ?? '' }}</span>
                                     </td>
                                     <td class="text-center">
                                         <a href="" class="font-medium whitespace-nowrap">
