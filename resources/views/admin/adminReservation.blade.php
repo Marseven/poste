@@ -10,7 +10,7 @@
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                 <div class="hidden md:block mx-auto text-slate-500">
-                    Affiche de 1 a 10 sur {{ $expeditions->count() }} réservations
+                    Affiche de 1 a 10 sur {{ $reservations->count() }} réservations
                 </div>
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
