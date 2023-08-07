@@ -123,7 +123,7 @@
                                 </tr>
 
                                 <!-- BEGIN: Delete Confirmation Modal -->
-                                <div id="assign-{{ $package->id }}" class="modal" tabindex="-1" aria-hidden="true">
+                                <div id="assign-{{ $reservation->id }}" class="modal" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <form method="POST" action="{{ route('adminReservationAgentAssign') }}">
