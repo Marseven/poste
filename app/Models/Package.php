@@ -28,4 +28,9 @@ class Package extends Model
     {
         return $this->hasMany(PackageExpedition::class, 'package_id');
     }
+
+    public function mode()
+    {
+        return $this->belongsTo(ModeExpedition::class, 'mode_exp_id');
+    }
 }
