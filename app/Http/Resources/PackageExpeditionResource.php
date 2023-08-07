@@ -20,7 +20,7 @@ class PackageExpeditionResource extends JsonResource
     {
         // Set locale
         Carbon::setLocale('fr');
-        
+
         // Get relation data
         $agent = User::find($this->agent_id);
         $package = Package::find($this->package_id);
@@ -34,10 +34,10 @@ class PackageExpeditionResource extends JsonResource
             'package_code' => $package->code,
             'package_libelle' => $package->libelle,
 
-            'colis_id' => $colis->id,
-            'colis_code' => $colis->code,
-            'colis_libelle' => $colis->libelle,
-            'colis_poids' => $colis->poids,
+            'colis_id' => $colis->id ?? '',
+            'colis_code' => $colis->code ?? '',
+            'colis_libelle' => $colis->libelle ?? '',
+            'colis_poids' => $colis->poids ?? '',
 
             'agent' => $agent->name,
 
