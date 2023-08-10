@@ -104,6 +104,10 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::post('track-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'track_expedition']);
 
 	Route::post('detail-colis/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_colis']);
+	Route::post('detail-tarif/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_tarif']);
+	Route::post('detail-mode/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_mode_expedition']);
+	Route::post('detail-ville/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_ville']);
+
 	Route::post('colis-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'colis_expedition']);
 	Route::post('suivi-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'suivi_expedition']);
 

@@ -31,7 +31,7 @@ class ColisExpeditionResource extends JsonResource
             'modele' => $this->modele,
             'poids' => $this->poids,
 
-            'agent' => $agent->name,
+            'agent' => $agent ? $agent->name : 'Non defini',
 
             'active' => $this->active,
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y'),
