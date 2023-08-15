@@ -573,9 +573,9 @@ class ExpeditionContoller extends Controller
 
     public function adminFacturePay(Request $request, $code)
     {
-        $expedition = Expedition::where('code', $code)->first();
+        $expedition = Expedition::where('id', $request->id)->first();
         $methode = MethodePaiement::where('code', $request->methode)->first();
-        dd($request->methode);
+        dd($expedition);
         if ($request->methode == "CA") {
             $payment = new Paiement();
             $payment->expedition_id = $expedition->id;
