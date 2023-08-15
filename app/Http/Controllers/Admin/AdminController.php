@@ -50,6 +50,7 @@ class AdminController extends Controller
 
         $exp_j = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->get();
         $exp_j_pending = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->whereNotIn('etape_id', [3, 4])->get();
+        dd($exp_j_pending);
         $exp_j_do = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->whereIn('etape_id', [3, 4])->get();
 
         $exp = Expedition::all();
