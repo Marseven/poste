@@ -28,6 +28,7 @@ use App\Models\ParametreWhatsapp;
 use App\Models\Pays;
 use App\Models\Province;
 use App\Models\Reclamation;
+use App\Models\Reservation;
 use App\Models\ServiceExpedition;
 use App\Models\Societe;
 use App\Models\StatutExpedition;
@@ -44,7 +45,8 @@ use App\Http\Resources\PackageResource;
 use App\Http\Resources\SuiviPackageResource;
 use App\Http\Resources\AgentResource;
 use App\Http\Resources\AgenceResource;
-use App\Models\Onesignal;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,8 +56,7 @@ use Carbon\Carbon;
 use Jenssegers\Agent\Facades\Agent;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 
 use WisdomDiala\Countrypkg\Models\Country;
 use WisdomDiala\Countrypkg\Models\State;
@@ -78,18 +79,18 @@ class ApiAgentController extends Controller
         // Get user who have this email
         $user_exists = User::where('email', $email)->first();
 
-        if (!empty($user_exists) || $user_exists != null) {
+        if(!empty($user_exists) || $user_exists != null){
 
             if (Auth::attempt(['email' => $email, 'password' => $password, 'active' => 1])) {
 
-                // Get user who have this email
-                $user = Auth::user();
+		        // Get user who have this email
+		        $user = Auth::user();
 
-                // Create token
-                $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
-
+		        // Create token
+            	$token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
+            
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Bienvenue !',
                     'token' => $token,
@@ -97,18 +98,19 @@ class ApiAgentController extends Controller
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Impossible de se conntecter. Veuillez réessayer svp !',
                 'user' => []
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 501,
             'message' => 'Vos identifiants semblent incorrects. Veuillez réessayer svp !',
             'user' => $user_exists
-        ]);
+        ]); 
     }
 
     /**
@@ -120,35 +122,35 @@ class ApiAgentController extends Controller
     public function forgotpassword(Request $request)
     {
 
-        // Get data
-        $email_send = $request->input('email');
+    	// Get data
+    	$email_send = $request->input('email');
 
         // Get user who have this email's number
         $user_exists = User::where('email', $request->input('email'))->first();
-        if ($user_exists) {
+        if($user_exists){
 
             // Create code_secret
             $code_secret = Carbon::now()->timestamp;
+                                
 
-
-            // Update user's secret code
+            // Update user's secret code 
             $user_exists->code_secret = $code_secret;
-            if ($user_exists->save()) {
+            if($user_exists->save()){
 
                 // Send secret code to user by SMS here !
                 $phone_agent = $user_exists->phone;
                 $message_to_send = "Hi Mr/Mme " . $user_exists->name . ", veuillez utiliser le code de reinitialisation suivant pour changer votre mot de passe : " . $user_exists->code_secret . " !";
 
                 $details = [
-                    'title' => 'Code de reinitialisation',
-                    'body' => "Hi Mr/Mme " . $user_exists->name . ", veuillez utiliser le code de reinitialisation suivant pour changer votre mot de passe : " . $user_exists->code_secret . " !"
-                ];
+			        'title' => 'Code de reinitialisation',
+			        'body' => "Hi Mr/Mme " . $user_exists->name . ", veuillez utiliser le code de reinitialisation suivant pour changer votre mot de passe : " . $user_exists->code_secret . " !"
+			    ];
 
 
                 //\Mail::to($request->input('email'))->send(new \App\Mail\ForgotMail($details));
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'email' => $email_send,
                     'code_reset' => $code_secret,
@@ -156,9 +158,10 @@ class ApiAgentController extends Controller
                     'user' => $user_exists
                 ]);
             }
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Cet email ne figure pas dans la base de données de La Poste !',
             'user' => Auth::user()
@@ -176,52 +179,55 @@ class ApiAgentController extends Controller
         // Get user's who have this secret code
         $user_exists = User::where('code_secret', $request->input('code_secret'))->first();
 
-        if ($user_exists) {
+        if($user_exists){
 
-            // Check if passwords are same
+            // Check if passwords are same 
             $new_password = $request->input('new_password');
             $confirm_password = $request->input('confirm_password');
 
-            if ($new_password == $confirm_password) {
+            if($new_password == $confirm_password){
 
                 // Prepare data to save
                 $user_exists->password = Hash::make($new_password);
 
-                if ($user_exists->save()) {
+                if($user_exists->save()){
 
                     // Connect user
                     if (Auth::attempt(['email' => $user_exists->email, 'password' => $new_password, 'active' => 1])) {
-
+            
                         return response([
-                            'result' => true,
+                            'result' => true, 
                             'status' => 200,
                             'message' => 'Bienvenue sur La Poste !',
                             'user' => Auth::user()
                         ]);
                     }
                     return response([
-                        'result' => false,
+                        'result' => false, 
                         'status' => 500,
                         'message' => 'Impossible de se connecter. Veuillez réessayer svp !',
                         'user' => $user_exists
                     ]);
+
                 }
                 return response([
-                    'result' => false,
+                    'result' => false, 
                     'status' => 500,
                     'message' => 'Une erreur est survenue. Veuillez réessayer !',
                     'user' => $user_exists
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Les mots de passe ne sont pas identiques !',
                 'user' => $user_exists
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Votre code secret est incorrect. Veuillez demander un nouveau code de réinitialisation !',
             'user' => []
@@ -240,17 +246,18 @@ class ApiAgentController extends Controller
         // Get user by id
         $profil = User::find($request->input('user_id'));
 
-        if ($profil) {
+        if($profil){
 
             return response([
-                'result' => true,
+                'result' => true, 
                 'status' => 200,
                 'message' => 'Données personnelles récupérées avec succès !',
                 'user' => $profil
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos informations personnelles !'
         ]);
@@ -268,7 +275,7 @@ class ApiAgentController extends Controller
         // Get agent to update firstly
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Data to save
             $agent->name = $request->input('name');
@@ -276,26 +283,29 @@ class ApiAgentController extends Controller
             $agent->phone = $request->input('phone');
             $agent->adresse = $request->input('adresse');
 
-            if ($agent->save()) {
+            if($agent->save()){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Vos données personnelles ont été modifiés avec succès !',
                     'user' => $agent
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Impossible de modifier vos données personnelles !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible de modifier vos informations personnelles !'
         ]);
+
     }
 
     /**
@@ -310,10 +320,10 @@ class ApiAgentController extends Controller
         // Get agent to update firstly
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Verifier si les mots de passe sont identiques
-            if ($request->input('new_password') == $request->input('confirm_password')) {
+            if($request->input('new_password') == $request->input('confirm_password')){
 
                 // Récupérer les données du formulaire
                 if (Hash::check($request->input('old_password'), $agent->password)) {
@@ -321,39 +331,43 @@ class ApiAgentController extends Controller
                     // Preparer le mot de passe
                     $agent->password = Hash::make($request->input('new_password'));
 
-                    // Sauvergarder
-                    if ($agent->save()) {
+                    // Sauvergarder 
+                    if($agent->save()){
 
                         // Redirection
                         return response([
-                            'result' => true,
+                            'result' => true, 
                             'status' => 200,
                             'message' => 'Mot de passe modifié avec succès !'
                         ]);
+
                     }
                     return response([
-                        'result' => false,
+                        'result' => false, 
                         'status' => 500,
                         'message' => 'Impossible de modifier votre mot de passe !'
                     ]);
                 }
                 return response([
-                    'result' => false,
+                    'result' => false, 
                     'status' => 500,
                     'message' => 'Votre ancien mot de passe semble incorrect !'
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Les mots de passe ne sont pas identiques !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible de modifier votre mot de passe !'
         ]);
+
     }
 
     /**
@@ -368,40 +382,43 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get client's notifications
             $notifications = Notification::where('receiver_id', $agent->id)
-                ->orWhere('active', 3)
-                ->orderBy('id', 'DESC')
-                ->get();
+            ->orWhere('active', 3)
+            ->orderBy('id', 'DESC')
+            ->get();
 
             // Count elements
             $nombre_notifs = $notifications->count();
 
-            if (!empty($notifications) || $notifications->count() > 0) {
+            if(!empty($notifications) || $notifications->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste de vos notifications !',
                     'nombre_notifs' => $nombre_notifs,
                     'notifications' => NotificationResource::collection($notifications),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'nombre_notifs' => $nombre_notifs,
                 'message' => 'Aucune notification pour le moment !',
                 'notifications' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos notifications !'
         ]);
+
     }
 
     /**
@@ -419,38 +436,41 @@ class ApiAgentController extends Controller
         // Get bureau by id
         $bureau = Agence::where('libelle', $request->input('bureau'))->first();
 
-        if ($agent) {
+        if($agent){
 
             // Get agents
             $agents = User::where('active', 1)
-                ->where('role', 'Agent')
-                ->where('agence_id', $bureau->id)
-                ->orderBy('id', 'DESC')->get();
+            ->where('role', 'Agent')
+            ->where('agence_id', $bureau->id)
+            ->orderBy('id', 'DESC')->get();
 
-            if (!empty($agents) || $agents->count() > 0) {
+            if(!empty($agents) || $agents->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des agents actifs !',
                     'nbre_agents' => $agents->count(),
                     'agents' => AgentResource::collection($agents),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucun agent actif pour le moment !',
                 'nbre_agents' => $agents->count(),
                 'agents' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'nbre_packages' => 0,
             'message' => 'Impossible d\'accéder aux agents actifs !'
         ]);
+
     }
 
     /**
@@ -465,35 +485,38 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get bureaux
             $bureaux = Agence::where('active', 1)->orderBy('id', 'DESC')->get();
 
-            if (!empty($bureaux) || $bureaux->count() > 0) {
+            if(!empty($bureaux) || $bureaux->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des bureaux actifs !',
                     'nbre_bureaux' => $bureaux->count(),
                     'bureaux' => AgenceResource::collection($bureaux),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucun bureau actif pour le moment !',
                 'nbre_bureaux' => $bureaux->count(),
                 'bureaux' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'nbre_bureaux' => 0,
             'message' => 'Impossible d\'accéder aux bureaux actifs !'
         ]);
+
     }
 
     /**
@@ -508,34 +531,38 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get agent's packages
             $packages = Package::where('active', 0)->orWhere('active', 1)->orWhere('active', 2)->orWhere('active', 3)->orderBy('id', 'DESC')->get();
 
-            if ($packages->count() > 0) {
+            if(!empty($packages) || $packages->count() > 0){
+
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des packages actifs !',
                     'nbre_packages' => $packages->count(),
                     'packages' => PackageResource::collection($packages),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucun package actif pour le moment !',
                 'nbre_packages' => $packages->count(),
                 'packages' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'nbre_packages' => 0,
             'message' => 'Impossible d\'accéder aux packages actifs !'
         ]);
+
     }
 
     /**
@@ -550,32 +577,35 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get agent's packages
             $packages = Package::where('active', 4)->orderBy('id', 'DESC')->get();
 
-            if (!empty($packages) || $packages->count() > 0) {
+            if(!empty($packages) || $packages->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des packages completes !',
                     'packages' => PackageResource::collection($packages),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucun package complete pour le moment !',
                 'packages' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible d\'accéder aux packages actifs !'
         ]);
+
     }
 
     /**
@@ -590,32 +620,35 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get agent's colis
             $colis = ColisExpedition::where('created_at', '=', Carbon::today())->get();
 
-            if (!empty($colis) || $colis->count() > 0) {
+            if(!empty($colis) || $colis->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des colis du jour !',
                     'colis' => ColisExpeditionResource::collection($colis),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucun colis pour le moment !',
                 'colis' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible d\'accéder aux colis du jour !'
         ]);
+
     }
 
     /**
@@ -630,32 +663,35 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get agent's packages expedition
             $expeditions = PackageExpedition::where('created_at', '=', Carbon::today())->get();
 
-            if (!empty($expeditions) || $expeditions->count() > 0) {
+            if(!empty($expeditions) || $expeditions->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des expeditions du jour !',
                     'expeditions' => PackageExpedition::collection($expeditions),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucune expedition pour le moment !',
                 'colis' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible d\'accéder aux expeditions du jour !'
         ]);
+
     }
 
     /**
@@ -670,75 +706,94 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
-            // Instancier une nouvelle expedition
-            $expedition = new PackageExpedition();
+	        // Instancier une nouvelle expedition
+	        $expedition = new PackageExpedition();
 
-            // Check ids
-            $package = Package::find($request->input('package_id'));
-            $colis = ColisExpedition::find($request->input('colis_id'));
+	        // Check ids
+	        $package = Package::find($request->input('package_id'));
+	        $colis = ColisExpedition::find($request->input('colis_id'));
 
-            // Code
-            $ext = 'EXP.';
-            $code = Carbon::now()->timestamp;
+            // Get expedition
+            $this_expedition = Expedition::find($colis->expedition_id);
 
-            // Préparer la requete
-            $expedition->code = $code .  '-' . $package->code . '-' . $colis->code;
-            $expedition->package_id = $request->input('package_id');
-            $expedition->colis_id = $request->input('colis_id');
-            $expedition->agent_id = $request->input('agent_id');
-            $expedition->active = 1;
+            // Check if not null
+            if(!empty($this_expedition) && $this_expedition->status == 3 || $this_expedition->status == 4) {
 
-            if (!empty($package) && !empty($colis)) {
+                // Code
+                $ext = 'EXP.';
+                $code = Carbon::now()->timestamp;
 
-                // Check if you already have assign this colis
-                $check_expedition = PackageExpedition::where('colis_id', $request->input('colis_id'))->first();
-                if (empty($check_expedition)) {
+                // Préparer la requete
+                $expedition->code = $code .  '-' . $package->code . '-' . $colis->code;
+                $expedition->package_id = $request->input('package_id');
+                $expedition->colis_id = $request->input('colis_id');
+                $expedition->agent_id = $request->input('agent_id');
+                $expedition->active = 1;
 
-                    // Sauvegarde
-                    if ($expedition->save()) {
+                if (!empty($package) && !empty($colis)) {
 
-                        // Update package
-                        $package = Package::find($request->input('package_id'));
-                        $package->nbre_colis += 1;
-                        $package->save();
+                    // Check if you already have assign this colis
+                    $check_expedition = PackageExpedition::where('colis_id', $request->input('colis_id'))->first();
+                    if(empty($check_expedition)) {
 
-                        // Update colis
-                        $colis = ColisExpedition::find($request->input('colis_id'));
-                        $colis->active = 2;
-                        $colis->save();
+                        // Sauvegarde
+                        if($expedition->save()){
 
-                        // Reponse
+                            // Update package
+                            $package = Package::find($request->input('package_id'));
+                            $package->nbre_colis += 1;
+                            $package->save();
+
+                            // Update colis
+                            $colis = ColisExpedition::find($request->input('colis_id'));
+                            $colis->active = 2;
+                            $colis->save();
+
+                            // Reponse
+                            return response([
+                                'result' => true, 
+                                'status' => 200,
+                                'message' => 'Colis assigné avec succès !'
+                            ]);
+                        }
                         return response([
-                            'result' => true,
-                            'status' => 200,
-                            'message' => 'Colis assigné avec succès !'
+                            'result' => false, 
+                            'status' => 500,
+                            'message' => 'Impossible d\'assginer ce colis a ce package !'
                         ]);
+
                     }
                     return response([
-                        'result' => false,
+                        'result' => false, 
                         'status' => 500,
-                        'message' => 'Impossible d\'assginer ce colis a ce package !'
+                        'message' => 'Ce colis a deja ete assigne !'
                     ]);
                 }
                 return response([
-                    'result' => false,
+                    'result' => false, 
                     'status' => 500,
-                    'message' => 'Ce colis a deja ete assigne !'
+                    'message' => 'Impossible d\'assigner ce colis a ce package !'
                 ]);
-            }
+
+            } 
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
-                'message' => 'Impossible d\'assigner ce colis a ce package !'
+                'message' => 'Impossible d\'assigner ce colis expedition !'
             ]);
+
+	        
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous d\'assigner ce colis a ce package !'
         ]);
+
+        
     }
 
     /**
@@ -753,7 +808,7 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get expedition by id
             $expedition = PackageExpedition::find($request->input('expedition_id'));
@@ -779,25 +834,28 @@ class ApiAgentController extends Controller
 
                 // Reponse
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'package_id' => $request->input('package_id'),
                     'message' => 'Colis supprime avec succès !'
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 501,
                 'package_id' => $request->input('package_id'),
                 'message' => 'Impossible de supprimer ce colis a ce package !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'package_id' => $request->input('package_id'),
             'message' => 'Impossible pour vous de supprimer ce colis a ce package !'
         ]);
+
+        
     }
 
     /**
@@ -812,33 +870,36 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
-            // Get colis by id
-            $colis = ColisExpedition::where('code', $request->input('colis_code'))
-                ->orWhere('id', $request->input('colis_code'))
-                ->first();
+	        // Get colis by id
+	        $colis = ColisExpedition::where('code', $request->input('colis_code'))
+	        ->orWhere('id', $request->input('colis_code'))
+	        ->first();
 
-            if ($colis) {
+	        if($colis){
 
-                return response([
-                    'result' => true,
-                    'status' => 200,
-                    'message' => 'Détails colis !',
-                    'colis' => ColisExpeditionResource::make($colis), // When you get only one element and not a collection
-                ]);
-            }
-            return response([
-                'result' => false,
-                'status' => 500,
-                'message' => 'Impossible d\'accéder aux détails de ce colis !'
-            ]);
+	            return response([
+	                'result' => true, 
+	                'status' => 200,
+	                'message' => 'Détails colis !',
+	                'colis' => ColisExpeditionResource::make($colis), // When you get only one element and not a collection
+	            ]);
+
+	        }
+	        return response([
+	            'result' => false, 
+	            'status' => 500,
+	            'message' => 'Impossible d\'accéder aux détails de ce colis !'
+	        ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce colis !'
         ]);
+
     }
 
     /**
@@ -853,42 +914,45 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
-            // Get package by id
-            $package = Package::find($request->input('package_id'));
+	        // Get package by id
+	        $package = Package::find($request->input('package_id'));
 
-            if ($package) {
+	        if($package){
 
-                // Get package id
-                $package_id = $package->id;
+	        	// Get package id
+	        	$package_id = $package->id;
 
-                // Get all expedition package
-                $expeditions = PackageExpedition::where('package_id', $package_id)->get();
+	        	// Get all expedition package
+	        	$expeditions = PackageExpedition::where('package_id', $package_id)->get();
 
                 // Get all suivi package
                 $historiques = SuiviPackage::where('package_id', $package_id)->get();
 
-                return response([
-                    'result' => true,
-                    'status' => 200,
-                    'message' => 'Détails package !',
-                    'package' => PackageResource::make($package), // When you get only one element and not a collection
-                    'expeditions' => PackageExpeditionResource::collection($expeditions),
-                    'historiques' => SuiviPackageResource::collection($historiques),
-                ]);
-            }
-            return response([
-                'result' => false,
-                'status' => 500,
-                'message' => 'Impossible d\'accéder aux détails de ce package !'
-            ]);
+	            return response([
+	                'result' => true, 
+	                'status' => 200,
+	                'message' => 'Détails package !',
+	                'package' => PackageResource::make($package), // When you get only one element and not a collection
+	                'expeditions' => PackageExpeditionResource::collection($expeditions), 
+                    'historiques' => SuiviPackageResource::collection($historiques), 
+	            ]);
+
+	        }
+	        return response([
+	            'result' => false, 
+	            'status' => 500,
+	            'message' => 'Impossible d\'accéder aux détails de ce package !'
+	        ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce package !'
         ]);
+
     }
 
     /**
@@ -903,34 +967,37 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get package by id
             $package = Package::find($request->input('package_id'));
 
-            if ($package) {
+            if($package){
 
                 // Get package id
                 $package_id = $package->id;
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Détails package !',
                     'package' => PackageResource::make($package), // When you get only one element and not a collection
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Impossible d\'accéder aux détails de ce package !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce package !'
         ]);
+
     }
 
     /**
@@ -945,35 +1012,38 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get package by id
             $package = Package::find($request->input('package_id'));
 
-            if ($package) {
+            if($package){
 
                 // Get package id
                 $package_id = $package->id;
 
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Détails package !',
                     'package' => PackageResource::make($package), // When you get only one element and not a collection
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Impossible d\'accéder aux détails de ce package !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce package !'
         ]);
+
     }
 
     /**
@@ -988,7 +1058,7 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Instancier suivi
             $suivi = new SuiviPackage();
@@ -1008,7 +1078,7 @@ class ApiAgentController extends Controller
             $suivi->active = intval($request->input('active_value'));
 
             // Sauvegarde
-            if ($suivi->save()) {
+            if($suivi->save()){
 
                 // Update package
                 $package = Package::find($request->input('package_id'));
@@ -1018,22 +1088,25 @@ class ApiAgentController extends Controller
 
                 // Reponse
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Suivi soumis avec succès !'
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 501,
                 'message' => 'Impossible de soumettre ce suivi !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre ce suivi !'
         ]);
+
+        
     }
 
     /**
@@ -1048,7 +1121,7 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Instancier suivi
             $suivi = new SuiviPackage();
@@ -1059,8 +1132,8 @@ class ApiAgentController extends Controller
 
             // Préparer la requete
             $suivi->code = $ext .  '-' . $code;
-            $suivi->etape_id = $request->input('position');
-            $suivi->status = $request->input('statut');
+            $suivi->position = $request->input('position');
+            $suivi->statut = $request->input('statut');
             $suivi->rapport = $request->input('rapport');
             $suivi->package_id = $request->input('package_id');
 
@@ -1068,57 +1141,35 @@ class ApiAgentController extends Controller
             $suivi->active = intval($request->input('active_value'));
 
             // Sauvegarde
-            if ($suivi->save()) {
+            if($suivi->save()){
 
                 // Update package
                 $package = Package::find($request->input('package_id'));
-                $package->etape_id = $request->input('position');
+                $package->position = $request->input('position');
                 $package->active = 4;
                 $package->save();
 
-                $package_colis = PackageExpedition::where('package_id', $package->id)->get();
-
-                $last_exp = [];
-                foreach ($package_colis as $pc) {
-                    $colis = ColisExpedition::find($pc->colis_id);
-                    if ($colis && !in_array($colis->expedition_id, $last_exp)) {
-                        $suivi_exp = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('status', STATUT_PENDING)->first();
-                        if ($suivi_exp) {
-                            $suivi_exp->status = STATUT_DO;
-                            $suivi_exp->updated_at = date('Y-m-d H:i');
-                            $suivi_exp->save();
-                            $id_next = $suivi_exp->etape_id + 1;
-                            $suivi_exp_next = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('etape_id', $id_next)->first();
-                        }
-
-                        if ($suivi_exp_next) {
-                            $suivi_exp_next->status = STATUT_PENDING;
-                            $suivi_exp_next->updated_at = date('Y-m-d H:i');
-                            $suivi_exp_next->save();
-                        }
-
-                        $last_exp[] = $colis->expedition_id;
-                    }
-                }
-
                 // Reponse
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Suivi soumis avec succès !'
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 501,
                 'message' => 'Impossible de soumettre ce suivi !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre ce suivi !'
         ]);
+
+        
     }
 
     /**
@@ -1133,7 +1184,7 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Instancier suivi
             $suivi = new SuiviPackage();
@@ -1144,8 +1195,8 @@ class ApiAgentController extends Controller
 
             // Préparer la requete
             $suivi->code = $ext .  '-' . $code;
-            $suivi->etape_id = $request->input('position');
-            $suivi->status = $request->input('statut');
+            $suivi->position = $request->input('position');
+            $suivi->statut = $request->input('statut');
             $suivi->rapport = $request->input('rapport');
             $suivi->package_id = $request->input('package_id');
 
@@ -1153,31 +1204,34 @@ class ApiAgentController extends Controller
             $suivi->active = intval($request->input('active_value'));
 
             // Sauvegarde
-            if ($suivi->save()) {
+            if($suivi->save()){
 
                 // Update package
                 $package = Package::find($request->input('package_id'));
-                $package->etape_id = $request->input('position');
+                $package->position = $request->input('position');
                 $package->save();
 
                 // Reponse
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Suivi soumis avec succès !'
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 501,
                 'message' => 'Impossible de soumettre ce suivi !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre ce suivi !'
         ]);
+
+        
     }
 
     /**
@@ -1192,46 +1246,50 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get agent in charge by name
             $agent_in_charge = User::where('name', $request->input('name_agent'))->first();
 
 
             // Sauvegarde
-            if ($agent_in_charge) {
+            if($agent_in_charge){
 
                 // Update package
                 $package = Package::find(intval($request->input('package_id')));
                 $package->agent_id = $agent_in_charge->id;
                 $package->active = 2;
 
-                if ($package->save()) {
+                if($package->save()){
 
                     // Reponse
                     return response([
-                        'result' => true,
+                        'result' => true, 
                         'status' => 200,
-                        'message' => 'Dépêche attribuée a Mr/Mlle ' . $agent_in_charge->name . ' avec succès !'
+                        'message' => 'Dépêche attribuée a Mr/Mlle '. $agent_in_charge->name .' avec succès !'
                     ]);
+
                 }
                 return response([
-                    'result' => false,
+                    'result' => false, 
                     'status' => 501,
-                    'message' => 'Impossible d\'attribuer cette dépêche a  l\'agent ' . $agent_in_charge->name . ' !'
+                    'message' => 'Impossible d\'attribuer cette dépêche a  l\'agent '. $agent_in_charge->name .' !'
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 502,
-                'message' => 'Impossible d\'attribuer cette dépêche a  l\'agent ' . $request->input('name_agent') . ' !'
+                'message' => 'Impossible d\'attribuer cette dépêche a  l\'agent '. $request->input('name_agent') .' !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre ce suivi !'
         ]);
+
+        
     }
 
 
@@ -1247,60 +1305,41 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
-            // Get package by id
-            $package = Package::find($request->input('package_id'));
+	        // Get package by id
+	        $package = Package::find($request->input('package_id'));
 
-            if ($package) {
-                // Update package
-                $package->active = 3;
-                $package->save();
+	        if (!empty($package)) {
+	        	// Update package
+	        	$package = DB::table('packages')
+	        	->where('id', $request->input('package_id'))
+	        	->update([
+	        		'active' => 3
+	        	]);
 
-                $package_colis = PackageExpedition::where('package_id', $package->id)->get();
+	            // Reponse
+	            return response([
+	                'result' => true, 
+	                'status' => 200,
+	                'package' => $package,
+	                'message' => 'Procedure d\'assignation cloturée avec succès !'
+	            ]);
+	        }
+	        return response([
+	            'result' => false, 
+	            'status' => 500,
+	            'message' => 'Impossible de cloturer la procedure d\'assignation de ce package !'
+	        ]);
 
-                $last_exp = [];
-                foreach ($package_colis as $pc) {
-                    $colis = ColisExpedition::find($pc->colis_id);
-                    if (!in_array($colis->expedition_id, $last_exp)) {
-                        $suivi_exp = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('status', STATUT_PENDING)->first();
-                        if ($suivi_exp) {
-                            $suivi_exp->status = STATUT_DO;
-                            $suivi_exp->updated_at = date('Y-m-d H:i');
-                            $suivi_exp->save();
-                            $id_next = $suivi_exp->etape_id + 1;
-                            $suivi_exp_next = SuiviExpedition::where('expedition_id', $colis->expedition_id)->where('etape_id', $id_next)->first();
-                        }
-
-                        if ($suivi_exp_next) {
-                            $suivi_exp_next->status = STATUT_PENDING;
-                            $suivi_exp_next->updated_at = date('Y-m-d H:i');
-                            $suivi_exp_next->save();
-                        }
-
-                        $last_exp[] = $colis->expedition_id;
-                    }
-                }
-
-                // Reponse
-                return response([
-                    'result' => true,
-                    'status' => 200,
-                    'package' => $package,
-                    'message' => 'Procedure d\'assignation cloturée avec succès !'
-                ]);
-            }
-            return response([
-                'result' => false,
-                'status' => 500,
-                'message' => 'Impossible de cloturer la procedure d\'assignation de ce package !'
-            ]);
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous de cloturer la procedure d\'assignation de ce package !'
         ]);
+
+        
     }
 
     /**
@@ -1315,38 +1354,41 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Get agent's reclamations
             $reclamations = Reclamation::where('active', 1)
-                ->orWhere('active', 2)
-                ->orWhere('active', 3)
-                ->orderBy('id', 'DESC')->get();
+            ->orWhere('active', 2)
+            ->orWhere('active', 3)
+            ->orderBy('id', 'DESC')->get();
 
-            if (!empty($reclamations) || $reclamations->count() > 0) {
+            if(!empty($reclamations) || $reclamations->count() > 0){
 
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Liste des reclamations !',
                     'nbre_packages' => $reclamations->count(),
                     'reclamations' => ReclamationResource::collection($reclamations),
                 ]);
+
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 500,
                 'message' => 'Aucune reclamation pour le moment !',
                 'nbre_reclamations' => $reclamations->count(),
                 'reclamations' => [],
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'nbre_reclamations' => 0,
             'message' => 'Impossible d\'accéder aux reclamations !'
         ]);
+
     }
 
 
@@ -1362,7 +1404,7 @@ class ApiAgentController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if ($agent) {
+        if($agent){
 
             // Instancier une nouvelle reclamation
             $reclamation = new Reclamation();
@@ -1379,26 +1421,29 @@ class ApiAgentController extends Controller
             $reclamation->active = 1;
 
             // Sauvegarde
-            if ($reclamation->save()) {
+            if($reclamation->save()){
 
                 // Reponse
                 return response([
-                    'result' => true,
+                    'result' => true, 
                     'status' => 200,
                     'message' => 'Reclamation soumis avec succès !'
                 ]);
             }
             return response([
-                'result' => false,
+                'result' => false, 
                 'status' => 501,
                 'message' => 'Impossible de soumettre cette reclamation !'
             ]);
+
         }
         return response([
-            'result' => false,
+            'result' => false, 
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre cette reclamation !'
         ]);
+
+        
     }
 
     /**
@@ -1409,6 +1454,7 @@ class ApiAgentController extends Controller
      */
     public function update_incident(Request $request, $user_id)
     {
+    	
     }
 
     /**
@@ -1419,6 +1465,7 @@ class ApiAgentController extends Controller
      */
     public function search_incident(Request $request, $user_id)
     {
+    	
     }
 
     /**
@@ -1429,6 +1476,7 @@ class ApiAgentController extends Controller
      */
     public function delete_incident(Request $request, $user_id)
     {
+    	
     }
 
     /**
@@ -1439,62 +1487,11 @@ class ApiAgentController extends Controller
      */
     public function detail_incident(Request $request, $user_id)
     {
+    	
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function onesignal_agent(Request $request)
-    {
-        // Check if this player or user id already exists !
-        $check_player = Onesignal::where('user_id', $request->input('user_id'))->first();
 
-        if (empty($check_player)) {
-            # code...
-            // Instancier une nouvelle one signal
-            $player = new Onesignal();
-
-            // Préparer la requete
-            $player->user_id = $request->input('user_id');
-            $player->player_id = $request->input('player_id');
-            $player->role = $request->input('role');
-            $player->active = 1;
-
-            // Sauvegarde
-            if ($player->save()) {
-
-                // Send notification to this player
-                $title = "Bienvenue";
-                $body = "La Poste, votre agence postale en ligne";
-                $idPlayer = $request->input('player_id');
-                $this->sendNotification($title, $body, $idPlayer);
-
-                // Reponse
-                return response([
-                    'result' => true,
-                    'status' => 200,
-                    'message' => 'Player ID soumis avec succès !'
-                ]);
-            }
-            return response([
-                'result' => false,
-                'status' => 501,
-                'message' => 'Impossible de soumettre ce Player ID !'
-            ]);
-        } else {
-            # code...
-            return response([
-                'result' => false,
-                'status' => 502,
-                'message' => 'Ce player ID existe deja !'
-            ]);
-        }
-    }
-
-    public function sendNotification($title, $body, $idPlayer)
+    public function sendNotification(Request $request, $title, $body, $idPlayer)
     {
         $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
         $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
@@ -1520,56 +1517,17 @@ class ApiAgentController extends Controller
         return $response->json();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function onesignal_client(Request $request)
-    {
-        // Check if this player or user id already exists !
-        $check_player = Onesignal::where('user_id', $request->input('user_id'))->first();
 
-        if (empty($check_player)) {
 
-            // Instancier une nouvelle one signal
-            $player = new Onesignal();
 
-            // Préparer la requete
-            $player->user_id = $request->input('user_id');
-            $player->player_id = $request->input('player_id');
-            $player->role = $request->input('role');
-            $player->active = 1;
 
-            // Sauvegarde
-            if ($player->save()) {
 
-                // Send notification to this player
-                $title = "Bienvenue";
-                $body = "La Poste, votre agence postale en ligne";
-                $idPlayer = $request->input('player_id');
-                $this->sendNotification($title, $body, $idPlayer);
 
-                // Reponse
-                return response([
-                    'result' => true,
-                    'status' => 200,
-                    'message' => 'Player ID soumis avec succès !'
-                ]);
-            }
-            return response([
-                'result' => false,
-                'status' => 501,
-                'message' => 'Impossible de soumettre ce Player ID !'
-            ]);
-        } else {
-            # code...
-            return response([
-                'result' => false,
-                'status' => 502,
-                'message' => 'Ce player ID existe deja !'
-            ]);
-        }
-    }
+
+
+
+
+
+
+
 }
