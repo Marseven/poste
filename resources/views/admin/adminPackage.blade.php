@@ -125,7 +125,7 @@
                                             {{ $package->libelle }}
                                         </a>
                                         <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
-                                            {{ $package->agent->name }}
+                                            {{ $package->agent->name ?? 'Aucun Agent' }}
                                         </div>
                                     </td>
                                     <td class="text-center">
