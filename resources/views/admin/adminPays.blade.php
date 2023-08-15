@@ -136,7 +136,7 @@
                                         {{ $country->code }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $country->zone->libelle }}
+                                        {{ $country->zone->libelle ?? '' }}
                                     </td>
                                     <td class="text-center">
                                         {{ $country->libelle }}
