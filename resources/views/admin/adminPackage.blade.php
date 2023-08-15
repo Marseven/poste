@@ -170,7 +170,7 @@
                                                 </button>
                                                 <div class="dropdown-menu w-40">
                                                     <ul class="dropdown-content">
-                                                        @if ($package->agent_id == null)
+                                                        @if ($package->agent_id == null || $package->active != 4)
                                                             <li>
                                                                 <a href="javascript:;" data-tw-toggle="modal"
                                                                     data-tw-target="#assign-{{ $package->id }}"
