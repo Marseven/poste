@@ -110,6 +110,9 @@
 
                         @if ($packages)
                             @foreach ($packages as $package)
+                                @php
+                                    $package->load(['agent']);
+                                @endphp
                                 <tr class="intro-x">
                                     <td class="text-center">
                                         <a href="{{ route('adminSuiviPackage', ['code' => $package->code]) }}"
@@ -122,7 +125,7 @@
                                             {{ $package->libelle }}
                                         </a>
                                         <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
-                                            {{ $package->description }}
+                                            {{ $package->agent->name }}
                                         </div>
                                     </td>
                                     <td class="text-center">
