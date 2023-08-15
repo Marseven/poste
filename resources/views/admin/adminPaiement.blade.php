@@ -63,7 +63,7 @@
                                         {{ number_format($pay->amount, 0, ',', ' ') }} XAF
                                     </td>
                                     <td class="text-center">
-                                        {{ $pay->operator }}
+                                        {{ $pay->methode_id != 2 ? ($pay->methode_id == 1 ? 'CASH' : 'PAIEMENT EN LIVRAISON') : $pay->operator ?? 'EBILLING' }}
                                     </td>
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($pay->paid_at)->translatedFormat('d-m-Y') }}
