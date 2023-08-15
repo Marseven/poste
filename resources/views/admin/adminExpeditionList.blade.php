@@ -437,7 +437,7 @@
             const id = $(this).data('id');
             const countdownElement = $('#countdown-text');
             const linkElement = $('#link-text');
-            const textSuccess = $('#text-success');
+            const textSuccess = document.getElementById('text-success');
             const methode = $("#methode-" + id).val();
 
             const operator = $("#operator-" + id).val();
@@ -574,7 +574,8 @@
                                 const countdownInterval = setInterval(function() {
                                     if (timeLeft > 0) {
                                         // Affichez le nombre de secondes restantes
-                                        console.log(`Temps restant : ${timeLeft} secondes`);
+                                        console.log(
+                                            `Temps restant : ${timeLeft} secondes`);
                                         countdownElement.text(timeLeft);
                                         timeLeft--;
 
@@ -589,7 +590,8 @@
                                         // Arrêtez le compte à rebours
                                         clearInterval(countdownInterval);
 
-                                        const count = tailwind.Modal.getInstance(document
+                                        const count = tailwind.Modal.getInstance(
+                                            document
                                             .querySelector("#countdown"));
 
                                         count.hide();
@@ -601,7 +603,8 @@
                                 const checkInterval = setInterval(function() {
                                     if (timeLeft > 0) {
                                         // Affichez le nombre de secondes restantes
-                                        console.log(`Temps restant : ${timeLeft} secondes`);
+                                        console.log(
+                                            `Temps restant : ${timeLeft} secondes`);
 
                                         // Effectuez la requête AJAX vers votre script PHP pour vérifier le statut
                                         $.ajax({
@@ -613,47 +616,62 @@
                                             dataType: 'json',
                                             success: function(result) {
                                                 console.log(result);
-                                                if (result.success == true) {
+                                                if (result.success ==
+                                                    true) {
 
                                                     clearInterval(
-                                                        countdownInterval);
-                                                    clearInterval(checkInterval);
+                                                        countdownInterval
+                                                    );
+                                                    clearInterval(
+                                                        checkInterval);
 
-                                                    const count = tailwind.Modal
+                                                    const count = tailwind
+                                                        .Modal
                                                         .getInstance(
-                                                            document.querySelector(
-                                                                "#countdown"));
+                                                            document
+                                                            .querySelector(
+                                                                "#countdown"
+                                                            ));
                                                     count.hide();
 
-                                                    const form = tailwind.Modal
-                                                        .getInstance(document
+                                                    const form = tailwind
+                                                        .Modal
+                                                        .getInstance(
+                                                            document
                                                             .querySelector(
                                                                 "#pay-expedition-" +
                                                                 id)
                                                         );
                                                     form.hide();
 
-                                                    const success = tailwind.Modal
+                                                    const success = tailwind
+                                                        .Modal
                                                         .getInstance(
-                                                            document.querySelector(
-                                                                "#success-modal"));
+                                                            document
+                                                            .querySelector(
+                                                                "#success-modal"
+                                                            ));
                                                     success.show();
                                                 }
-                                                $(".valider").prop('disabled',
+                                                $(".valider").prop(
+                                                    'disabled',
                                                     false);
                                             },
-                                            error: function(xhr, status, error) {
+                                            error: function(xhr, status,
+                                                error) {
                                                 // Une erreur s'est produite lors de la requête AJAX
                                                 console.log(
                                                     'Erreur lors de la requête AJAX : ' +
                                                     error);
-                                                $(".valider").prop('disabled',
+                                                $(".valider").prop(
+                                                    'disabled',
                                                     false);
                                                 // Continuez le compte à rebours même en cas d'erreur
                                             },
                                             complete: function() {
                                                 // Réactivez le bouton une fois que la requête AJAX est terminée
-                                                $(".valider").prop('disabled',
+                                                $(".valider").prop(
+                                                    'disabled',
                                                     false);
                                             }
                                         });
@@ -688,8 +706,9 @@
                                 const form = tailwind.Modal.getInstance(document.querySelector(
                                     "#pay-expedition-" + id));
                                 form.hide();
-                                const success = tailwind.Modal.getInstance(document.querySelector(
-                                    "#link-response"));
+                                const success = tailwind.Modal.getInstance(document
+                                    .querySelector(
+                                        "#link-response"));
                                 success.show();
 
                                 $(".valider").prop('disabled', false);
