@@ -69,6 +69,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::get('search-incident/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'search_incident']);
 	Route::post('delete-incident/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'delete_incident']);
 	Route::post('detail-incident/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'detail_incident']);
+
+
+	Route::get('onesignal-agent/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'onesignal_agent']);
 	/* Routing de gestion Agent */
 
 
