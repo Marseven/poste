@@ -11,6 +11,7 @@ use App\Models\Pays;
 use App\Models\Province;
 use App\Models\Reclamation;
 use App\Models\Societe;
+use App\Models\SuiviExpedition;
 use App\Models\Ville;
 
 
@@ -48,8 +49,8 @@ class AdminController extends Controller
         $packages = Package::all();
 
         $exp_j = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->get();
-        $exp_j_pending = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->where('etape_id', '<>', 4)->get();
-        $exp_j_do = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->where('etape_id', 4)->get();
+        $exp_j_pending = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->whereNotIn('etape_id', [3, 4])->get();
+        $exp_j_do = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->whereIn('etape_id', [3, 4])->get();
 
         $exp = Expedition::all();
         $exp_pending = Expedition::where('etape_id', '<>', 4)->get();
