@@ -90,6 +90,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
 	Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'notifications']);
 
+	Route::get('expeditions/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'expeditions']);
 	Route::get('expeditions-actives/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'expeditions_actives']);
 	Route::get('expeditions-completes/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'expeditions_completes']);
 
@@ -118,6 +119,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::get('search-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'search_reclamation']);
 	Route::post('delete-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'delete_reclamation']);
 	Route::post('detail-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_reclamation']);
+
+
+	Route::get('paiements/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'paiements']);
 
 
 	Route::get('reseaux/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'reseaux']);

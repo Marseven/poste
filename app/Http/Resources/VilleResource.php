@@ -3,10 +3,13 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use App\Models\Pays;
+use App\Models\Province;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
 
-class NotificationResource extends JsonResource
+class VilleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,23 +23,21 @@ class NotificationResource extends JsonResource
         Carbon::setLocale('fr');
         
         // Get relation data
-        $expediteur = User::find($this->sender_id);
-        $destinataire = User::find($this->receiver_id);
+        $pays = Pays::find($this->pays_id);
+        $province = User::find($this->province_id);
+        
 
         return [
             'id' => $this->id,
-            'code ' => $this->code,
+            'code' => $this->code,
             'libelle' => $this->libelle,
-            'details' => $this->details,
-            
-            'status' => $this->status,
 
-            'expediteur' => $expediteur ? $expediteur->name : 'Non defini',
-            'destinataire' => $destinataire ? $destinataire->name : 'non defini',
+            'pays' => $pays ? $pays->libelle : 'Non defini',
+            'province' => $province ? $province->libelle : 'Non defini',
 
             'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
-            'updated_at' => Carbon::parse($this->updated_at)->diffForHumans(),
+            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y'),
+            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y'),
         ];
     }
 }

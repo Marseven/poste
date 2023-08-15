@@ -20,7 +20,7 @@ class PackageResource extends JsonResource
     {
         // Set locale
         Carbon::setLocale('fr');
-
+        
         // Get relation data
         $responsable = User::find($this->responsable_id);
         $agent = User::find($this->agent_id);
@@ -37,17 +37,17 @@ class PackageResource extends JsonResource
             'nbre_colis' => $this->nbre_colis,
             'position' => $this->position,
 
-            'code_ville_origine' => $ville_origine->code ?? '',
-            'ville_origine' => $ville_origine->libelle ?? '',
+            'code_ville_origine' => $ville_origine->code,
+            'ville_origine' => $ville_origine->libelle,
 
-            'code_ville_destination' => $ville_destination->code ?? '',
-            'ville_destination' => $ville_destination->libelle ?? '',
+            'code_ville_destination' => $ville_destination->code,
+            'ville_destination' => $ville_destination->libelle,
 
-            'code_agence_origine' => $agence_origine->code ?? '',
-            'agence_origine' => $agence_origine->libelle ?? '',
+            'code_agence_origine' => $agence_origine->code,
+            'agence_origine' => $agence_origine->libelle,
 
-            'code_agence_destination' => $agence_destination->code ?? '',
-            'agence_destination' => $agence_destination->libelle ?? '',
+            'code_agence_destination' => $agence_destination->code,
+            'agence_destination' => $agence_destination->libelle,
 
             'responsable' => !empty($responsable) ? $responsable->name : 'Non attribué',
             'agent' => !empty($agent) ? $agent->name : 'Non attribué',

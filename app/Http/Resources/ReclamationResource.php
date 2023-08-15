@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class ReclamationResource extends JsonResource
 {
@@ -19,6 +21,7 @@ class ReclamationResource extends JsonResource
         
         // Get relation data
         $agent = User::find($this->agent_id);
+        $client = User::find($this->client_id);
 
         return [
             'id' => $this->id,
@@ -26,7 +29,10 @@ class ReclamationResource extends JsonResource
             'libelle' => $this->libelle,
             'details' => $this->details,
 
-            'agent' => $agent->name,
+            'agent' => $agent ? $agent->name : 'Non defini',
+            'client' => $client ? $client->name : 'Non defini',
+
+            'status' => $this->status,
 
             'active' => $this->active,
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y'),

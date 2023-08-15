@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+
+use App\Http\Resources\ExpedieResource;
+use App\Models\NotificationMobile;
 use App\Models\User;
 use App\Models\Adresse;
 use App\Models\Agence;
@@ -61,6 +64,7 @@ use App\Http\Resources\VilleResource;
 use App\Http\Resources\ModeExpeditionResource;
 use App\Http\Resources\ServiceExpeditionResource;
 use App\Http\Resources\PriceExpeditionResource;
+use App\Http\Resources\PaiementResource;
 
 
 use Illuminate\Http\Request;
@@ -587,8 +591,7 @@ class ApiClientController extends Controller
         if($client){
 
             // Get client's notifications
-            $notifications = Notification::where('receiver_id', $client->id)
-            ->orWhere('active', 3)
+            $notifications = NotificationMobile::where('receiver_id', $client->id)
             ->orderBy('id', 'DESC')
             ->get();
 
@@ -629,7 +632,7 @@ class ApiClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function expeditions_actives(Request $request, $user_id)
+    public function expeditions(Request $request, $user_id)
     {
 
         // Get client by id
@@ -638,23 +641,23 @@ class ApiClientController extends Controller
         if($client){
 
             // Get client's expeditions
-            $expeditions = Expedition::where('active', 1)->orWhere('active', 2)->orWhere('active', 3)->orderBy('id', 'DESC')->get();
+            $expeditions = Expedition::where('client_id', $client->id)->orderBy('id', 'DESC')->get();
 
             if(!empty($expeditions) || $expeditions->count() > 0){
 
                 return response([
                     'result' => true, 
                     'status' => 200,
-                    'message' => 'Liste des expeditions actives !',
+                    'message' => 'Liste des expeditions !',
                     'nbre_expeditions' => $expeditions->count(),
-                    'expeditions' => ExpeditionResource::collection($expeditions),
+                    'expeditions' => ExpedieResource::collection($expeditions),
                 ]);
 
             }
             return response([
                 'result' => false, 
                 'status' => 500,
-                'message' => 'Aucune expedition active pour le moment !',
+                'message' => 'Aucune expedition pour le moment !',
                 'nbre_expeditions' => $expeditions->count(),
                 'expeditons' => [],
             ]);
@@ -665,7 +668,7 @@ class ApiClientController extends Controller
             'status' => 500,
             'nbre_expeditions' => 0,
             'expeditions' => [],
-            'message' => 'Impossible d\'accéder aux expeditions actives !'
+            'message' => 'Impossible d\'accéder aux expeditions !'
         ]);
 
     }
@@ -2324,6 +2327,56 @@ class ApiClientController extends Controller
             'nbre_prices_expeditions' => 0,
             'agences' => [],
             'message' => 'Impossible d\'accéder aux tarifs expedition !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function paiements(Request $request, $user_id)
+    {
+
+        // Get client by id
+        $client = User::find($user_id);
+
+        if($client){
+
+            // Get client's paiements
+            $paiements = Paiement::where('client_id', $client->id)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+            // Count elements
+            $nombre_paiements = $paiements->count();
+
+            if(!empty($paiements) || $paiements->count() > 0){
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Liste de vos paiements !',
+                    'nombre_paiements' => $nombre_paiements,
+                    'paiements' => PaiementResource::collection($paiements),
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'nombre_paiements' => $nombre_paiements,
+                'message' => 'Aucun paiement pour le moment !',
+                'paiements' => [],
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible d\'accéder à vos paiements !'
         ]);
 
     }
