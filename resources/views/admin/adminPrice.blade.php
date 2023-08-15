@@ -141,7 +141,7 @@
 
 
             <!-- BEGIN: Data List -->
-            <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+            <div class="intro-y col-span-12 overflow-auto ">
                 <table class="table table-report -mt-2">
                     <thead>
                         <tr>

@@ -263,7 +263,7 @@
                                     class="w-4 h-4 mr-2"></i> Ajouter un autre élément </a>
                         </div>
                         <div class="p-5 grid grid-cols-12 gap-4 gap-y-3">
-                            <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                            <div class="intro-y col-span-12 overflow-auto ">
                                 <table class="table table-report -mt-2">
                                     <thead>
                                         <tr>
