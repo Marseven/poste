@@ -174,8 +174,10 @@
                                                         <select class="form-control" id="methode-{{ $expedition->id }}"
                                                             onChange="afficherEbForm()" name="methode" required>
                                                             @foreach ($methodes as $methode)
-                                                                <option value="{{ $methode->code }}">
-                                                                    {{ $methode->libelle }}</option>
+                                                                @if ($expedition->status != 4 && $methode->code != 'PL')
+                                                                    <option value="{{ $methode->code }}">
+                                                                        {{ $methode->libelle }}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
