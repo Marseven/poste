@@ -179,11 +179,13 @@
                                                                     un agent</a>
                                                             </li>
                                                         @endif
-                                                        <li>
-                                                            <a href="javascript:;" data-tw-toggle="modal"
-                                                                data-tw-target="#update-{{ $package->id }}"
-                                                                class="dropdown-item">Editer</a>
-                                                        </li>
+                                                        @if ($package->active != 4)
+                                                            <li>
+                                                                <a href="javascript:;" data-tw-toggle="modal"
+                                                                    data-tw-target="#update-{{ $package->id }}"
+                                                                    class="dropdown-item">Editer</a>
+                                                            </li>
+                                                        @endif
                                                         <li>
                                                             <a href="{{ route('adminDetailPackage', ['code' => $package->code]) }}"
                                                                 class="dropdown-item">Voir</a>
