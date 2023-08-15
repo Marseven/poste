@@ -575,7 +575,7 @@ class ExpeditionContoller extends Controller
     {
         $expedition = Expedition::where('code', $code)->first();
         $methode = MethodePaiement::where('code', $request->methode)->first();
-
+        dd($request->methode);
         if ($request->methode == "CA") {
             $payment = new Paiement();
             $payment->expedition_id = $expedition->id;

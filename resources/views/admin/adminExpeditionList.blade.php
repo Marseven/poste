@@ -94,6 +94,10 @@
                                         @if ($expedition->status == 3)
                                             <div class="flex items-center justify-center text-success"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> Payée </div>
+                                        @elseif ($expedition->status == 4)
+                                            <div class="flex items-center justify-center text-success"> <i
+                                                    data-lucide="check-square" class="w-4 h-4 mr-2"></i> Paiement à la
+                                                livraion </div>
                                         @else
                                             <div class="flex items-center justify-center text-warning"> <i
                                                     data-lucide="check-square" class="w-4 h-4 mr-2"></i> En attente de
