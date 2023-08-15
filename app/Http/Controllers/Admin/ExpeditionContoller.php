@@ -514,6 +514,18 @@ class ExpeditionContoller extends Controller
         return back()->with('failed', 'Impossible de valider cette expedition !');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminExpeditionDelivery(Expedition $expedition)
+    {
+        $admin_id = Auth::user()->id;
+
+        // Get package by id
+    }
+
     ################################################################################################################
     #                                                                                                              #
     #   FACTURE                                                                                                    #

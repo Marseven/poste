@@ -129,6 +129,7 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::post('new-paquet', [ExpeditionContoller::class, 'adminNewPaquet'])->name('adminNewPaquet');
     Route::post('delete-paquet', [ExpeditionContoller::class, 'adminDeletePaquet'])->name('adminDeletePaquet');
     Route::post('add-expedition', [ExpeditionContoller::class, 'adminAddExpedition'])->name('adminAddExpedition');
+    Route::get('delivery-expedition/{expedition}', [ExpeditionContoller::class, 'adminExpeditionDelivery'])->name('adminExpeditionDelivery');
     /* End Expedition */
 
     /* Start Réservation */

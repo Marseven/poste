@@ -129,6 +129,12 @@
                                                             <a href="{{ route('adminEtiquetteExpedition', ['code' => $expedition->code]) }}"
                                                                 class="dropdown-item">Etiquette</a>
                                                         </li>
+                                                        @if ($expedition->etape_id == 3 || $expedition->etape_id == 4)
+                                                            <li>
+                                                                <a href="{{ url('delivery-expedition/' . $expedition->id) }}"
+                                                                    class="dropdown-item">Expédition Livrée</a>
+                                                            </li>
+                                                        @endif
 
                                                     </ul>
                                                 </div>
