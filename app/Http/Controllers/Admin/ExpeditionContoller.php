@@ -1314,27 +1314,28 @@ class ExpeditionContoller extends Controller
 
             $onesignal = Onesignal::where('user_id', $request->input('agent'))->first();
             $agent = User::find($request->input('agent'));
+            if ($onesignal) {
+                $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
+                $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
 
-            $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
-            $restApiKey = 'ZDA0ZTY4YjQtMTMxOC00MzBjLThmZDEtYzYwOTg4YTkzZTAx';
+                $playerIds = [$onesignal->player_id]; // Array of player_ids (device tokens)
+                $notificationTitle = "Package N° " . $package->code . " Assigné";
+                $notificationBody = "M. " . $agent->name . " le package n°" . $package->code . " vous a été assihné pour l'enregistrement des colis.";
 
-            $playerIds = [$onesignal->player_id]; // Array of player_ids (device tokens)
-            $notificationTitle = "Package N° " . $package->code . " Assigné";
-            $notificationBody = "M. " . $agent->name . " le package n°" . $package->code . " vous a été assihné pour l'enregistrement des colis.";
+                $headers = [
+                    'Content-Type' => 'application/json; charset=utf-8',
+                    'Authorization' => 'Basic ' . $restApiKey,
+                ];
 
-            $headers = [
-                'Content-Type' => 'application/json; charset=utf-8',
-                'Authorization' => 'Basic ' . $restApiKey,
-            ];
+                $data = [
+                    'app_id' => $appId,
+                    'include_player_ids' => $playerIds,
+                    'headings' => ['en' => $notificationTitle],
+                    'contents' => ['en' => $notificationBody],
+                ];
 
-            $data = [
-                'app_id' => $appId,
-                'include_player_ids' => $playerIds,
-                'headings' => ['en' => $notificationTitle],
-                'contents' => ['en' => $notificationBody],
-            ];
-
-            $response = Http::withHeaders($headers)->post('https://onesignal.com/api/v1/notifications', $data);
+                $response = Http::withHeaders($headers)->post('https://onesignal.com/api/v1/notifications', $data);
+            }
 
             return back()->with('success', 'Dépêche assignée avec succès !');
             // Get colis by id
