@@ -1693,7 +1693,7 @@ class ApiClientController extends Controller
             $reservation->phone_dest = $request->input('phone_dest');
 
             //$reservation->nbre_colis = $request->input('nbre_colis');
-            $reservation->frais_poste = $request->input('mode_livraison') == "Oui" ? 0 : 1500.0;
+            $reservation->frais_poste = $request->input('mode_livraison') == "Oui" ? 1500 : 0;
             $reservation->nbre_colis = 0;
 
             $reservation->client_id = $request->input('client_id');
