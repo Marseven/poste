@@ -52,9 +52,9 @@ use App\Models\Reseau;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PackageExpeditionResource;
 use App\Http\Resources\PackageResource;
-use App\Http\Resources\ExpeditionResource; 
+use App\Http\Resources\ExpeditionResource;
 use App\Http\Resources\ColisExpeditionResource;
-use App\Http\Resources\SuiviExpeditionResource; 
+use App\Http\Resources\SuiviExpeditionResource;
 use App\Http\Resources\AgenceResource;
 use App\Http\Resources\ReclamationResource;
 use App\Http\Resources\IncidentResource;
@@ -81,7 +81,7 @@ use Illuminate\Support\Facades\Http;
 use Jenssegers\Agent\Facades\Agent;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Validator;
 
 use WisdomDiala\Countrypkg\Models\Country;
 use WisdomDiala\Countrypkg\Models\State;
@@ -104,18 +104,18 @@ class ApiClientController extends Controller
         // Get user who have this email
         $user_exists = User::where('email', $email)->first();
 
-        if(!empty($user_exists) || $user_exists != null){
+        if (!empty($user_exists) || $user_exists != null) {
 
             if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password'), 'active' => 1])) {
 
-		        // Get user who have this email
-		        $user = Auth::user();
+                // Get user who have this email
+                $user = Auth::user();
 
-		        // Create token
-            	$token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
-            
+                // Create token
+                $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
+
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Bienvenue !',
                     'token' => $token,
@@ -123,19 +123,18 @@ class ApiClientController extends Controller
                 ]);
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de se connecter. Veuillez réessayer svp !',
                 'user' => []
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 501,
             'message' => 'Vos identifiants semblent incorrects. Veuillez réessayer svp !',
             'user' => []
-        ]); 
+        ]);
     }
 
 
@@ -165,9 +164,9 @@ class ApiClientController extends Controller
         // Check if password are same
         $new_password = $request->input('password');
         $confirm_password = $request->input('confirm_password');
-        if($new_password != $confirm_password){
+        if ($new_password != $confirm_password) {
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Les mots de passe ne sont pas identiques !',
                 'user' => []
@@ -176,9 +175,9 @@ class ApiClientController extends Controller
 
         // Check if someone's get this email
         $name_exists = User::where('name', $request->input('name'))->first();
-        if($name_exists){
+        if ($name_exists) {
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Ce nom est déjà enregistré. Veuillez en saisir un autre svp !',
                 'user' => []
@@ -187,9 +186,9 @@ class ApiClientController extends Controller
 
         // Check if someone's get this email
         $email_exists = User::where('email', $request->input('email'))->first();
-        if($email_exists){
+        if ($email_exists) {
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Cet email est déjà enregistré. Veuillez en saisir un autre svp !',
                 'user' => []
@@ -198,25 +197,25 @@ class ApiClientController extends Controller
 
         // Check if someone's get this number's phone
         $phone_exists = User::where('phone', $request->input('phone'))->first();
-        if($phone_exists){
+        if ($phone_exists) {
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Ce numéro de téléphone est déjà enregistré. Veuillez en saisir un autre svp !',
                 'user' => []
             ]);
         }
 
-        if($user->save()){
-            if(Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password'), 'active' => 1])) {
+        if ($user->save()) {
+            if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password'), 'active' => 1])) {
 
                 // Send SMS or notification here !
 
                 // Create token
                 $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
-                
+
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Compte crée avec succès. Bienvenue sur La Poste !',
                     'token' => $token,
@@ -225,14 +224,11 @@ class ApiClientController extends Controller
             }
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible de créer ce compte !',
             'user' => $user
         ]);
-
-
-
     }
 
     /**
@@ -244,35 +240,35 @@ class ApiClientController extends Controller
     public function forgotpassword(Request $request)
     {
 
-    	// Get data
-    	$email_send = $request->input('email');
+        // Get data
+        $email_send = $request->input('email');
 
         // Get user who have this email's number
         $user_exists = User::where('email', $request->input('email'))->first();
-        if($user_exists){
+        if ($user_exists) {
 
             // Create code_secret
             $code_secret = Carbon::now()->timestamp;
-                                
 
-            // Update user's secret code 
+
+            // Update user's secret code
             $user_exists->code_secret = $code_secret;
-            if($user_exists->save()){
+            if ($user_exists->save()) {
 
                 // Send secret code to user by SMS here !
                 $phone_agent = $user_exists->phone;
                 $message_to_send = "Hi Mr/Mme " . $user_exists->name . ", veuillez utiliser le code de reinitialisation suivant pour changer votre mot de passe : " . $user_exists->code_secret . " !";
 
                 $details = [
-			        'title' => 'Code de reinitialisation',
-			        'body' => "Hi Mr/Mme " . $user_exists->name . ", veuillez utiliser le code de reinitialisation suivant pour changer votre mot de passe : " . $user_exists->code_secret . " !"
-			    ];
+                    'title' => 'Code de reinitialisation',
+                    'body' => "Hi Mr/Mme " . $user_exists->name . ", veuillez utiliser le code de reinitialisation suivant pour changer votre mot de passe : " . $user_exists->code_secret . " !"
+                ];
 
 
                 //\Mail::to($request->input('email'))->send(new \App\Mail\ForgotMail($details));
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'email' => $email_send,
                     'code_reset' => $code_secret,
@@ -280,10 +276,9 @@ class ApiClientController extends Controller
                     'user' => $user_exists
                 ]);
             }
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Cet email ne figure pas dans la base de données de La Poste !',
             'user' => Auth::user()
@@ -301,29 +296,29 @@ class ApiClientController extends Controller
         // Get user's who have this secret code
         $user_exists = User::where('code_secret', $request->input('code_secret'))->first();
 
-        if($user_exists){
+        if ($user_exists) {
 
-            // Check if passwords are same 
+            // Check if passwords are same
             $new_password = $request->input('new_password');
             $confirm_password = $request->input('confirm_password');
 
-            if($new_password == $confirm_password){
+            if ($new_password == $confirm_password) {
 
                 // Prepare data to save
                 $user_exists->password = Hash::make($new_password);
 
-                if($user_exists->save()){
+                if ($user_exists->save()) {
 
                     // Connect user
                     if (Auth::attempt(['email' => $user_exists->email, 'password' => $new_password, 'active' => 1])) {
 
-                        //$user = Auth::user(); 
+                        //$user = Auth::user();
 
                         // Create token
                         $token = $user_exists->createToken('Laravel Password Grant Client')->plainTextToken;
-            
+
                         return response([
-                            'result' => true, 
+                            'result' => true,
                             'status' => 200,
                             'message' => 'Mot de passe reinitialise !',
                             'token' => $token,
@@ -331,31 +326,28 @@ class ApiClientController extends Controller
                         ]);
                     }
                     return response([
-                        'result' => false, 
+                        'result' => false,
                         'status' => 500,
                         'message' => 'Impossible de se connecter. Veuillez réessayer svp !',
                         'user' => $user_exists
                     ]);
-
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Une erreur est survenue. Veuillez réessayer !',
                     'user' => $user_exists
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Les mots de passe ne sont pas identiques !',
                 'user' => []
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Votre code secret est incorrect. Veuillez demander un nouveau code de réinitialisation !',
             'user' => []
@@ -374,18 +366,17 @@ class ApiClientController extends Controller
         // Get user by id
         $profil = User::find($request->input('user_id'));
 
-        if($profil){
+        if ($profil) {
 
             return response([
-                'result' => true, 
+                'result' => true,
                 'status' => 200,
                 'message' => 'Données personnelles récupérées avec succès !',
                 'user' => $profil
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos informations personnelles !'
         ]);
@@ -403,7 +394,7 @@ class ApiClientController extends Controller
         // Get agent to update firstly
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Data to save
             $client->name = $request->input('name');
@@ -411,29 +402,26 @@ class ApiClientController extends Controller
             $client->phone = $request->input('phone');
             $client->adresse = $request->input('adresse');
 
-            if($client->save()){
+            if ($client->save()) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Vos données personnelles ont été modifiés avec succès !',
                     'user' => $client
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de modifier vos données personnelles !'
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible de modifier vos informations personnelles !'
         ]);
-
     }
 
     /**
@@ -448,10 +436,10 @@ class ApiClientController extends Controller
         // Get agent to update firstly
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Verifier si les mots de passe sont identiques
-            if($request->input('new_password') == $request->input('confirm_password')){
+            if ($request->input('new_password') == $request->input('confirm_password')) {
 
                 // Récupérer les données du formulaire
                 if (Hash::check($request->input('old_password'), $client->password)) {
@@ -459,43 +447,39 @@ class ApiClientController extends Controller
                     // Preparer le mot de passe
                     $client->password = Hash::make($request->input('new_password'));
 
-                    // Sauvergarder 
-                    if($client->save()){
+                    // Sauvergarder
+                    if ($client->save()) {
 
                         // Redirection
                         return response([
-                            'result' => true, 
+                            'result' => true,
                             'status' => 200,
                             'message' => 'Mot de passe modifié avec succès !'
                         ]);
-
                     }
                     return response([
-                        'result' => false, 
+                        'result' => false,
                         'status' => 500,
                         'message' => 'Impossible de modifier votre mot de passe !'
                     ]);
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Votre ancien mot de passe semble incorrect !'
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Les mots de passe ne sont pas identiques !'
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible de modifier votre mot de passe !'
         ]);
-
     }
 
     /**
@@ -509,75 +493,73 @@ class ApiClientController extends Controller
         // Get client to update firstly
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-        	// Récupérer le logo
-	        $image = $request->file('avatar');
+            // Récupérer le logo
+            $image = $request->file('avatar');
 
-	        // Vérifier si le fichier n'est pas vide
-	        if($image != null){
+            // Vérifier si le fichier n'est pas vide
+            if ($image != null) {
 
-	            // Recuperer l'extension du fichier
-	            $ext = $image->getClientOriginalExtension();
+                // Recuperer l'extension du fichier
+                $ext = $image->getClientOriginalExtension();
 
-	            // Renommer le fichier
-	            $filename = rand(10000, 50000) . '.' . $ext;
+                // Renommer le fichier
+                $filename = rand(10000, 50000) . '.' . $ext;
 
-	            // Verifier les extensions 
-	            if($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg' || $ext == 'jfif'){
+                // Verifier les extensions
+                if ($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg' || $ext == 'jfif') {
 
-	                // Upload le fichier
-	                if($image->move(public_path('avatars'), $filename)){
+                    // Upload le fichier
+                    if ($image->move(public_path('avatars'), $filename)) {
 
-	                    // Attribuer l'url
-	                    $client->avatar = url('avatars') . '/' . $filename;
-	                    
-	                    // Sauvegarde
-	                    if($client->save()){
+                        // Attribuer l'url
+                        $client->avatar = url('avatars') . '/' . $filename;
 
-	                        // Redirection
-	                        return response([
-					            'result' => true, 
-					            'status' => 200,
-					            'user' => UserResource::make($client),
-					            'message' => 'Avatar modifiée avec succès !'
-					        ]);
-	                    }
-	                    return response([
-				            'result' => false, 
-				            'status' => 501,
-				            'user' => UserResource::make($client),
-				            'message' => 'Impossible de modifier votre avatar !'
-				        ]);
-	                }
-	                return response([
-			            'result' => false, 
-			            'status' => 502,
-			            'user' => $client,
-			            'message' => 'Imposible d\'uploader le fichier vers le répertoire défini !'
-			        ]);
-	            }
-	            return response([
-		            'result' => false, 
-		            'status' => 503,
-		            'user' => $client,
-		            'message' => 'L\'extension du fichier doit être soit du jpg ou du png !'
-		        ]);
-	        }
-	        return response([
-	            'result' => false, 
-	            'status' => 504,
-	            'user' => $client,
-	            'message' => 'Aucun fichier téléchargé. Veuillez réessayer svp !'
-	        ]);
+                        // Sauvegarde
+                        if ($client->save()) {
 
+                            // Redirection
+                            return response([
+                                'result' => true,
+                                'status' => 200,
+                                'user' => UserResource::make($client),
+                                'message' => 'Avatar modifiée avec succès !'
+                            ]);
+                        }
+                        return response([
+                            'result' => false,
+                            'status' => 501,
+                            'user' => UserResource::make($client),
+                            'message' => 'Impossible de modifier votre avatar !'
+                        ]);
+                    }
+                    return response([
+                        'result' => false,
+                        'status' => 502,
+                        'user' => $client,
+                        'message' => 'Imposible d\'uploader le fichier vers le répertoire défini !'
+                    ]);
+                }
+                return response([
+                    'result' => false,
+                    'status' => 503,
+                    'user' => $client,
+                    'message' => 'L\'extension du fichier doit être soit du jpg ou du png !'
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 504,
+                'user' => $client,
+                'message' => 'Aucun fichier téléchargé. Veuillez réessayer svp !'
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible de modifier votre avatar !'
         ]);
-
     }
 
     /**
@@ -591,31 +573,29 @@ class ApiClientController extends Controller
 
         // Get client's notifications
         $notifications = NotificationMobile::where('receiver_id', 0)
-        ->orderBy('id', 'DESC')
-        ->get();
+            ->orderBy('id', 'DESC')
+            ->get();
 
         // Count elements
         $nombre_notifs = $notifications->count();
 
-        if(!empty($notifications) || $notifications->count() > 0){
+        if (!empty($notifications) || $notifications->count() > 0) {
 
             return response([
-                'result' => true, 
+                'result' => true,
                 'status' => 200,
                 'message' => 'Liste des notifications !',
                 'nombre_notifs' => $nombre_notifs,
                 'notifications' => NotificationResource::collection($notifications),
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nombre_notifs' => $nombre_notifs,
             'message' => 'Aucune notification pour le moment !',
             'notifications' => [],
         ]);
-
     }
 
     /**
@@ -630,42 +610,39 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's notifications
             $notifications = NotificationMobile::where('receiver_id', $client->id)
-            ->orderBy('id', 'DESC')
-            ->get();
+                ->orderBy('id', 'DESC')
+                ->get();
 
             // Count elements
             $nombre_notifs = $notifications->count();
 
-            if(!empty($notifications) || $notifications->count() > 0){
+            if (!empty($notifications) || $notifications->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste de vos notifications !',
                     'nombre_notifs' => $nombre_notifs,
                     'notifications' => NotificationResource::collection($notifications),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'nombre_notifs' => $nombre_notifs,
                 'message' => 'Aucune notification pour le moment !',
                 'notifications' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos notifications !'
         ]);
-
     }
 
     /**
@@ -680,39 +657,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's expeditions
             $expeditions = Expedition::where('client_id', $client->id)->orderBy('id', 'DESC')->get();
 
-            if(!empty($expeditions) || $expeditions->count() > 0){
+            if (!empty($expeditions) || $expeditions->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des expeditions !',
                     'nbre_expeditions' => $expeditions->count(),
                     'expeditions' => ExpedieResource::collection($expeditions),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune expedition pour le moment !',
                 'nbre_expeditions' => $expeditions->count(),
                 'expeditons' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_expeditions' => 0,
             'expeditions' => [],
             'message' => 'Impossible d\'accéder aux expeditions !'
         ]);
-
     }
 
     /**
@@ -727,39 +701,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's expeditions
             $expeditions = Expedition::where('active', 4)->orderBy('id', 'DESC')->get();
 
-            if(!empty($expeditions) || $expeditions->count() > 0){
+            if (!empty($expeditions) || $expeditions->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des expeditions completes !',
                     'nbre_expeditions' => $expeditions->count(),
                     'expeditions' => ExpeditionResource::collection($expeditions),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune expedition complete pour le moment !',
                 'nbre_expeditions' => $expeditions->count(),
                 'expeditons' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_expeditions' => 0,
             'expeditions' => [],
             'message' => 'Impossible d\'accéder aux expeditions completes !'
         ]);
-
     }
 
     /**
@@ -774,38 +745,35 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-        	// Get code expedition
-        	$code_expedition = $request->input('code_expedition');
+            // Get code expedition
+            $code_expedition = $request->input('code_expedition');
 
             // Get client's colis
             $colis = ColisExpedition::where('code',  $code_expedition)->get();
 
-            if(!empty($colis) || $colis->count() > 0){
+            if (!empty($colis) || $colis->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des colis de cette expedition !',
                     'colis' => ColisExpeditionResource::collection($colis),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun colis pour le moment !',
                 'colis' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder aux colis de cette expedition !'
         ]);
-
     }
 
     /**
@@ -820,35 +788,32 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's colis
             $colis = ColisExpedition::where('expedition_id', $request->input('expedition_id'))->get();
 
-            if(!empty($colis) || $colis->count() > 0){
+            if (!empty($colis) || $colis->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des colis de cette expedition !',
                     'colis' => ColisExpeditionResource::collection($colis),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun colis pour le moment !',
                 'colis' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder aux colis de cette expedition !'
         ]);
-
     }
 
     /**
@@ -863,35 +828,32 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's colis
             $colis = ColisExpedition::where('reservation_id', $request->input('reservation_id'))->get();
 
-            if(!empty($colis) || $colis->count() > 0){
+            if (!empty($colis) || $colis->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des colis de cette reservation !',
                     'colis' => ColisExpeditionResource::collection($colis),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun colis pour le moment !',
                 'colis' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder aux colis de cette reservation !'
         ]);
-
     }
 
     /**
@@ -906,7 +868,7 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get id expedition
             $id_expedition = $request->input('id_expedition');
@@ -914,30 +876,27 @@ class ApiClientController extends Controller
             // Get client's suivis
             $suivis = SuiviExpedition::where('expedition_id',  $id_expedition)->get();
 
-            if(!empty($suivis) || $suivis->count() > 0){
+            if (!empty($suivis) || $suivis->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Historique de cette expedition !',
                     'historique' => SuiviExpeditionResource::collection($suivis),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun mouvement pour le moment !',
                 'historique' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder au suivi de cette expedition !'
         ]);
-
     }
 
     /**
@@ -952,34 +911,31 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-	        // Get colis by id
-	        $colis = ColisExpedition::find($request->input('colis_id'));
+            // Get colis by id
+            $colis = ColisExpedition::find($request->input('colis_id'));
 
-	        if($colis){
+            if ($colis) {
 
-	            return response([
-	                'result' => true, 
-	                'status' => 200,
-	                'message' => 'Détails colis !',
-	                'colis' => ColisExpeditionResource::make($colis), // When you get only one element and not a collection
-	            ]);
-
-	        }
-	        return response([
-	            'result' => false, 
-	            'status' => 500,
-	            'message' => 'Impossible d\'accéder aux détails de ce colis !'
-	        ]);
-
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Détails colis !',
+                    'colis' => ColisExpeditionResource::make($colis), // When you get only one element and not a collection
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 500,
+                'message' => 'Impossible d\'accéder aux détails de ce colis !'
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce colis !'
         ]);
-
     }
 
     /**
@@ -994,37 +950,34 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-	        // Get expedition by id or code
-	        $expedition = Expedition::where('code_aleatoire', $request->input('expedition_code'))->first();
+            // Get expedition by id or code
+            $expedition = Expedition::where('code_aleatoire', $request->input('expedition_code'))->first();
 
-	        if($expedition){
+            if ($expedition) {
 
-	        	// Get code of this expedition
-	        	$code_expedition = $expedition->code;
+                // Get code of this expedition
+                $code_expedition = $expedition->code;
 
-	            return response([
-	                'result' => true, 
-	                'status' => 200,
-	                'message' => 'Détails expedition !',
-	                'expedition' => ExpeditionResource::make($expedition), // When you get only one element and not a collection
-	            ]);
-
-	        }
-	        return response([
-	            'result' => false, 
-	            'status' => 500,
-	            'message' => 'Impossible d\'accéder aux détails de cette expedition !'
-	        ]);
-
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Détails expedition !',
+                    'expedition' => ExpeditionResource::make($expedition), // When you get only one element and not a collection
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 500,
+                'message' => 'Impossible d\'accéder aux détails de cette expedition !'
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de cette expedition !'
         ]);
-
     }
 
     /**
@@ -1039,11 +992,11 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Check mode expedition
             $bp = $request->input('boite_postale');
-            if(!empty($bp)) {
+            if (!empty($bp)) {
 
                 $expedition = new Expedition();
 
@@ -1084,24 +1037,21 @@ class ApiClientController extends Controller
                 $expedition->active = 0;
                 $expedition->status = 0;
 
-                if($expedition->save()){
+                if ($expedition->save()) {
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Nouvelle reservation effectuee !',
                         'expedition' => ExpeditionResource::make($expedition),
                     ]);
-    
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Impossible de soumettre votre expedition pour le moment !',
                     'expedition' => [],
                 ]);
-                
-
             } else {
 
                 $expedition = new Expedition();
@@ -1141,33 +1091,28 @@ class ApiClientController extends Controller
                 $expedition->active = 0;
                 $expedition->status = 0;
 
-                if($expedition->save()){
+                if ($expedition->save()) {
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Nouvelle reservation effectuee !',
                         'expedition' => ExpeditionResource::make($expedition),
                     ]);
-    
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Impossible de soumettre votre expedition pour le moment !',
                     'expedition' => [],
                 ]);
-                
-
             }
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre votre expedition !'
         ]);
-    	
     }
 
     /**
@@ -1182,11 +1127,11 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Check reservation
             $reservation = Reservation::find($request->input('reservation_id'));
-            if(!empty($reservation)) {
+            if (!empty($reservation)) {
 
                 $colis = new ColisExpedition();
 
@@ -1213,7 +1158,7 @@ class ApiClientController extends Controller
                 $colis->active = 0;
                 $colis->status = 0;
 
-                if($colis->save()){
+                if ($colis->save()) {
 
                     // Update reservation
                     $reservation = Reservation::find($request->input('reservation_id'));
@@ -1222,37 +1167,32 @@ class ApiClientController extends Controller
                     $reservation->save();
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Nouveau colis ajoute !',
                         'reservation' => ReservationResource::make($reservation),
                         'colis' => ColisExpeditionResource::make($colis),
                     ]);
-    
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Impossible de soumettre votre colis pour le moment !',
                     'reservation' => [],
                 ]);
-                
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de soumettre votre expedition pour le moment !',
                 'reservation' => [],
-            ]); 
-
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre votre reservation !'
         ]);
-    	
     }
 
     /**
@@ -1267,7 +1207,7 @@ class ApiClientController extends Controller
         // Get agent by id
         $agent = User::find($user_id);
 
-        if($agent){
+        if ($agent) {
 
             // Get expedition by id
             $expedition = Expedition::find($request->input('expedition_id'));
@@ -1288,25 +1228,22 @@ class ApiClientController extends Controller
 
                 // Reponse
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Colis supprime avec succès !'
                 ]);
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 501,
                 'message' => 'Impossible de supprimer ce colis a ce package !'
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous de supprimer ce colis a ce package !'
         ]);
-
-        
     }
 
     /**
@@ -1317,7 +1254,6 @@ class ApiClientController extends Controller
      */
     public function update_expedition(Request $request, $user_id)
     {
-    	
     }
 
     /**
@@ -1328,7 +1264,6 @@ class ApiClientController extends Controller
      */
     public function search_expedition(Request $request, $user_id)
     {
-    	
     }
 
     /**
@@ -1339,7 +1274,6 @@ class ApiClientController extends Controller
      */
     public function delete_expedition(Request $request, $user_id)
     {
-    	
     }
 
     /**
@@ -1354,42 +1288,39 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's reclamations
             $reclamations = Reclamation::where('client_id', $client->id)
-            ->orderBy('id', 'DESC')
-            ->get();
+                ->orderBy('id', 'DESC')
+                ->get();
 
             // Count elements
             $nombre_reclamations = $reclamations->count();
 
-            if(!empty($reclamations) || $reclamations->count() > 0){
+            if (!empty($reclamations) || $reclamations->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste de vos reclamations !',
                     'nombre_reclamations' => $nombre_reclamations,
                     'reclamations' => ReclamationResource::collection($reclamations),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'nombre_reclamations' => $nombre_reclamations,
                 'message' => 'Aucune reclamation pour le moment !',
                 'reclamations' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos reclamations !'
         ]);
-
     }
 
     /**
@@ -1404,8 +1335,8 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
-            
+        if ($client) {
+
             $reclamation = new Reclamation();
             $reclamation->code = $request->input('code');
             $reclamation->libelle = $request->input('libelle');
@@ -1414,29 +1345,27 @@ class ApiClientController extends Controller
             $reclamation->status = 0;
             $reclamation->active = 0;
 
-            if($reclamation->save()){
+            if ($reclamation->save()) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Reclamation envoyée avec succès !',
                     'reclamation' => ReclamationResource::make($reclamation)
                 ]);
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de créer ce compte !',
                 'reclamation' => $reclamation
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'effectuer cette operation !'
         ]);
-    	
     }
 
     /**
@@ -1451,8 +1380,8 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
-            
+        if ($client) {
+
             $reclamation = new Reclamation();
             $reclamation->code = $request->input('code');
             $reclamation->libelle = $request->input('libelle');
@@ -1462,45 +1391,42 @@ class ApiClientController extends Controller
             $reclamation->status = 0;
             $reclamation->active = 0;
 
-            if($reclamation->save()){
+            if ($reclamation->save()) {
 
                 // Update paiement
                 $paiement = Paiement::find($request->input('paiement_id'));
-                if(!empty($paiement) || $paiement != null){
+                if (!empty($paiement) || $paiement != null) {
 
                     // Change status
                     $paiement->status = 1;
                     $paiement->save();
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Reclamation envoyée avec succès !',
                         'reclamation' => ReclamationResource::make($reclamation)
                     ]);
-
                 }
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Reclamation envoyée avec succès !',
                     'reclamation' => ReclamationResource::make($reclamation)
                 ]);
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de créer ce compte !',
                 'reclamation' => $reclamation
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'effectuer cette operation !'
         ]);
-    	
     }
 
     /**
@@ -1515,8 +1441,8 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
-            
+        if ($client) {
+
             $reclamation = new Reclamation();
             $reclamation->code = $request->input('code');
             $reclamation->libelle = $request->input('libelle');
@@ -1526,45 +1452,42 @@ class ApiClientController extends Controller
             $reclamation->status = 0;
             $reclamation->active = 0;
 
-            if($reclamation->save()){
+            if ($reclamation->save()) {
 
                 // Update expedition
                 $expedition = Expedition::find($request->input('expedition_id'));
-                if(!empty($expedition) || $expedition != null){
+                if (!empty($expedition) || $expedition != null) {
 
                     // Change status
                     $expedition->status = 1;
                     $expedition->save();
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Reclamation envoyée avec succès !',
                         'reclamation' => ReclamationResource::make($reclamation)
                     ]);
-
                 }
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Reclamation envoyée avec succès !',
                     'reclamation' => ReclamationResource::make($reclamation)
                 ]);
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de créer ce compte !',
                 'reclamation' => $reclamation
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'effectuer cette operation !'
         ]);
-    	
     }
 
     /**
@@ -1579,12 +1502,12 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
-            
+        if ($client) {
+
             $reclamation = Reclamation::find($request->input('reclamation_id'));
 
-            if(!empty($reclamation) || $reclamation != null){
-                
+            if (!empty($reclamation) || $reclamation != null) {
+
                 //$reclamation->code = $request->input('code');
                 $reclamation->libelle = $request->input('libelle');
                 $reclamation->details = $request->input('details');
@@ -1592,36 +1515,33 @@ class ApiClientController extends Controller
                 $reclamation->status = 0;
                 $reclamation->active = 0;
 
-                if($reclamation->save()){
+                if ($reclamation->save()) {
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Reclamation modifiée avec succès !',
                         'reclamation' => ReclamationResource::make($reclamation)
                     ]);
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Impossible de modifier cette reclamation !',
                     'reclamation' => ReclamationResource::make($reclamation)
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible pour vous d\'effectuer cette operation !'
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'effectuer cette operation !'
         ]);
-    	
     }
 
     /**
@@ -1632,7 +1552,6 @@ class ApiClientController extends Controller
      */
     public function search_reclamation(Request $request, $user_id)
     {
-    	
     }
 
     /**
@@ -1647,42 +1566,39 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
-            
+        if ($client) {
+
             $reclamation = Reclamation::find($request->input('reclamation_id'));
 
-            if(!empty($reclamation) || $reclamation != null){
+            if (!empty($reclamation) || $reclamation != null) {
 
-                if($reclamation->delete()){
+                if ($reclamation->delete()) {
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Reclamation supprimée avec succès !',
                         'reclamation' => ReclamationResource::make($reclamation)
                     ]);
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Impossible de supprimer cette reclamation !',
                     'reclamation' => ReclamationResource::make($reclamation)
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible pour vous d\'effectuer cette operation !'
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'effectuer cette operation !'
         ]);
-    	
     }
 
     /**
@@ -1693,7 +1609,6 @@ class ApiClientController extends Controller
      */
     public function detail_reclamation(Request $request, $user_id)
     {
-    	
     }
 
     /**
@@ -1708,42 +1623,39 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's reservations
             $reservations = Reservation::where('client_id', $client->id)
-            ->orderBy('id', 'DESC')
-            ->get();
+                ->orderBy('id', 'DESC')
+                ->get();
 
             // Count elements
             $nombre_reservations = $reservations->count();
 
-            if(!empty($reservations) || $reservations->count() > 0){
+            if (!empty($reservations) || $reservations->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste de vos reservations !',
                     'nombre_reservations' => $nombre_reservations,
                     'reservations' => ReservationResource::collection($reservations),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'nombre_reservations' => $nombre_reservations,
                 'message' => 'Aucune reservation pour le moment !',
                 'reservations' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos reservations !'
         ]);
-
     }
 
     /**
@@ -1758,8 +1670,8 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
-            
+        if ($client) {
+
             $reservation = new Reservation();
 
             $reservation->code = $request->input('code');
@@ -1789,7 +1701,7 @@ class ApiClientController extends Controller
             $reservation->status = $request->input('status');
             $reservation->active = 0;
 
-            if($reservation->save()){
+            if ($reservation->save()) {
 
                 // Send notification
                 $idPlayer = $request->input('player_id');
@@ -1798,7 +1710,7 @@ class ApiClientController extends Controller
                 $this->sendNotification($title, $body, $idPlayer);
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Reservation envoyée avec succès !',
                     'reservation_id' => $reservation->id,
@@ -1806,18 +1718,16 @@ class ApiClientController extends Controller
                 ]);
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de créer ce compte !',
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'effectuer cette operation !'
         ]);
-    	
     }
 
     /**
@@ -1832,42 +1742,39 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's colis
             $colis = ColisExpedition::where('client_id', $client->id)
-            ->orderBy('id', 'DESC')
-            ->get();
+                ->orderBy('id', 'DESC')
+                ->get();
 
             // Count elements
             $nombre_colis = $colis->count();
 
-            if(!empty($colis) || $colis->count() > 0){
+            if (!empty($colis) || $colis->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste de vos colis !',
                     'nombre_colis' => $nombre_colis,
                     'colis' => ColisExpeditionResource::collection($colis),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'nombre_colis' => $nombre_colis,
                 'message' => 'Aucun colis pour le moment !',
                 'colis' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos colis !'
         ]);
-
     }
 
     /**
@@ -1882,11 +1789,11 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Check reservation
             $reservation = Reservation::find($request->input('reservation_id'));
-            if(!empty($reservation)) {
+            if (!empty($reservation)) {
 
                 // Get price expedition
                 //$tarification = PriceExpedition::find($request->input('price_expedition_id'));
@@ -1918,7 +1825,7 @@ class ApiClientController extends Controller
                 $colis->active = 0;
                 $colis->status = 0;
 
-                if($colis->save()){
+                if ($colis->save()) {
 
                     // Update reservation
                     $reservation = Reservation::find($request->input('reservation_id'));
@@ -1927,37 +1834,32 @@ class ApiClientController extends Controller
                     $reservation->save();
 
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'Nouveau colis ajoute !',
                         'reservation' => ReservationResource::make($reservation),
                         'colis' => ColisExpeditionResource::make($colis),
                     ]);
-    
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 500,
                     'message' => 'Impossible de soumettre votre colis pour le moment !',
                     'reservation' => [],
                 ]);
-                
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Impossible de soumettre votre reservation pour le moment !',
                 'reservation' => [],
-            ]); 
-
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous de soumettre votre reservation !'
         ]);
-    	
     }
 
     /**
@@ -1972,38 +1874,35 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-	        // Get tarif by id
-	        $tarif = PriceExpedition::where('service_id', $request->input('service_id'))
-            ->where('weight', $request->input('weight'))
-            ->first();
+            // Get tarif by id
+            $tarif = PriceExpedition::where('service_id', $request->input('service_id'))
+                ->where('weight', $request->input('weight'))
+                ->first();
 
-	        if($tarif){
+            if ($tarif) {
 
-	            return response([
-	                'result' => true, 
-	                'status' => 200,
-	                'message' => 'Détails tarif !',
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Détails tarif !',
                     'prix' => $tarif->price,
-	                'tarification' => PriceExpeditionResource::make($tarif), // When you get only one element and not a collection
-	            ]);
-
-	        }
-	        return response([
-	            'result' => false, 
-	            'status' => 500,
+                    'tarification' => PriceExpeditionResource::make($tarif), // When you get only one element and not a collection
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 500,
                 'type' => $tarif->libelle,
-	            'message' => 'Impossible d\'accéder aux détails de ce tarif !'
-	        ]);
-
+                'message' => 'Impossible d\'accéder aux détails de ce tarif !'
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce tarif !'
         ]);
-
     }
 
     /**
@@ -2018,36 +1917,33 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-	        // Get mode_expedition by id
-	        $mode_expedition = ModeExpedition::find($request->input('mode_expedition_id'));
+            // Get mode_expedition by id
+            $mode_expedition = ModeExpedition::find($request->input('mode_expedition_id'));
 
-	        if($mode_expedition){
+            if ($mode_expedition) {
 
-	            return response([
-	                'result' => true, 
-	                'status' => 200,
-	                'message' => 'Détails mode expedition !',
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Détails mode expedition !',
                     'mode_expedition' => $mode_expedition->libelle,
-	                'mode' => ModeExpeditionResource::make($mode_expedition), // When you get only one element and not a collection
-	            ]);
-
-	        }
-	        return response([
-	            'result' => false, 
-	            'status' => 500,
+                    'mode' => ModeExpeditionResource::make($mode_expedition), // When you get only one element and not a collection
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 500,
                 'mode_expedition' => $mode_expedition->libelle,
-	            'message' => 'Impossible d\'accéder aux détails de ce mode_expedition !'
-	        ]);
-
+                'message' => 'Impossible d\'accéder aux détails de ce mode_expedition !'
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de ce mode_expedition !'
         ]);
-
     }
 
     /**
@@ -2062,36 +1958,33 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
-	        // Get ville by id
-	        $ville = Ville::find($request->input('ville_id'));
+            // Get ville by id
+            $ville = Ville::find($request->input('ville_id'));
 
-	        if($ville){
+            if ($ville) {
 
-	            return response([
-	                'result' => true, 
-	                'status' => 200,
-	                'message' => 'Détails ville !',
+                return response([
+                    'result' => true,
+                    'status' => 200,
+                    'message' => 'Détails ville !',
                     'ville' => $ville->libelle,
-	                'town' => VilleResource::make($ville), // When you get only one element and not a collection
-	            ]);
-
-	        }
-	        return response([
-	            'result' => false, 
-	            'status' => 500,
+                    'town' => VilleResource::make($ville), // When you get only one element and not a collection
+                ]);
+            }
+            return response([
+                'result' => false,
+                'status' => 500,
                 'ville' => $ville->libelle,
-	            'message' => 'Impossible d\'accéder aux détails de cette ville !'
-	        ]);
-
+                'message' => 'Impossible d\'accéder aux détails de cette ville !'
+            ]);
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible pour vous d\'accéder aux détails de cette ville !'
         ]);
-
     }
 
 
@@ -2106,7 +1999,7 @@ class ApiClientController extends Controller
 
 
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -2120,39 +2013,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's reseaux
             $reseaux = Reseau::orderBy('id', 'DESC')->get();
 
-            if(!empty($reseaux) || $reseaux->count() > 0){
+            if (!empty($reseaux) || $reseaux->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 202,
                     'message' => 'Liste des reseaux !',
                     'nbre_reseaux' => $reseaux->count(),
                     'reseaux' => ReseauResource::collection($reseaux),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun reseau pour le moment !',
                 'nbre_reseaux' => 0,
                 'reseaux' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_reseaux' => 0,
             'reseaux' => [],
             'message' => 'Impossible d\'accéder aux reseaux !'
         ]);
-
     }
 
     /**
@@ -2167,39 +2057,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's zones
             $zones = Zone::where('reseau_id', $request->input('reseau_id'))->orderBy('id', 'DESC')->get();
 
-            if(!empty($zones) || $zones->count() > 0){
+            if (!empty($zones) || $zones->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des zones !',
                     'nbre_zones' => $zones->count(),
                     'zones' => ZoneResource::collection($zones),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune zone pour le moment !',
                 'nbre_zones' => 0,
                 'zones' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_zones' => 0,
             'expeditions' => [],
             'message' => 'Impossible d\'accéder aux zones !'
         ]);
-
     }
 
     /**
@@ -2214,39 +2101,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's countries
             $countries = Pays::orderBy('name', 'asc')->get();
 
-            if(!empty($countries) || $countries->count() > 0){
+            if (!empty($countries) || $countries->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des pays !',
                     'nbre_countries' => $countries->count(),
                     'countries' => PaysResource::collection($countries),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun pays pour le moment !',
                 'nbre_countries' => 0,
                 'countries' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_countries' => 0,
             'countries' => [],
             'message' => 'Impossible d\'accéder aux pays !'
         ]);
-
     }
 
     /**
@@ -2261,39 +2145,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's provinces
             $provinces = Province::where('pays_id', $request->input('pays_id'))->orderBy('id', 'DESC')->get();
 
-            if(!empty($provinces) || $provinces->count() > 0){
+            if (!empty($provinces) || $provinces->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des provinces !',
                     'nbre_provinces' => $provinces->count(),
                     'provinces' => ProvinceResource::collection($provinces),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune province pour le moment !',
                 'nbre_provinces' => 0,
                 'provinces' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_provinces' => 0,
             'provinces' => [],
             'message' => 'Impossible d\'accéder aux provinces !'
         ]);
-
     }
 
     /**
@@ -2308,39 +2189,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's villes
             $villes = Ville::where('province_id', $request->input('province_id'))->orderBy('libelle', 'ASC')->get();
 
-            if(!empty($villes) || $villes->count() > 0){
+            if (!empty($villes) || $villes->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des villes !',
                     'nbre_villes' => $villes->count(),
                     'villes' => VilleResource::collection($villes),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune ville pour le moment !',
                 'nbre_villes' => 0,
                 'villes' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_villes' => 0,
             'villes' => [],
             'message' => 'Impossible d\'accéder aux villes !'
         ]);
-
     }
 
     /**
@@ -2355,39 +2233,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's villes
-            $villes = Ville::where('pays_id', 1)->orderBy('id', 'DESC')->get();
+            $villes = Ville::whereIn('province_id', [1, 2, 3, 4, 5, 6, 7, 8, 9])->orderBy('id', 'DESC')->get();
 
-            if(!empty($villes) || $villes->count() > 0){
+            if (!empty($villes) || $villes->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des villes !',
                     'nbre_villes' => $villes->count(),
                     'villes' => VilleResource::collection($villes),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune ville pour le moment !',
                 'nbre_villes' => 0,
                 'villes' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_villes' => 0,
             'villes' => [],
             'message' => 'Impossible d\'accéder aux villes !'
         ]);
-
     }
 
     /**
@@ -2402,39 +2277,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's villes
-            $villes = Ville::where('pays_id', 1)->orderBy('id', 'DESC')->get();
+            $villes = Ville::whereIn('province_id', [1, 2, 3, 4, 5, 6, 7, 8, 9])->orderBy('id', 'DESC')->get();
 
-            if(!empty($villes) || $villes->count() > 0){
+            if (!empty($villes) || $villes->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des villes !',
                     'nbre_villes' => $villes->count(),
                     'villes' => VilleResource::collection($villes),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune ville pour le moment !',
                 'nbre_villes' => 0,
                 'villes' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_villes' => 0,
             'villes' => [],
             'message' => 'Impossible d\'accéder aux villes !'
         ]);
-
     }
 
     /**
@@ -2449,39 +2321,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's villes
             $villes = Ville::where('pays_id', 1)->orderBy('id', 'DESC')->get();
 
-            if(!empty($villes) || $villes->count() > 0){
+            if (!empty($villes) || $villes->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des villes !',
                     'nbre_villes' => $villes->count(),
                     'villes' => VilleResource::collection($villes),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune ville pour le moment !',
                 'nbre_villes' => 0,
                 'villes' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_villes' => 0,
             'villes' => [],
             'message' => 'Impossible d\'accéder aux villes !'
         ]);
-
     }
 
     /**
@@ -2496,39 +2365,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's agences
             $agences = Agence::orderBy('id', 'DESC')->get();
 
-            if(!empty($agences) || $agences->count() > 0){
+            if (!empty($agences) || $agences->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des bureaux !',
                     'nbre_agences' => $agences->count(),
                     'agences' => AgenceResource::collection($agences),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun bureau pour le moment !',
                 'nbre_agences' => 0,
                 'agences' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_agences' => 0,
             'agences' => [],
             'message' => 'Impossible d\'accéder aux bureaux !'
         ]);
-
     }
 
     /**
@@ -2543,39 +2409,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's modes_expeditions
             $modes_expeditions = ModeExpedition::orderBy('id', 'DESC')->get();
 
-            if(!empty($modes_expeditions) || $modes_expeditions->count() > 0){
+            if (!empty($modes_expeditions) || $modes_expeditions->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des modes expedition !',
                     'nbre_modes_expeditions' => $modes_expeditions->count(),
                     'modes_expeditions' => ModeExpeditionResource::collection($modes_expeditions),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun mode expedition pour le moment !',
                 'nbre_modes_expeditions' => 0,
                 'modes_expeditions' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_modes_expeditions' => 0,
             'agences' => [],
             'message' => 'Impossible d\'accéder aux modes expedition !'
         ]);
-
     }
 
     /**
@@ -2590,39 +2453,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's services_expeditions
             $services_expeditions = ServiceExpedition::orderBy('id', 'DESC')->get();
 
-            if(!empty($services_expeditions) || $services_expeditions->count() > 0){
+            if (!empty($services_expeditions) || $services_expeditions->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des services expedition !',
                     'nbre_services_expeditions' => $services_expeditions->count(),
                     'services_expeditions' => ServiceExpeditionResource::collection($services_expeditions),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun service expedition pour le moment !',
                 'nbre_services_expeditions' => 0,
                 'services_expeditions' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_services_expeditions' => 0,
             'agences' => [],
             'message' => 'Impossible d\'accéder aux services expedition !'
         ]);
-
     }
 
     /**
@@ -2637,39 +2497,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's prices_expeditions
             $prices_expeditions = PriceExpedition::where('service_id', $request->input('service_id'))->orderBy('id', 'DESC')->get();
 
-            if(!empty($prices_expeditions) || $prices_expeditions->count() > 0){
+            if (!empty($prices_expeditions) || $prices_expeditions->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste des tarifs expedition !',
                     'nbre_prices_expeditions' => $prices_expeditions->count(),
                     'prices_expeditions' => PriceExpeditionResource::collection($prices_expeditions),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucun tarif expedition pour le moment !',
                 'nbre_prices_expeditions' => 0,
                 'prices_expeditions' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_prices_expeditions' => 0,
             'agences' => [],
             'message' => 'Impossible d\'accéder aux tarifs expedition !'
         ]);
-
     }
 
     /**
@@ -2684,43 +2541,41 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's paiements
             $paiements = Paiement::where('client_id', $client->id)
-            ->orderBy('id', 'DESC')
-            ->get();
+                ->orderBy('id', 'DESC')
+                ->get();
 
             // Count elements
             $nombre_paiements = $paiements->count();
 
-            if(!empty($paiements) || $paiements->count() > 0){
+            if (!empty($paiements) || $paiements->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 200,
                     'message' => 'Liste de vos paiements !',
                     'nombre_paiements' => $nombre_paiements,
                     'paiements' => PaiementResource::collection($paiements),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'nombre_paiements' => $nombre_paiements,
                 'message' => 'Aucun paiement pour le moment !',
                 'paiements' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'message' => 'Impossible d\'accéder à vos paiements !'
         ]);
-
-    }/**
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -2732,39 +2587,36 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Get client's etapes
             $etapes = Etape::orderBy('id', 'DESC')->get();
 
-            if(!empty($etapes) || $etapes->count() > 0){
+            if (!empty($etapes) || $etapes->count() > 0) {
 
                 return response([
-                    'result' => true, 
+                    'result' => true,
                     'status' => 202,
                     'message' => 'Liste des etapes !',
                     'nbre_etapes' => $etapes->count(),
                     'etapes' => EtapeResource::collection($etapes),
                 ]);
-
             }
             return response([
-                'result' => false, 
+                'result' => false,
                 'status' => 500,
                 'message' => 'Aucune etape pour le moment !',
                 'nbre_etapes' => 0,
                 'reseaux' => [],
             ]);
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_etapes' => 0,
             'etapes' => [],
             'message' => 'Impossible d\'accéder aux etapes !'
         ]);
-
     }
 
 
@@ -2775,7 +2627,7 @@ class ApiClientController extends Controller
 
 
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -2821,7 +2673,7 @@ class ApiClientController extends Controller
         // Get client by id
         $client = User::find($user_id);
 
-        if($client){
+        if ($client) {
 
             // Check if this player or user id already exists !
             //$check_player = Onesignal::where('player_id', $request->input('player_id'))->orWhere('user_id', $request->input('user_id'))->first();
@@ -2839,7 +2691,7 @@ class ApiClientController extends Controller
                 $player->active = 1;
 
                 // Sauvegarde
-                if($player->save()){
+                if ($player->save()) {
 
                     // Send notification to this player
                     $title = "Bienvenue";
@@ -2849,47 +2701,31 @@ class ApiClientController extends Controller
 
                     // Reponse
                     return response([
-                        'result' => true, 
+                        'result' => true,
                         'status' => 200,
                         'message' => 'La Poste, votre agence postale en ligne !'
                     ]);
                 }
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 501,
                     'message' => 'La Poste - pour vous servir ** !'
                 ]);
-
             } else {
                 # code...
                 return response([
-                    'result' => false, 
+                    'result' => false,
                     'status' => 502,
                     'message' => 'La Poste - pour vous servir *** !'
                 ]);
             }
-
         }
         return response([
-            'result' => false, 
+            'result' => false,
             'status' => 500,
             'nbre_etapes' => 0,
             'etapes' => [],
             'message' => 'Impossible d\'accéder aux etapes !'
         ]);
-
-        
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
