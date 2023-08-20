@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\UserResource;
 use App\Models\Onesignal;
 use App\Models\User;
 use App\Models\Adresse;
@@ -83,20 +84,20 @@ class ApiAgentController extends Controller
 
         if(!empty($user_exists) || $user_exists != null){
 
-            if (Auth::attempt(['email' => $email, 'password' => $password, 'active' => 1])) {
+            if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password'), 'active' => 1])) {
 
 		        // Get user who have this email
 		        $user = Auth::user();
 
 		        // Create token
-            	$token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
+            	$token = $user->createToken('Laravel Password Grant User')->plainTextToken;
             
                 return response([
                     'result' => true, 
                     'status' => 200,
                     'message' => 'Bienvenue !',
                     'token' => $token,
-                    'user' => Auth::user()
+                    'user' => UserResource::make($user)
                 ]);
             }
             return response([
@@ -111,7 +112,7 @@ class ApiAgentController extends Controller
             'result' => false, 
             'status' => 501,
             'message' => 'Vos identifiants semblent incorrects. Veuillez réessayer svp !',
-            'user' => $user_exists
+            'user' => []
         ]); 
     }
 

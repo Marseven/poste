@@ -29,13 +29,13 @@ class PaiementResource extends JsonResource
         return [
             'id' => $this->id,
             'reference' => $this->reference,
-            'client ' => $client ? $client->name : 'Non defini',
+            'client' => $client ? $client->name : 'Non defini',
             'expedition' => $expedition ? $expedition->reference : 'Non defini',
             'methode' => $methode ? $methode->libelle : 'Non defini',
             
             'amount' => $this->amount,
             'description' => $this->description,
-            'status' => $this->status,
+            
             'timeout' => $this->timeout,
             'ebilling_id' => $this->ebilling_id,
             'transaction_id' => $this->transaction_id,
@@ -44,10 +44,10 @@ class PaiementResource extends JsonResource
             'expired_at' => Carbon::parse($this->expired_at)->diffForHumans(),
             'paid_at' => Carbon::parse($this->paid_at)->diffForHumans(),
             
-
-            //'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
-            'updated_at' => Carbon::parse($this->updated_at)->diffForHumans(),
+            'status' => $this->status,
+            
+            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
 }

@@ -27,6 +27,8 @@ Route::post('creer-un-compte', [App\Http\Controllers\Api\ApiClientController::cl
 Route::post('mot-de-passe', [App\Http\Controllers\Api\ApiClientController::class, 'forgotpassword']);
 Route::post('reinitialiser', [App\Http\Controllers\Api\ApiClientController::class, 'resetpassword']);
 Route::post('avatar', [App\Http\Controllers\Api\ApiClientController::class, 'modifieravatar']);
+
+Route::get('notifications', [App\Http\Controllers\Api\ApiClientController::class, 'notifications']);
 /* Routing de gestion d'authentification */
 
 
@@ -71,7 +73,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::post('detail-incident/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'detail_incident']);
 
 
-	Route::get('onesignal-agent/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'onesignal_agent']);
+	Route::post('onesignal-agent/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'onesignal_agent']);
 	/* Routing de gestion Agent */
 
 
@@ -91,7 +93,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::post('modifier-mot-de-passe/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'modifierpassword']);
 	Route::post('avatar/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'modifieravatar']);
 
-	Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'notifications']);
+	//Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'notifications']);
+	Route::get('notifications-mobile/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'notifications_mobile']);
 
 	Route::get('expeditions/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'expeditions']);
 	Route::get('expeditions-actives/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'expeditions_actives']);
@@ -113,11 +116,15 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::post('detail-ville/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'detail_ville']);
 
 	Route::post('colis-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'colis_expedition']);
+	Route::post('expedition-colis/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'expedition_colis']);
+	Route::post('reservation-colis/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'reservation_colis']);
 	Route::post('suivi-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'suivi_expedition']);
 
 
 	Route::get('reclamations/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'reclamations']);
 	Route::post('new-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'new_reclamation']);
+	Route::post('paie-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'paie_reclamation']);
+	Route::post('exp-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'exp_reclamation']);
 	Route::post('update-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'update_reclamation']);
 	Route::get('search-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'search_reclamation']);
 	Route::post('delete-reclamation/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'delete_reclamation']);
@@ -137,10 +144,13 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::post('gabon-villes-origines/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'gabon_villes_origines']);
 	Route::post('gabon-villes-destinations/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'gabon_villes_destinations']);
 
-	Route::post('agences/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'agences']);
+	Route::get('agences/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'agences']);
 	Route::get('modes-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'modes_expeditions']);
 	Route::get('services-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'services_expeditions']);
 	Route::post('tarifs-expedition/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'prices_expeditions']);
+
+
+	Route::post('onesignal-client/{user_id}', [App\Http\Controllers\Api\ApiClientController::class, 'onesignal_client']);
 	/* Routing de gestion Client */
 
 

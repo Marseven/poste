@@ -2,6 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ColisExpedition;
+use App\Models\Expedition;
+use App\Models\Package;
+use App\Models\Paiement;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
@@ -23,6 +27,11 @@ class ReclamationResource extends JsonResource
         $agent = User::find($this->agent_id);
         $client = User::find($this->client_id);
 
+        $expedition = Expedition::find($this->expedition_id);
+        $colis = ColisExpedition::find($this->colis_id);
+        $depeche = Package::find($this->package_id);
+        $paiement = Paiement::find($this->paiement_id);
+
         return [
             'id' => $this->id,
             'code' => $this->code,
@@ -32,11 +41,16 @@ class ReclamationResource extends JsonResource
             'agent' => $agent ? $agent->name : 'Non defini',
             'client' => $client ? $client->name : 'Non defini',
 
+            'expedition' => $expedition ? $expedition->reference : 'Non defini',
+            'colis' => $colis ? $colis->code : 'Non defini',
+            'depeche' => $depeche ? $depeche->code : 'Non defini',
+            'paiement' => $paiement ? $paiement->reference : 'Non defini',
+
             'status' => $this->status,
 
             'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y'),
-            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y'),
+            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
 }

@@ -29,7 +29,7 @@ class AgentResource extends JsonResource
             'noms' => $this->noms,
             'prenoms' => $this->prenoms,
             'genre' => $this->genre,
-            'email ' => $this->email ,
+            'email' => $this->email ,
             'phone' => $this->phone,
             'role' => $this->role,
             'adresse' => $this->adresse,

@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Etape;
 use App\Models\MethodePaiement;
 use App\Models\ModeExpedition;
 use App\Models\PriceExpedition;
+use App\Models\Reservation;
 use App\Models\User;
 use App\Models\Agence;
 use App\Models\Ville;
@@ -39,8 +41,8 @@ class ExpedieResource extends JsonResource
 
         $methode_paiement = MethodePaiement::find($this->methode_paiement_id);
 
-        $reservation = User::find($this->reservation_id);
-        $etape = User::find($this->etape_id);
+        $reservation = Reservation::find($this->reservation_id);
+        $etape = Etape::find($this->etape_id);
 
         return [
             'id' => $this->id,
@@ -67,12 +69,12 @@ class ExpedieResource extends JsonResource
             'adresse_dest' => $this->adresse_dest,
 
 
-            'address' => $this->address ? $this->address : 0,
-            'bp' => $this->bp ? $this->bp : 'Non defini',
-            'bp_frais' => $this->bp_frais ? $this->bp_frais : 0,
+            'address' => !empty($this->address) ? $this->address : 0,
+            'bp' => !empty($this->bp) ? $this->bp : 'Non defini',
+            'bp_frais' => !empty($this->bp_frais) ? $this->bp_frais : 0,
 
             'amount' => $this->amount,
-            'nbre_colis' => $this->nbre_colis ? $this->nbre_colis : 0,
+            'nbre_colis' => !empty($this->nbre_colis) ? $this->nbre_colis : 0,
 
             'methode_paiement' => $methode_paiement ? $methode_paiement->libelle : 'Non defini',
             'reservation' => $reservation ? $reservation->code : 'Non defini',
@@ -85,8 +87,8 @@ class ExpedieResource extends JsonResource
             'status' => $this->status,
             'active' => $this->active,
 
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('d.m.Y'),
-            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y'),
+            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
 }

@@ -28,14 +28,14 @@ class ColisExpeditionResource extends JsonResource
             'code' => $this->code,
             'libelle' => $this->libelle,
             'description' => $this->description,
-            'modele' => $this->modele,
+            'modele' => !empty($this->modele) ? $this->modele : 'Non defini',
             'poids' => $this->poids,
 
             'agent' => $agent ? $agent->name : 'Non defini',
 
             'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y'),
-            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y'),
+            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
 }
