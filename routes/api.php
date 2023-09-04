@@ -42,6 +42,23 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
 	Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'notifications']);
 
+	Route::get('reservations-agent/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'reservations']);
+	Route::post('scan-reservation/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'scan_reservation']);
+	
+	Route::post('localisation-rsv/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'localisation_rsv']);
+	Route::post('service-rsv/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'service_rsv']);
+	Route::post('destinataire-rsv/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'destinataire_rsv']);
+	Route::post('up-colis-rsv/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'up_colis_rsv']);
+	Route::post('new-colis-rsv/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'new_colis_rsv']);
+	Route::post('del-colis-rsv/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'del_colis_rsv']);
+
+	Route::post('up-reservation/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'up_reservation']);
+	Route::post('up-reservation-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'up_reservation_colis']);
+	Route::post('del-reservation-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'del_reservation_colis']);
+	Route::post('new-reservation-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'new_reservation_colis']);
+	Route::post('reservation-colis/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'reservation_colis']);
+	Route::post('conversion/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'conversion']);
+
 	Route::post('agents-actives/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'agents_actives']);
 	Route::get('bureaux-actifs/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'bureaux_actives']);
 

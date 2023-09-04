@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\ReservationResource;
 use App\Http\Resources\UserResource;
 use App\Models\Onesignal;
 use App\Models\User;
@@ -1494,6 +1495,1125 @@ class ApiAgentController extends Controller
     }
 
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reservations(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get agent's reservations
+            $reservations = Reservation::where('agent_id', $agent->id)->orderBy('id', 'DESC')->get();
+
+            // Count elements
+            $nombre_reservations = $reservations->count();
+
+            if(!empty($reservations) || $reservations->count() > 0){
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Liste des reservations !',
+                    'nombre_reservations' => $nombre_reservations,
+                    'reservations' => ReservationResource::collection($reservations),
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'nombre_reservations' => $nombre_reservations,
+                'message' => 'Aucune reservation pour le moment !',
+                'reservations' => [],
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible d\'accéder à vos reservations !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function scan_reservation(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            if($reservation){
+
+                // Get reservation id
+                $reservation_id = $reservation->id;
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Détails reservation !',
+                    'reservation' => ReservationResource::make($reservation), // When you get only one element and not a collection
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible d\'accéder aux détails de cette reservation !'
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'accéder aux détails de cette reservation !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function up_reservation(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            if($reservation){
+
+                // Update Reservation by Agent
+                //$reservation->code = $request->input('code');
+
+                $reservation->ville_origine_id = $request->input('ville_origine_id');
+                $reservation->ville_destination_id = $request->input('ville_destination_id');
+
+                $reservation->mode_expedition_id = $request->input('mode_expedition_id');
+                $reservation->mode_livraison = $request->input('mode_livraison');
+                $reservation->boite_postale = $request->input('boite_postale');
+                $reservation->adresse_livraison = $request->input('adresse_livraison');
+
+                $reservation->name_exp = $request->input('name_exp');
+                $reservation->email_exp = $request->input('email_exp');
+                $reservation->phone_exp = $request->input('phone_exp');
+
+                $reservation->name_dest = $request->input('name_dest');
+                $reservation->email_dest = $request->input('email_dest');
+                $reservation->phone_dest = $request->input('phone_dest');
+
+                //$reservation->nbre_colis = $request->input('nbre_colis');
+                $reservation->frais_poste = $request->input('mode_livraison') == "Oui" ? 1500.0 : 0.0;
+                $reservation->nbre_colis = 0;
+
+                $reservation->client_id = $request->input('client_id');
+                $reservation->player_id = $request->input('player_id');
+
+                $reservation->status = $request->input('status');
+                $reservation->active = 0;
+
+                if($reservation->save()){
+
+                    // Send notification
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Reservation envoyée avec succès !',
+                        'reservation_id' => $reservation->id,
+                        'reservation' => ReservationResource::make($reservation)
+                    ]);
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de créer cette reservation !',
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible d\'accéder aux détails de cette reservation !'
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'accéder aux détails de cette reservation !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function up_reservation_colis(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            if($reservation){
+
+                // Check colis
+                $colis = ColisExpedition::find($request->input('reservation_id'));
+                if(!empty($colis)) {
+    
+                    //$colis = new ColisExpedition();
+    
+                    // Data to save
+                    $colis->code = $request->input('code');
+    
+                    $colis->service_exp_id = $request->input('service_exp_id');
+    
+                    $colis->libelle = $request->input('libelle');
+                    $colis->description = $request->input('description');
+    
+                    $colis->type = $request->input('type');
+                    $colis->poids = $request->input('poids');
+                    //$colis->longeur = $request->input('longeur');
+                    //$colis->largeur = $request->input('largeur');
+                    //$colis->hauteur = $request->input('hauteur');
+    
+                    $colis->amount = $request->input('amount');
+    
+                    $colis->reservation_id = $request->input('reservation_id');
+    
+                    $colis->client_id = $request->input('client_id');
+    
+                    $colis->active = 0;
+                    $colis->status = 0;
+    
+                    if($colis->save()){
+    
+                        // Update reservation
+                        $reservation = Reservation::find($request->input('reservation_id'));
+                        $reservation->amount += $colis->amount;
+                        $reservation->nbre_colis += 1;
+                        $reservation->save();
+    
+                        return response([
+                            'result' => true, 
+                            'status' => 200,
+                            'message' => 'Nouveau colis ajoute !',
+                            'reservation' => ReservationResource::make($reservation),
+                            'colis' => ColisExpeditionResource::make($colis),
+                        ]);
+        
+                    }
+                    return response([
+                        'result' => false, 
+                        'status' => 500,
+                        'message' => 'Impossible de soumettre votre colis pour le moment !',
+                        'reservation' => [],
+                    ]);
+                    
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de soumettre votre colis pour le moment !',
+                    'reservation' => [],
+                ]); 
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible d\'accéder aux détails de ce colis !'
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'accéder aux détails de ce colis !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function del_reservation_colis(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            if($reservation){
+
+                // Check colis
+                $colis = ColisExpedition::find($request->input('reservation_id'));
+                if(!empty($colis)) {
+    
+                    if($colis->delete()){
+    
+                        // Update reservation
+                        $reservation = Reservation::find($request->input('reservation_id'));
+                        $reservation->amount += $colis->amount;
+                        $reservation->nbre_colis -= 1;
+                        $reservation->save();
+    
+                        return response([
+                            'result' => true, 
+                            'status' => 200,
+                            'message' => 'Colis supprime avec succes !',
+                            'reservation' => ReservationResource::make($reservation),
+                            //'colis' => ColisExpeditionResource::make($colis),
+                        ]);
+        
+                    }
+                    return response([
+                        'result' => false, 
+                        'status' => 500,
+                        'message' => 'Impossible de supprimer votre colis pour le moment !',
+                        'reservation' => [],
+                    ]);
+                    
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de supprimer votre colis pour le moment !',
+                    'reservation' => [],
+                ]); 
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de supprimer ce colis !'
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'accéder aux détails de ce colis !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function new_colis(Request $request, $user_id)
+    {
+
+        // Get client by id
+        $client = User::find($user_id);
+
+        if($client){
+
+            // Check reservation
+            $reservation = Reservation::find($request->input('reservation_id'));
+            if(!empty($reservation)) {
+
+                $colis = new ColisExpedition();
+
+                // Data to save
+                $colis->code = $request->input('code');
+
+                $colis->service_exp_id = $request->input('service_exp_id');
+
+                $colis->libelle = $request->input('libelle');
+                $colis->description = $request->input('description');
+
+                $colis->type = $request->input('type');
+                $colis->poids = $request->input('poids');
+                //$colis->longeur = $request->input('longeur');
+                //$colis->largeur = $request->input('largeur');
+                //$colis->hauteur = $request->input('hauteur');
+
+                $colis->amount = $request->input('amount');
+
+                $colis->reservation_id = $request->input('reservation_id');
+
+                $colis->client_id = $request->input('client_id');
+
+                $colis->active = 0;
+                $colis->status = 0;
+
+                if($colis->save()){
+
+                    // Update reservation
+                    $reservation = Reservation::find($request->input('reservation_id'));
+                    $reservation->amount += $colis->amount;
+                    $reservation->nbre_colis += 1;
+                    $reservation->save();
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Nouveau colis ajoute !',
+                        'reservation' => ReservationResource::make($reservation),
+                        'colis' => ColisExpeditionResource::make($colis),
+                    ]);
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de soumettre votre colis pour le moment !',
+                    'reservation' => [],
+                ]);
+                
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre expedition pour le moment !',
+                'reservation' => [],
+            ]); 
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous de soumettre votre reservation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reservation_colis(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Check reservation
+            $reservation = Reservation::find($request->input('reservation_id'));
+            if(!empty($reservation)) {
+
+                // Get price expedition
+                //$tarification = PriceExpedition::find($request->input('price_expedition_id'));
+
+                $colis = new ColisExpedition();
+
+                // Data to save
+                $colis->code = $request->input('code');
+
+                $colis->service_exp_id = $request->input('service_exp_id');
+
+                $colis->libelle = $request->input('libelle');
+                $colis->description = $request->input('description');
+
+                $colis->type = $request->input('type');
+                $colis->poids = $request->input('poids');
+
+                $colis->longeur = 0.00;
+                $colis->largeur = 0.00;
+                $colis->hauteur = 0.00;
+
+                $colis->amount = $request->input('amount');
+
+                //$colis->price_expedition_id = $request->input('price_expedition_id');
+                $colis->reservation_id = $request->input('reservation_id');
+
+                $colis->client_id = $request->input('client_id');
+
+                $colis->active = 0;
+                $colis->status = 0;
+
+                if($colis->save()){
+
+                    // Update reservation
+                    $reservation = Reservation::find($request->input('reservation_id'));
+                    $reservation->amount += $colis->amount;
+                    $reservation->nbre_colis += 1;
+                    $reservation->save();
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Nouveau colis ajoute !',
+                        'reservation' => ReservationResource::make($reservation),
+                        'colis' => ColisExpeditionResource::make($colis),
+                    ]);
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de soumettre votre colis pour le moment !',
+                    'reservation' => [],
+                ]);
+                
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre reservation pour le moment !',
+                'reservation' => [],
+            ]); 
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous de soumettre votre reservation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function conversion(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+    
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            // New Expedition
+            $expedition = new Expedition();
+
+            // Get agence's codes
+            $bureau_origine = Agence::find($agent->agence_id);
+            $bureau_destination = Agence::find($reservation->ville_destination_id);
+
+            // Data to save
+            $expedition->code = $request->input('code');
+            $expedition->reference = $bureau_origine->code . '.' . $request->input('code') . '.' . $bureau_destination->code;
+
+            $expedition->ville_exp_id = $reservation->ville_origine_id;
+            $expedition->agence_exp_id = $bureau_origine->id;
+
+            $expedition->ville_dest_id = $reservation->ville_destination_id;
+            $expedition->agence_dest_id = $bureau_destination->id;
+
+            $expedition->name_exp = $reservation->name_exp;
+            $expedition->phone_exp = $reservation->phone_exp;
+            $expedition->email_exp = $reservation->email_exp;
+            $expedition->adresse_exp = !empty($reservation->adresse_exp) ? $reservation->adresse_exp : 'Non defini';
+
+            $expedition->name_dest = $reservation->name_dest;
+            $expedition->phone_dest = $reservation->phone_dest;
+            $expedition->email_dest = $reservation->email_dest;
+            $expedition->adresse_dest = !empty($reservation->adresse_livraison) ? $reservation->adresse_livraison : 'Non defini';
+
+            $expedition->address = !empty($reservation->adresse_livraison) ? $reservation->adresse_livraison : 0;
+            $expedition->bp = !empty($reservation->bp) ? $reservation->bp : 'Non defini';
+            $expedition->bp_frais = !empty($reservation->bp_frais) ? $reservation->bp_frais : 0;
+
+            $expedition->amount = $reservation->amount;
+
+            $expedition->nbre_colis = $reservation->nbre_colis;
+
+            $expedition->mode_exp_id = $reservation->mode_expedition_id;
+            //$expedition->methode_paiement_id = $paiement->methode_id;
+            $expedition->reservation_id = $reservation->id;
+
+            $expedition->client_id = $reservation->client_id;
+            $expedition->agent_id = $reservation->agent_id;
+
+            $expedition->active = 0;
+            $expedition->status = 0;
+
+            if($expedition->save()){
+
+                // Update colis
+                ColisExpedition::where('reservation_id', $expedition->reservation_id)->update(['expedition_id' => $expedition->id]);
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Conversion effectue avec succes !',
+                    //'reservation' => ReservationResource::make($reservation),
+                    //'colis' => ColisExpeditionResource::make($colis),
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre paiement !',
+                'reservation' => [],
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 502,
+            'message' => 'Impossible pour vous d\'effectuer ce paiements !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function new_paiement(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+    
+            $paiement = new Paiement();
+
+            // Data to save
+            $paiement->reference = $request->input('reference');
+
+            $paiement->client_id = $request->input('client_id');
+            $paiement->reservation_id = $request->input('reservation_id');
+            $paiement->expedition_id = $request->input('expedition_id');
+            $paiement->methode_id = $request->input('methode_id');
+
+            $paiement->amount = $request->input('amount');
+            $paiement->description = $request->input('description');
+
+            $paiement->status = $request->input('status');
+            $paiement->timeout = $request->input('timeout');
+
+            $paiement->ebilling_id = $request->input('ebilling_id');
+            $paiement->transaction_id = $request->input('transaction_id');
+            $paiement->operator = $request->input('operator');
+
+            $paiement->expired_at = $request->input('expired_at');
+            $paiement->paid_at = $request->input('paid_at');
+    
+            if($paiement->save()){
+
+                // Update Expedition - status, active, methode_paiement_id
+
+                // Update Reservation - status, active
+
+                // Update Colis - status, active
+
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Paiement effectue avec succes !',
+                    //'reservation' => ReservationResource::make($reservation),
+                    //'colis' => ColisExpeditionResource::make($colis),
+                ]);
+
+                
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 501,
+                'message' => 'Impossible de soumettre votre paiement !',
+                'reservation' => [],
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 502,
+            'message' => 'Impossible pour vous d\'effectuer ce paiements !'
+        ]);
+
+    }
+
+
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function localisation_rsv(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Check reservation
+            $reservation = Reservation::find($request->input('reservation_id'));
+            if(!empty($reservation)) {
+
+                $reservation->ville_origine_id = $request->input('ville_origine_id');
+                $reservation->ville_destination_id = $request->input('ville_destination_id');
+
+                if($reservation->save()){
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Modification effectuée avec succès !',
+                        'reservation_id' => $reservation->id,
+                        'reservation' => ReservationResource::make($reservation)
+                    ]);
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de modifier cette reservation !',
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre modification pour le moment !',
+                'reservation' => [],
+            ]); 
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'effectuer cette operation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function service_rsv(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Check reservation
+            $reservation = Reservation::find($request->input('reservation_id'));
+            if(!empty($reservation)) {
+
+                $reservation->mode_expedition_id = $request->input('mode_expedition_id');
+                $reservation->mode_livraison = $request->input('mode_livraison');
+                $reservation->boite_postale = $request->input('boite_postale');
+                $reservation->adresse_livraison = $request->input('adresse_livraison');
+
+                //$reservation->amount += $request->input('mode_livraison') == 'Oui' ? 1500 : 0;
+
+                if($reservation->save()){
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Modification effectuée avec succès !',
+                        'reservation_id' => $reservation->id,
+                        'reservation' => ReservationResource::make($reservation)
+                    ]);
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de modifier cette reservation !',
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre modification pour le moment !',
+                'reservation' => [],
+            ]); 
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'effectuer cette operation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destinataire_rsv(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Check reservation
+            $reservation = Reservation::find($request->input('reservation_id'));
+            if(!empty($reservation)) {
+
+                $reservation->name_dest = $request->input('name_dest');
+                $reservation->email_dest = $request->input('email_dest');
+                $reservation->phone_dest = $request->input('phone_dest');
+
+                if($reservation->save()){
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Modification effectuée avec succès !',
+                        'reservation_id' => $reservation->id,
+                        'reservation' => ReservationResource::make($reservation)
+                    ]);
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de modifier cette reservation !',
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre modification pour le moment !',
+                'reservation' => [],
+            ]); 
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'effectuer cette operation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function new_colis_rsv(Request $request, $user_id)
+    {
+
+        // Get client by id
+        $client = User::find($user_id);
+
+        if($client){
+
+            // Check reservation
+            $reservation = Reservation::find($request->input('reservation_id'));
+            if(!empty($reservation)) {
+
+                $colis = new ColisExpedition();
+
+                // Data to save
+                $colis->code = $request->input('code');
+
+                $colis->service_exp_id = $request->input('service_exp_id');
+
+                $colis->libelle = $request->input('libelle');
+                $colis->description = $request->input('description');
+
+                $colis->type = $request->input('type');
+                $colis->poids = $request->input('poids');
+
+                $colis->amount = $request->input('amount');
+
+                $colis->reservation_id = $request->input('reservation_id');
+
+                $colis->client_id = $request->input('client_id');
+
+                $colis->active = 0;
+                $colis->status = 0;
+
+                if($colis->save()){
+
+                    // Update reservation
+                    $reservation = Reservation::find($request->input('reservation_id'));
+                    $reservation->amount += $colis->amount;
+                    $reservation->nbre_colis += 1;
+                    $reservation->save();
+
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'Nouveau colis ajoute !',
+                        'reservation' => ReservationResource::make($reservation),
+                        'colis' => ColisExpeditionResource::make($colis),
+                    ]);
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de soumettre votre colis pour le moment !',
+                    'reservation' => [],
+                ]);
+                
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre expedition pour le moment !',
+                'reservation' => [],
+            ]); 
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous de soumettre votre reservation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function up_colis_rsv(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            if($reservation){
+
+                // Check colis
+                $colis = ColisExpedition::find($request->input('reservation_id'));
+                if(!empty($colis)) {
+    
+                    //$colis = new ColisExpedition();
+    
+                    // Data to save
+                    $colis->code = $request->input('code');
+    
+                    $colis->service_exp_id = $request->input('service_exp_id');
+    
+                    $colis->libelle = $request->input('libelle');
+                    $colis->description = $request->input('description');
+    
+                    $colis->type = $request->input('type');
+                    $colis->poids = $request->input('poids');
+    
+                    $colis->amount = $request->input('amount');
+    
+                    $colis->reservation_id = $request->input('reservation_id');
+    
+                    $colis->client_id = $request->input('client_id');
+    
+                    $colis->active = 0;
+                    $colis->status = 0;
+    
+                    if($colis->save()){
+    
+                        // Update reservation
+                        $reservation = Reservation::find($request->input('reservation_id'));
+                        $reservation->amount += $colis->amount;
+                        $reservation->nbre_colis += 1;
+                        $reservation->save();
+    
+                        return response([
+                            'result' => true, 
+                            'status' => 200,
+                            'message' => 'Nouveau colis ajoute !',
+                            'reservation' => ReservationResource::make($reservation),
+                            'colis' => ColisExpeditionResource::make($colis),
+                        ]);
+        
+                    }
+                    return response([
+                        'result' => false, 
+                        'status' => 500,
+                        'message' => 'Impossible de soumettre votre colis pour le moment !',
+                        'reservation' => [],
+                    ]);
+                    
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de soumettre votre colis pour le moment !',
+                    'reservation' => [],
+                ]); 
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible d\'accéder aux détails de ce colis !'
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'accéder aux détails de ce colis !'
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function del_colis_rsv(Request $request, $user_id)
+    {
+
+        // Get agent by id
+        $agent = User::find($user_id);
+
+        if($agent){
+
+            // Get reservation by id
+            $reservation = Reservation::find($request->input('reservation_id'));
+
+            if($reservation){
+
+                // Check colis
+                $colis = ColisExpedition::find($request->input('reservation_id'));
+                if(!empty($colis)) {
+    
+                    if($colis->delete()){
+    
+                        // Update reservation
+                        $reservation = Reservation::find($request->input('reservation_id'));
+                        $reservation->amount -= $colis->amount;
+                        $reservation->nbre_colis -= 1;
+                        $reservation->save();
+    
+                        return response([
+                            'result' => true, 
+                            'status' => 200,
+                            'message' => 'Colis supprime avec succes !',
+                            'reservation' => ReservationResource::make($reservation),
+                            //'colis' => ColisExpeditionResource::make($colis),
+                        ]);
+        
+                    }
+                    return response([
+                        'result' => false, 
+                        'status' => 500,
+                        'message' => 'Impossible de supprimer votre colis pour le moment !',
+                        'reservation' => [],
+                    ]);
+                    
+    
+                }
+                return response([
+                    'result' => false, 
+                    'status' => 500,
+                    'message' => 'Impossible de supprimer votre colis pour le moment !',
+                    'reservation' => [],
+                ]); 
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de supprimer ce colis !'
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'accéder aux détails de ce colis !'
+        ]);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function sendNotification($title, $body, $idPlayer)
     {
         $appId = 'eaa5c8b4-3642-40d6-b3e7-8721e5d08a94';
@@ -1526,52 +2646,69 @@ class ApiAgentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function onesignal_agent(Request $request)
+    public function onesignal_agent(Request $request, $user_id)
     {
-        // Check if this player or user id already exists !
-        $check_player = Onesignal::where('player_id', $request->input('player_id'))->first();
 
-        if (empty($check_player)) {
-            # code...
-            // Instancier une nouvelle one signal
-            $player = new Onesignal();
+        // Get agent by id
+        $agent = User::find($user_id);
 
-            // Préparer la requete
-            $player->player_id = $request->input('player_id');
-            $player->user_id = $request->input('user_id');
-            $player->role = $request->input('role');
-            $player->active = 1;
+        if($agent){
 
-            // Sauvegarde
-            if($player->save()){
+            // Check if this player or user id already exists !
+            //$check_player = Onesignal::where('player_id', $request->input('player_id'))->orWhere('user_id', $request->input('user_id'))->first();
+            $check_player = Onesignal::where('player_id', $request->input('player_id'))->first();
 
-                // Send notification to this player
-                $title = "LA POSTE";
-                $body = "Appareil Agent identifie avec succes !";
-                $idPlayer = $request->input('player_id');
-                $this->sendNotification($title, $body, $idPlayer);
+            if (empty($check_player)) {
 
-                // Reponse
+                // Instancier une nouvelle one signal
+                $player = new Onesignal();
+
+                // Préparer la requete
+                $player->user_id = $request->input('user_id');
+                $player->player_id = $request->input('player_id');
+                $player->role = $request->input('role');
+                $player->active = 1;
+
+                // Sauvegarde
+                if($player->save()){
+
+                    // Send notification to this player
+                    $title = "Bienvenue";
+                    $body = "La Poste, votre agence postale en ligne";
+                    $idPlayer = $request->input('player_id');
+                    $this->sendNotification($title, $body, $idPlayer);
+
+                    // Reponse
+                    return response([
+                        'result' => true, 
+                        'status' => 200,
+                        'message' => 'La Poste, votre agence postale en ligne !'
+                    ]);
+                }
                 return response([
-                    'result' => true, 
-                    'status' => 200,
-                    'message' => 'Bon retour parmi nous !'
+                    'result' => false, 
+                    'status' => 501,
+                    'message' => 'La Poste - pour vous servir ** !'
+                ]);
+
+            } else {
+                # code...
+                return response([
+                    'result' => false, 
+                    'status' => 502,
+                    'message' => 'La Poste - pour vous servir *** !'
                 ]);
             }
-            return response([
-                'result' => false, 
-                'status' => 501,
-                'message' => 'Bon retour parmi nous !'
-            ]);
 
-        } else {
-            # code...
-            return response([
-                'result' => false, 
-                'status' => 502,
-                'message' => 'Bon retour parmi nous !'
-            ]);
         }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'nbre_etapes' => 0,
+            'etapes' => [],
+            'message' => 'Impossible d\'effectuer cette operation !'
+        ]);
+
         
     }
 
