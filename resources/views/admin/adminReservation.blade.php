@@ -196,6 +196,7 @@
                 url: "{{ route('adminSelect') }}",
                 data: {
                     'target': "agent",
+                    'type': "resevation",
                     'agence': agence_id,
                 },
                 dataType: 'json',
