@@ -130,7 +130,7 @@ class ApiOfflineController extends Controller
                 'status' => 200,
                 'message' => 'Liste des villes !',
                 'nbre_villes' => $villes->count(),
-                'nbre_villes' => VilleResource::collection($villes),
+                'villes' => VilleResource::collection($villes),
             ]);
 
         }
@@ -139,7 +139,7 @@ class ApiOfflineController extends Controller
             'status' => 500,
             'message' => 'Aucune ville pour le moment !',
             'nbre_villes' => 0,
-            'nbre_villes' => [],
+            'villes' => [],
         ]);
 
     }
