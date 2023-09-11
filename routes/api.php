@@ -32,13 +32,13 @@ Route::get('notifications', [App\Http\Controllers\Api\ApiClientController::class
 /* Routing de gestion d'authentification */
 
 /* Routing de offline */
-Route::post('nos-agences', [App\Http\Controllers\Api\ApiOfflineController::class, 'agences']);
-Route::post('nos-villes', [App\Http\Controllers\Api\ApiOfflineController::class, 'villes']);
-Route::post('nos-services', [App\Http\Controllers\Api\ApiOfflineController::class, 'services']);
-Route::post('nos-modalites', [App\Http\Controllers\Api\ApiOfflineController::class, 'modalites']);
-Route::post('nos-zones', [App\Http\Controllers\Api\ApiOfflineController::class, 'zones']);
-Route::post('nos-reseaux', [App\Http\Controllers\Api\ApiOfflineController::class, 'reseaux']);
-Route::post('nos-tarifications', [App\Http\Controllers\Api\ApiOfflineController::class, 'tarifications']);
+Route::get('nos-agences', [App\Http\Controllers\Api\ApiOfflineController::class, 'agences']);
+Route::get('nos-villes', [App\Http\Controllers\Api\ApiOfflineController::class, 'villes']);
+Route::get('nos-services', [App\Http\Controllers\Api\ApiOfflineController::class, 'services']);
+Route::get('nos-modalites', [App\Http\Controllers\Api\ApiOfflineController::class, 'modalites']);
+Route::get('nos-zones', [App\Http\Controllers\Api\ApiOfflineController::class, 'zones']);
+Route::get('nos-reseaux', [App\Http\Controllers\Api\ApiOfflineController::class, 'reseaux']);
+Route::get('nos-tarifications', [App\Http\Controllers\Api\ApiOfflineController::class, 'tarifications']);
 /* Routing de offline */
 
 
