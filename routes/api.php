@@ -31,6 +31,16 @@ Route::post('avatar', [App\Http\Controllers\Api\ApiClientController::class, 'mod
 Route::get('notifications', [App\Http\Controllers\Api\ApiClientController::class, 'notifications']);
 /* Routing de gestion d'authentification */
 
+/* Routing de offline */
+Route::post('nos-agences', [App\Http\Controllers\Api\ApiOfflineController::class, 'agences']);
+Route::post('nos-villes', [App\Http\Controllers\Api\ApiOfflineController::class, 'villes']);
+Route::post('nos-services', [App\Http\Controllers\Api\ApiOfflineController::class, 'services']);
+Route::post('nos-modalites', [App\Http\Controllers\Api\ApiOfflineController::class, 'modalites']);
+Route::post('nos-zones', [App\Http\Controllers\Api\ApiOfflineController::class, 'zones']);
+Route::post('nos-reseaux', [App\Http\Controllers\Api\ApiOfflineController::class, 'reseaux']);
+Route::post('nos-tarifications', [App\Http\Controllers\Api\ApiOfflineController::class, 'tarifications']);
+/* Routing de offline */
+
 
 Route::middleware(['auth:sanctum'])->group(function() {
 
