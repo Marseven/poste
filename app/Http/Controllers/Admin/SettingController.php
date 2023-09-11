@@ -966,7 +966,11 @@ class SettingController extends Controller
             $response = json_encode($organization);
             return response()->json($response);
         } elseif ($request->target == 'agent') {
-            $organization = User::where('agence_id', $request->agence)->where('role', 'Agent')->get();
+            if ($request->type) {
+                $organization = User::where('role', 'Agent')->get();
+            } else {
+                $organization = User::where('agence_id', $request->agence)->where('role', 'Agent')->get();
+            }
             $response = json_encode($organization);
             return response()->json($response);
         }
