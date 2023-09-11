@@ -29,6 +29,7 @@ class AgenceResource extends JsonResource
             'code' => $this->code,
             'libelle' => $this->libelle,
             'phone' => $this->phone,
+            'ville_id' => $this->ville_id,
             'ville' => $ville ? $ville->libelle : 'Non defini',
 
             'active' => $this->active,
