@@ -25,7 +25,6 @@ class ZoneResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'libelle' => $this->libelle,
-            'phone' => $this->phone,
             'reseau_id' => $this->reseau_id,
             'reseau' => $reseau ? $reseau->libelle : 'Non defini',
 
