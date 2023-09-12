@@ -71,7 +71,7 @@
                                         @elseif($reclamation->package_id != null)
                                             Package N° {{ $reclamation->package->code }}
                                         @else
-                                            Colis N° {{ $reclamation->colis->code }}
+                                            Colis N° {{ $reclamation->colis->code ?? '' }}
                                         @endif
                                     </td>
                                     <td class="w-40">
