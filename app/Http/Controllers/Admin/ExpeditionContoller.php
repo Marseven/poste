@@ -1479,7 +1479,7 @@ class ExpeditionContoller extends Controller
     public function adminReservationAgentAssign(Request $request)
     {
         // Get package by id
-        $reservation = Reservation::find($request->input('package'));
+        $reservation = Reservation::find($request->input('reservation'));
 
         if ($reservation) {
             $reservation->agent_id = $request->input('agent');
@@ -1513,7 +1513,7 @@ class ExpeditionContoller extends Controller
             return back()->with('success', 'Réservation assignée avec succès !');
             // Get colis by id
         } else {
-            return back()->with('failed', 'Impossible d\'assigner cette dépêche !');
+            return back()->with('failed', 'Impossible d\'assigner cette réservation !');
         }
     }
 
