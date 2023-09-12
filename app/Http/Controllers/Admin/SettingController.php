@@ -994,7 +994,7 @@ class SettingController extends Controller
         $page_title = "Logs Systeme";
 
 
-        $mouchards = Mouchard::paginate(10);
+        $mouchards = Mouchard::orderBy('desc', 'created_at')->paginate(10);
 
 
         $admin = Auth::user();
