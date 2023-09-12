@@ -9,6 +9,11 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'agent_id');
+    }
+
     public function mode()
     {
         return $this->belongsTo(ModeExpedition::class, 'mode_expedition_id');
