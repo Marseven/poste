@@ -55,6 +55,9 @@
                         <input type="hidden" id="id">
                         @if ($reservations)
                             @foreach ($reservations as $reservation)
+                                @php
+                                    $reservation->load(['agent']);
+                                @endphp
                                 <tr class="intro-x">
                                     <td class="text-center bg-primary">
                                         {{ $reservation->code }}
