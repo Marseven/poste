@@ -177,7 +177,7 @@
                                                         @elseif($reclamation->package_id != null)
                                                             <p>Package N° {{ $reclamation->package->code }}</p>
                                                         @else
-                                                            <p>Colis N° {{ $reclamation->colis->code }}</p>
+                                                            <p>Colis N° {{ $reclamation->colis->code ?? '' }}</p>
                                                         @endif
                                                     </div>
 
