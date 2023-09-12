@@ -65,7 +65,7 @@
                                         <span
                                             class="text-md px-1 bg-{{ $reservation->mode_expedition_id == 2 ? 'danger' : 'primary' }} text-white mr-1"
                                             style="padding:5px; font-weight: 600;">
-                                            {{ $reservation->mode->label ?? '' }}</span>
+                                            {{ $reservation->mode->libelle ?? '' }}</span>
                                     </td>
                                     <td class="text-center">
                                         <a href="" class="font-medium whitespace-nowrap">
@@ -106,15 +106,13 @@
                                                 </button>
                                                 <div class="dropdown-menu w-40">
                                                     <ul class="dropdown-content">
-                                                        @if ($reservation->agent_id == null)
-                                                            <li>
-                                                                <a href="javascript:;" data-tw-toggle="modal"
-                                                                    data-tw-target="#assign-{{ $reservation->id }}"
-                                                                    class="dropdown-item"
-                                                                    onclick="listeAgent({{ $reservation->id }})">Assigner
-                                                                    un agent</a>
-                                                            </li>
-                                                        @endif
+                                                        <li>
+                                                            <a href="javascript:;" data-tw-toggle="modal"
+                                                                data-tw-target="#assign-{{ $reservation->id }}"
+                                                                class="dropdown-item"
+                                                                onclick="listeAgent({{ $reservation->id }})">Assigner
+                                                                un agent</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
