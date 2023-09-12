@@ -159,7 +159,7 @@
                                                     <div class="col-6 mb-5">
                                                         <h6 class="text-uppercase fs-5 ls-2">AUTEUR </h6>
                                                         <p class="mb-0">
-                                                            {{ $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms }}
+                                                            {{ $reclamation->agent ? $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms : '' }}
                                                         </p>
                                                     </div>
 
