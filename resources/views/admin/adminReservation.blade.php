@@ -94,7 +94,7 @@
                                     </td>
 
                                     <td class="text-center">
-                                        {{ $reservation->agent->name }}
+                                        {{ $reservation->agent->name ?? 'Non Assigné' }}
                                     </td>
 
                                     <td class="w-40">
