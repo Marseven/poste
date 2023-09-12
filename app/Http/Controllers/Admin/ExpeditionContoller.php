@@ -1476,7 +1476,7 @@ class ExpeditionContoller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adminReseravtionAgentAssign(Request $request)
+    public function adminReservationAgentAssign(Request $request)
     {
         // Get package by id
         $reservation = Reservation::find($request->input('package'));
