@@ -71,7 +71,7 @@
                                         @elseif($reclamation->package_id != null)
                                             Package N° {{ $reclamation->package->code }}
                                         @else
-                                            Colis N° {{ $reclamation->colis->code }}
+                                            Colis N° {{ $reclamation->colis->code ?? '' }}
                                         @endif
                                     </td>
                                     <td class="w-40">
@@ -159,7 +159,7 @@
                                                     <div class="col-6 mb-5">
                                                         <h6 class="text-uppercase fs-5 ls-2">AUTEUR </h6>
                                                         <p class="mb-0">
-                                                            {{ $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms }}
+                                                            {{ $reclamation->agent ? $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms : '' }}
                                                         </p>
                                                     </div>
 
@@ -177,7 +177,7 @@
                                                         @elseif($reclamation->package_id != null)
                                                             <p>Package N° {{ $reclamation->package->code }}</p>
                                                         @else
-                                                            <p>Colis N° {{ $reclamation->colis->code }}</p>
+                                                            <p>Colis N° {{ $reclamation->colis->code ?? '' }}</p>
                                                         @endif
                                                     </div>
 

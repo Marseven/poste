@@ -72,8 +72,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-danger"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_j_do->count() }}
@@ -95,8 +95,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp->count() }}
@@ -113,8 +113,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_pending->count() }}
@@ -131,8 +131,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_do->count() }}
@@ -290,7 +290,7 @@
                         </div>
                     </div>
                     <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                        <a href="{{ route('adminReclamationAgent') }}">
+                        <a href="{{ route('adminReclamationClient') }}">
                             <div class="report-box zoom-in">
                                 <div class="box p-5">
                                     <div class="flex">
@@ -307,7 +307,7 @@
                                         </div>
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6"> {{ $reclamations->count() }}</div>
-                                    <div class="text-base text-slate-500 mt-1">Nbre de réclamations</div>
+                                    <div class="text-base text-slate-500 mt-1">Nbre de réclamations clients</div>
                                 </div>
                             </div>
                         </a>

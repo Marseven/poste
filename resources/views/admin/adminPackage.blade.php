@@ -10,7 +10,7 @@
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                 <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#large-modal-size-preview"
-                    class="btn btn-primary shadow-md mr-2">Nouveau Dépêche</a>
+                    class="btn btn-primary shadow-md mr-2">Nouvelle Dépêche</a>
 
                 <!-- BEGIN: Large Modal Content -->
                 <!-- BEGIN: Modal Content -->

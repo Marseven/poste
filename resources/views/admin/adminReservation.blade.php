@@ -46,6 +46,7 @@
                             <th class="text-center whitespace-nowrap">EXPEDITEUR</th>
                             <th class="text-center whitespace-nowrap">DESTINATAIRE</th>
                             <th class="text-center whitespace-nowrap">COUT TOTAL</th>
+                            <th class="text-center whitespace-nowrap">AGENT</th>
                             <th class="text-center whitespace-nowrap">STATUT FACTURE</th>
                             <th class="text-center whitespace-nowrap">ACTIONS</th>
                         </tr>
@@ -54,6 +55,9 @@
                         <input type="hidden" id="id">
                         @if ($reservations)
                             @foreach ($reservations as $reservation)
+                                @php
+                                    $reservation->load(['agent']);
+                                @endphp
                                 <tr class="intro-x">
                                     <td class="text-center bg-primary">
                                         {{ $reservation->code }}
@@ -88,6 +92,11 @@
                                         {{ $reservation->amount ? number_format($reservation->amount, 0, ',', ' ') : 0 }}
                                         XAF
                                     </td>
+
+                                    <td class="text-center">
+                                        {{ $reservation->agent->name ?? 'Non Assigné' }}
+                                    </td>
+
                                     <td class="w-40">
                                         @if ($reservation->status == 3)
                                             <div class="flex items-center justify-center text-success"> <i
@@ -106,15 +115,13 @@
                                                 </button>
                                                 <div class="dropdown-menu w-40">
                                                     <ul class="dropdown-content">
-                                                        @if ($reservation->agent_id == null)
-                                                            <li>
-                                                                <a href="javascript:;" data-tw-toggle="modal"
-                                                                    data-tw-target="#assign-{{ $reservation->id }}"
-                                                                    class="dropdown-item"
-                                                                    onclick="listeAgent({{ $reservation->id }})">Assigner
-                                                                    un agent</a>
-                                                            </li>
-                                                        @endif
+                                                        <li>
+                                                            <a href="javascript:;" data-tw-toggle="modal"
+                                                                data-tw-target="#assign-{{ $reservation->id }}"
+                                                                class="dropdown-item"
+                                                                onclick="listeAgent({{ $reservation->id }})">Assigner
+                                                                un agent</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
