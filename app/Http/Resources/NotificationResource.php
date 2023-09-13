@@ -35,6 +35,10 @@ class NotificationResource extends JsonResource
             'destinataire' => $destinataire ? $destinataire->name : 'non defini',
 
             'active' => $this->active,
+            
+            'sender_id' => $this->sender_id,
+            'receiver_id' => $this->receiver_id,
+
             'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
             'updated_at' => Carbon::parse($this->updated_at)->diffForHumans(),
         ];

@@ -46,6 +46,10 @@ class PaiementResource extends JsonResource
             
             'status' => $this->status,
             
+            'client_id' => $this->client_id,
+            'expedition_id' => $this->expedition_id,
+            'methode_id' => $this->methode_id,
+            
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];

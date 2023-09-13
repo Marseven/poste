@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\ExpedieResource;
 use App\Http\Resources\ModeExpeditionResource;
+use App\Http\Resources\OnesignalResource;
+use App\Http\Resources\PaiementResource;
 use App\Http\Resources\PriceExpeditionResource;
+use App\Http\Resources\ReclamationResource;
 use App\Http\Resources\ReseauResource;
 use App\Http\Resources\ServiceExpeditionResource;
 use App\Http\Resources\VilleResource;
 use App\Http\Resources\ZoneResource;
 use App\Models\ModeExpedition;
+use App\Models\NotificationMobile;
 use App\Models\Onesignal;
 use App\Models\PriceExpedition;
 use App\Models\Reseau;
@@ -305,6 +310,270 @@ class ApiOfflineController extends Controller
             'message' => 'Aucune tarification d\'expedition pour le moment !',
             'nbre_tarifications' => 0,
             'tarifications' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function appareils(Request $request)
+    {
+
+        // Get appareils
+        $appareils = Onesignal::orderBy('id', 'DESC')->get();
+
+        if(!empty($appareils) || $appareils->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des appareils identifies !',
+                'nbre_appareils' => $appareils->count(),
+                'appareils' => OnesignalResource::collection($appareils),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun appareil pour le moment !',
+            'nbre_appareils' => 0,
+            'appareils' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function messages(Request $request)
+    {
+
+        // Get messages
+        $messages = NotificationMobile::where('active', 4)->orderBy('id', 'DESC')->get();
+
+        if(!empty($messages) || $messages->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des messages identifies !',
+                'nbre_messages' => $messages->count(),
+                'messages' => NotificationResource::collection($messages),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun message pour le moment !',
+            'nbre_messages' => 0,
+            'messages' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reservations(Request $request, $id)
+    {
+
+        // Get reservations
+        $reservations = Reservation::where('client_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($reservations) || $reservations->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des reservations identifies !',
+                'nbre_reservations' => $reservations->count(),
+                'reservations' => ReservationResource::collection($reservations),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucune reservation pour le moment !',
+            'nbre_reservations' => 0,
+            'reservations' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function expeditions(Request $request, $id)
+    {
+
+        // Get expeditions
+        $expeditions = Expedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($expeditions) || $expeditions->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des expeditions identifiees !',
+                'nbre_expeditions' => $expeditions->count(),
+                'expeditions' => ExpedieResource::collection($expeditions),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucune expedition pour le moment !',
+            'nbre_expeditions' => 0,
+            'expeditions' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function colis(Request $request, $id)
+    {
+
+        // Get colis
+        $colis = ColisExpedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($colis) || $colis->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des colis identifies !',
+                'nbre_colis' => $colis->count(),
+                'colis' => ColisExpeditionResource::collection($colis),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun colis pour le moment !',
+            'nbre_colis' => 0,
+            'colis' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function notifications(Request $request, $id)
+    {
+
+        // Get notifications
+        $notifications = NotificationMobile::where('receiver_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($notifications) || $notifications->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des notifications identifies !',
+                'nbre_notifications' => $notifications->count(),
+                'notifications' => NotificationResource::collection($notifications),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucune notification pour le moment !',
+            'nbre_notifications' => 0,
+            'notifications' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reclamations(Request $request, $id)
+    {
+
+        // Get reclamations
+        $reclamations = Reclamation::where('client_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($reclamations) || $reclamations->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des reclamations identifies !',
+                'nbre_reclamations' => $reclamations->count(),
+                'reclamations' => ReclamationResource::collection($reclamations),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucune reclamation pour le moment !',
+            'nbre_reclamations' => 0,
+            'reclamations' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function paiements(Request $request, $id)
+    {
+
+        // Get paiements
+        $paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($paiements) || $paiements->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des paiements identifies !',
+                'nbre_paiements' => $paiements->count(),
+                'paiements' => PaiementResource::collection($paiements),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun paiement pour le moment !',
+            'nbre_paiements' => 0,
+            'paiements' => [],
         ]);
 
     }

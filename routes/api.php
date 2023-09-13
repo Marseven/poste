@@ -39,6 +39,14 @@ Route::get('nos-modalites', [App\Http\Controllers\Api\ApiOfflineController::clas
 Route::get('nos-zones', [App\Http\Controllers\Api\ApiOfflineController::class, 'zones']);
 Route::get('nos-reseaux', [App\Http\Controllers\Api\ApiOfflineController::class, 'reseaux']);
 Route::get('nos-tarifications', [App\Http\Controllers\Api\ApiOfflineController::class, 'tarifications']);
+Route::get('nos-appareils', [App\Http\Controllers\Api\ApiOfflineController::class, 'appareils']);
+Route::get('nos-messages', [App\Http\Controllers\Api\ApiOfflineController::class, 'messages']);
+Route::get('nos-reservations/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'reservations']);
+Route::get('nos-expeditions/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'expeditions']);
+Route::get('nos-colis/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'colis']);
+Route::get('nos-notifications/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'notifications']);
+Route::get('nos-reclamations/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'reclamations']);
+Route::get('nos-paiements/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'paiements']);
 /* Routing de offline */
 
 

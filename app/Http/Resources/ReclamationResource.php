@@ -49,6 +49,14 @@ class ReclamationResource extends JsonResource
             'status' => $this->status,
 
             'active' => $this->active,
+
+            'expedition_id' => $this->expedition_id,
+            'colis_id' => $this->colis_id,
+            'package_id' => $this->package_id,
+            'paiement_id' => $this->paiement_id,
+
+            'client_id' => $this->client_id,
+
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];

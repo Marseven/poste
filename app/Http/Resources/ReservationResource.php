@@ -33,6 +33,7 @@ class ReservationResource extends JsonResource
         return [
             'id' => $this->id,
             'code' => $this->code,
+
             'ville_origine' => $ville_origine ? $ville_origine->libelle : 'Non defini',
             'ville_destination' => $ville_destination ? $ville_destination->libelle : 'Non defini',
 
@@ -57,6 +58,11 @@ class ReservationResource extends JsonResource
 
             'client' => $client ? $client->name : 'Non defini',
             'agent' => $agent ? $agent->name : 'Non defini',
+            
+            'ville_origine_id' => $this->ville_origine_id,
+            'ville_destination_id' => $this->ville_destination_id,
+            'mode_expedition_id' => $this->mode_expedition_id,
+            'client_id' => $this->client_id,
 
             'active' => $this->active,
             'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
