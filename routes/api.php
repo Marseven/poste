@@ -51,6 +51,7 @@ Route::get('nos-colis/{id}', [App\Http\Controllers\Api\ApiOfflineController::cla
 Route::get('nos-notifications/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'notifications']);
 Route::get('nos-reclamations/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'reclamations']);
 Route::get('nos-paiements/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'paiements']);
+Route::get('nos-utilisateurs/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'utilisateurs']);
 /* Routing de offline */
 
 

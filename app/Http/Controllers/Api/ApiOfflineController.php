@@ -680,6 +680,39 @@ class ApiOfflineController extends Controller
 
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function utilisateurs(Request $request, $id)
+    {
+
+        // Get utilisateurs
+        $utilisateurs = User::where('id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($utilisateurs) || $utilisateurs->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des utilisateurs identifies !',
+                'nbre_utilisateurs' => $utilisateurs->count(),
+                'utilisateurs' => UserResource::collection($utilisateurs),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun utilisateur pour le moment !',
+            'nbre_utilisateurs' => 0,
+            'utilisateurs' => [],
+        ]);
+
+    }
+
 
 
 
