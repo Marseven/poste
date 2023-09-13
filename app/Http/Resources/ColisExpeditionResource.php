@@ -36,11 +36,13 @@ class ColisExpeditionResource extends JsonResource
             'code' => $this->code,
             'libelle' => $this->libelle,
             'description' => $this->description,
-            'modele' => !empty($this->service) ? $this->service : 'Non defini',
+            'modele' => !empty($this->service) ? $this->service->code : 'Non defini',
             'poids' => $this->poids,
+            'amount' => $this->amount,
 
-            'expedition' => !empty($this->expedition) ? $this->expedition : 'Non defini',
-            'reservation' => !empty($this->reservation) ? $this->service : 'Non defini',
+            
+            'expedition' => !empty($this->expedition) ? $this->expedition->code : 'Non defini',
+            'reservation' => !empty($this->reservation) ? $this->service->code : 'Non defini',
 
             'client' => $client ? $agent->name : 'Non defini',
             'agent' => $agent ? $agent->name : 'Non defini',

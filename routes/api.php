@@ -41,6 +41,10 @@ Route::get('nos-reseaux', [App\Http\Controllers\Api\ApiOfflineController::class,
 Route::get('nos-tarifications', [App\Http\Controllers\Api\ApiOfflineController::class, 'tarifications']);
 Route::get('nos-appareils', [App\Http\Controllers\Api\ApiOfflineController::class, 'appareils']);
 Route::get('nos-messages', [App\Http\Controllers\Api\ApiOfflineController::class, 'messages']);
+Route::get('nos-methodes', [App\Http\Controllers\Api\ApiOfflineController::class, 'methodes']);
+Route::get('nos-etapes', [App\Http\Controllers\Api\ApiOfflineController::class, 'etapes']);
+Route::get('nos-delais', [App\Http\Controllers\Api\ApiOfflineController::class, 'delais']);
+
 Route::get('nos-reservations/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'reservations']);
 Route::get('nos-expeditions/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'expeditions']);
 Route::get('nos-colis/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'colis']);

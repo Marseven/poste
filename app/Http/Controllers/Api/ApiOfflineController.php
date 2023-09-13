@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\DelaiResource;
+use App\Http\Resources\EtapeResource;
 use App\Http\Resources\ExpedieResource;
+use App\Http\Resources\MethodePaiementResource;
 use App\Http\Resources\ModeExpeditionResource;
 use App\Http\Resources\OnesignalResource;
 use App\Http\Resources\PaiementResource;
@@ -376,6 +379,105 @@ class ApiOfflineController extends Controller
             'message' => 'Aucun message pour le moment !',
             'nbre_messages' => 0,
             'messages' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function methodes(Request $request)
+    {
+
+        // Get methodes
+        $methodes = MethodePaiement::orderBy('id', 'DESC')->get();
+
+        if(!empty($methodes) || $methodes->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des methodes de paiement identifies !',
+                'nbre_methodes' => $methodes->count(),
+                'methodes' => MethodePaiementResource::collection($methodes),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucune methode de paiement pour le moment !',
+            'nbre_methodes' => 0,
+            'methodes' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function etapes(Request $request)
+    {
+
+        // Get etapes
+        $etapes = EtapeResource::orderBy('id', 'DESC')->get();
+
+        if(!empty($etapes) || $etapes->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des etapes identifies !',
+                'nbre_etapes' => $etapes->count(),
+                'etapes' => EtapeResource::collection($etapes),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucune etape pour le moment !',
+            'nbre_etapes' => 0,
+            'etapes' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function delais(Request $request)
+    {
+
+        // Get delais
+        $delais = DelaiResource::orderBy('id', 'DESC')->get();
+
+        if(!empty($delais) || $delais->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des delais identifies !',
+                'nbre_delais' => $delais->count(),
+                'delais' => DelaiResource::collection($delais),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun delai pour le moment !',
+            'nbre_delais' => 0,
+            'delais' => [],
         ]);
 
     }
