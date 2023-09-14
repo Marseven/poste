@@ -239,6 +239,11 @@ class UserController extends Controller
         $user->name = $request->input('noms') . ' ' . $request->input('prenoms');
         $user->noms = $request->input('noms');
         $user->prenoms = $request->input('prenoms');
+
+        $email_exist = User::where('email', $request->input('email'))->first();
+        if ($email_exist > 0) {
+            return back()->with('failed', 'Cette email est déjà utilisé !');
+        }
         $user->email = $request->input('email');
         $user->phone = $request->input('phone');
         $user->agence_id = $request->input('agence_id');
