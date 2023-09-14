@@ -37,12 +37,12 @@
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-2" class="form-label">Libelle</label>
-                                        <input type="text" class="form-control" name="libelle">
+                                        <input type="text" class="form-control" name="libelle" required>
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-12">
                                         <label for="modal-form-2" class="form-label">Description</label>
-                                        <textarea class="form-control" name="description" rows="4"></textarea>
+                                        <textarea class="form-control" name="description" rows="4" required></textarea>
                                     </div>
 
 
