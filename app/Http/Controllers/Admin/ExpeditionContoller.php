@@ -361,6 +361,10 @@ class ExpeditionContoller extends Controller
             // Get agence by id
             $agence = Agence::find($agence_id);
 
+            if ($agence == null) {
+                return back()->with('failed', 'Veuillez sélectionner une agence !');
+            }
+
             // Set data
             $reference =  $request->input('code_aleatoire') . '.' . $agence->code;
 
