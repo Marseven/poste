@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\UserResource;
+use App\Models\NotificationMobile;
 use App\Models\Onesignal;
 use App\Models\User;
 use App\Models\Adresse;
@@ -389,7 +390,7 @@ class ApiAgentController extends Controller
         if($agent){
 
             // Get client's notifications
-            $notifications = Notification::where('receiver_id', $agent->id)
+            $notifications = NotificationMobile::where('receiver_id', $agent->id)
             ->orWhere('active', 3)
             ->orderBy('id', 'DESC')
             ->get();
