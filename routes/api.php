@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
 	Route::post('modifier-avatar/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'modifieravatar']);
 	Route::post('modifier-mot-de-passe/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'modifierpassword']);
 
-	Route::get('notifications/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'notifications']);
+	Route::get('notifications-agent/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'notifications']);
 
 	Route::get('reservations-agent/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'reservations']);
 	Route::post('scan-reservation/{user_id}', [App\Http\Controllers\Api\ApiAgentController::class, 'scan_reservation']);
