@@ -17,6 +17,7 @@ use App\Http\Resources\ReseauResource;
 use App\Http\Resources\ServiceExpeditionResource;
 use App\Http\Resources\VilleResource;
 use App\Http\Resources\ZoneResource;
+use App\Models\Etape;
 use App\Models\ModeExpedition;
 use App\Models\NotificationMobile;
 use App\Models\Onesignal;
@@ -426,7 +427,7 @@ class ApiOfflineController extends Controller
     {
 
         // Get etapes
-        $etapes = EtapeResource::orderBy('id', 'DESC')->get();
+        $etapes = Etape::orderBy('id', 'DESC')->get();
 
         if(!empty($etapes) || $etapes->count() > 0){
 
@@ -459,7 +460,7 @@ class ApiOfflineController extends Controller
     {
 
         // Get delais
-        $delais = DelaiResource::orderBy('id', 'DESC')->get();
+        $delais = DelaiExpedition::orderBy('id', 'DESC')->get();
 
         if(!empty($delais) || $delais->count() > 0){
 
