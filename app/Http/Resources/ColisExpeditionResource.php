@@ -48,7 +48,7 @@ class ColisExpeditionResource extends JsonResource
             'expedition' => !empty($this->expedition) ? $this->expedition->code : 'Non defini',
             'reservation' => !empty($this->reservation) ? $this->service->code : 'Non defini',
 
-            'client' => $client ? $agent->name : 'Non defini',
+            'client' => $client ? $client->name : 'Non defini',
             'agent' => $agent ? $agent->name : 'Non defini',
 
             'service_exp_id' => $this->service_exp_id,
