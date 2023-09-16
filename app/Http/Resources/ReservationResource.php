@@ -44,8 +44,8 @@ class ReservationResource extends JsonResource
             'mode_expedition' => $mode_expedition ? $mode_expedition->libelle : 'Non defini',
 
             'mode_livraison' => $this->mode_livraison,
-            'boite_postale' => $this->boite_postale,
-            'adresse_livraison' => $this->adresse_livraison,
+            'boite_postale' => !empty($this->boite_postale) ? $this->boite_postale : 'Non defini',
+            'adresse_livraison' => !empty($this->adresse_livraison) ? $this->adresse_livraison : 'Non defini',
             'frais_poste' => $this->frais_poste,
             
             'name_exp' => $this->name_exp,
@@ -63,7 +63,7 @@ class ReservationResource extends JsonResource
             'client' => $client ? $client->name : 'Non defini',
             'agent' => $agent ? $agent->name : 'Non defini',
 
-            'player_id' => $this->player_id,
+            'player_id' => !empty($this->player_id) ? $this->player_id : 'Non defini',
             
             'ville_origine_id' => $this->ville_origine_id,
             'ville_destination_id' => $this->ville_destination_id,
