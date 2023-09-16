@@ -9,6 +9,7 @@ use App\Models\Paiement;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ReclamationResource extends JsonResource
 {
@@ -31,6 +32,9 @@ class ReclamationResource extends JsonResource
         $colis = ColisExpedition::find($this->colis_id);
         $depeche = Package::find($this->package_id);
         $paiement = Paiement::find($this->paiement_id);
+
+        $date = Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:i:s');
+        $stringDate = Str::of($date)->toString();
 
         return [
             'id' => $this->id,
@@ -57,7 +61,7 @@ class ReclamationResource extends JsonResource
 
             'client_id' => $this->client_id,
 
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }

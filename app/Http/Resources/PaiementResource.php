@@ -7,6 +7,7 @@ use App\Models\Expedition;
 use App\Models\MethodePaiement;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class PaiementResource extends JsonResource
 {
@@ -25,6 +26,9 @@ class PaiementResource extends JsonResource
         $client = User::find($this->client_id);
         $expedition = Expedition::find($this->expedition_id);
         $methode = MethodePaiement::find($this->methode_id);
+
+        $date = Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:i:s');
+        $stringDate = Str::of($date)->toString();
 
         return [
             'id' => $this->id,
@@ -50,7 +54,7 @@ class PaiementResource extends JsonResource
             'expedition_id' => $this->expedition_id,
             'methode_id' => $this->methode_id,
             
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
