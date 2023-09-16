@@ -649,9 +649,9 @@ class ApiOfflineController extends Controller
             // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
             // Par exemple, si vous souhaitez insérer des données dans une table, vous pouvez utiliser Eloquent
             NotificationMobile::create([
+                'code ' => $code,
                 'sender_id' => 1,
                 'receiver_id' => 15,
-                //'code ' => $code,
                 'libelle' => $title,
                 'details' => $paragraphe,
                 'status' => 0,
@@ -663,9 +663,9 @@ class ApiOfflineController extends Controller
             // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
             // Par exemple, si vous souhaitez insérer des données dans une table, vous pouvez utiliser Eloquent
             NotificationMobile::create([
+                'code ' => $code,
                 'sender_id' => 1,
                 'receiver_id' => 0,
-                //'code ' => $code,
                 'libelle' => $title,
                 'details' => $paragraphe,
                 'status' => 0,

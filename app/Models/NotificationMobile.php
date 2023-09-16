@@ -12,7 +12,7 @@ class NotificationMobile extends Model
     protected $fillable = [
         'sender_id',
         'receiver_id',
-        //'code',
+        'code',
         'libelle',
         'details',
         'status',
