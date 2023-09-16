@@ -627,7 +627,16 @@ class ApiOfflineController extends Controller
     {
 
         // Get paiements
-        $paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
+        //$paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
+
+        $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
+
+        $paiements = Paiement::all();
+
+        $paiements->each(function ($paiement) use ($clientId) {
+            $paiement->client_id = $clientId;
+            $paiement->save();
+        });
 
         if(!empty($paiements) || $paiements->count() > 0){
 
