@@ -106,7 +106,7 @@ class ExpedieResource extends JsonResource
             'methode_paiement_id' => !empty($this->methode_paiement_id) ? $this->methode_paiement_id : 0,
 
             'reservation_id' => !empty($this->reservation_id) ? $this->reservation_id : 0,
-            'etape_id' => !empty($this->etape_id) ? $this->etape_id : 0,
+            'etape_id' => !empty($this->etape_id) ? intval($this->etape_id) : 0,
 
             'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
