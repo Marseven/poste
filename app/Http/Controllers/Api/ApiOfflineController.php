@@ -75,6 +75,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Faker\Factory as FakerFactory;
 
 use Jenssegers\Agent\Facades\Agent;
 
@@ -493,15 +494,7 @@ class ApiOfflineController extends Controller
     {
 
         // Get expeditions
-        //$expeditions = Expedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
-        $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
-
-        $expeditions = Expedition::all();
-
-        $expeditions->each(function ($expedition) use ($clientId) {
-            $expedition->client_id = $clientId;
-            $expedition->save();
-        });
+        $expeditions = Expedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
 
 
         if(!empty($expeditions) || $expeditions->count() > 0){
@@ -634,7 +627,50 @@ class ApiOfflineController extends Controller
     {
 
         // Get paiements
-        $paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
+        //$paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
+        $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
+
+        $paiements = Expedition::all();
+
+        $paiements->each(function ($paiement) use ($clientId) {
+            $paiement->client_id = $clientId;
+            $paiement->save();
+        });
+
+        // Créez une instance de Faker
+        $faker = FakerFactory::create();
+
+        // Générez des données factices
+        $title = $faker->title;
+        $paragraphe = $faker->paragraph;
+
+        for ($i = 0; $i < 10; $i++) {
+            // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
+            // Par exemple, si vous souhaitez insérer des données dans une table, vous pouvez utiliser Eloquent
+            NotificationMobile::create([
+                'sender_id' => 1,
+                'receiver_id' => 15,
+                'code ' => Carbon::now()->timestamp,
+                'libelle' => $title,
+                'details' => $paragraphe,
+                'status' => 0,
+                'active' => 1,
+            ]);
+        }
+
+        for ($i = 0; $i < 10; $i++) {
+            // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
+            // Par exemple, si vous souhaitez insérer des données dans une table, vous pouvez utiliser Eloquent
+            NotificationMobile::create([
+                'sender_id' => 1,
+                'receiver_id' => 0,
+                'code ' => Carbon::now()->timestamp,
+                'libelle' => $title,
+                'details' => $paragraphe,
+                'status' => 0,
+                'active' => 4,
+            ]);
+        }
 
         if(!empty($paiements) || $paiements->count() > 0){
 
