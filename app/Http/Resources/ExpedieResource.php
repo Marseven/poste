@@ -95,10 +95,10 @@ class ExpedieResource extends JsonResource
             'client_id' => $this->client_id,
 
             'ville_exp_id' => !empty($this->ville_exp_id) ? $this->ville_exp_id : 0,
-            'agence_exp_id' => $this->agence_exp_id,
+            'agence_exp_id' => !empty($this->agence_exp_id) ? $this->agence_exp_id : 0,
 
             'ville_dest_id' => !empty($this->ville_dest_id) ? $this->ville_dest_id : 0,
-            'agence_dest_id' => $this->agence_dest_id,
+            'agence_dest_id' => !empty($this->agence_dest_id) ? $this->agence_dest_id : 0,
 
             'mode_exp_id' => !empty($this->mode_exp_id) ? $this->mode_exp_id : 0,
             'delai_exp_id' => !empty($this->delai_exp_id) ? $this->delai_exp_id : 0,
