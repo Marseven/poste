@@ -493,7 +493,16 @@ class ApiOfflineController extends Controller
     {
 
         // Get expeditions
-        $expeditions = Expedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
+        //$expeditions = Expedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
+        $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
+
+        $expeditions = Expedition::all();
+
+        $expeditions->each(function ($expedition) use ($clientId) {
+            $expedition->client_id = $clientId;
+            $expedition->save();
+        });
+
 
         if(!empty($expeditions) || $expeditions->count() > 0){
 
