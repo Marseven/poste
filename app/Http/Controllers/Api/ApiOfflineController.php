@@ -651,7 +651,7 @@ class ApiOfflineController extends Controller
             NotificationMobile::create([
                 'sender_id' => 1,
                 'receiver_id' => 15,
-                'code ' => $code,
+                //'code ' => $code,
                 'libelle' => $title,
                 'details' => $paragraphe,
                 'status' => 0,
@@ -665,7 +665,7 @@ class ApiOfflineController extends Controller
             NotificationMobile::create([
                 'sender_id' => 1,
                 'receiver_id' => 0,
-                'code ' => $code,
+                //'code ' => $code,
                 'libelle' => $title,
                 'details' => $paragraphe,
                 'status' => 0,
