@@ -44,6 +44,9 @@ class ExpedieResource extends JsonResource
         $reservation = Reservation::find($this->reservation_id);
         $etape = Etape::find($this->etape_id);
 
+        $date = Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:i:s');
+        $stringDate = Str::of($date)->toString();
+
         return [
             'id' => $this->id,
             'code' => $this->code,
@@ -104,7 +107,7 @@ class ExpedieResource extends JsonResource
             'reservation_id' => $this->reservation_id,
             'etape_id' => $this->etape_id,
 
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }

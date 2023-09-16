@@ -627,51 +627,7 @@ class ApiOfflineController extends Controller
     {
 
         // Get paiements
-        //$paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
-        $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
-
-        $paiements = Expedition::all();
-
-        $paiements->each(function ($paiement) use ($clientId) {
-            $paiement->client_id = $clientId;
-            $paiement->save();
-        });
-
-        // Créez une instance de Faker
-        $faker = FakerFactory::create();
-
-        // Générez des données factices
-        $title = $faker->title;
-        $paragraphe = $faker->paragraph;
-        $code = $faker->randomLetter;
-
-        for ($i = 0; $i < 10; $i++) {
-            // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
-            // Par exemple, si vous souhaitez insérer des données dans une table, vous pouvez utiliser Eloquent
-            NotificationMobile::create([
-                'code' => Str::random(7),
-                'sender_id' => 1,
-                'receiver_id' => 15,
-                'libelle' => $title,
-                'details' => $paragraphe,
-                'status' => 0,
-                'active' => 1,
-            ]);
-        }
-
-        for ($i = 0; $i < 10; $i++) {
-            // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
-            // Par exemple, si vous souhaitez insérer des données dans une table, vous pouvez utiliser Eloquent
-            NotificationMobile::create([
-                'code' => Str::random(7),
-                'sender_id' => 1,
-                'receiver_id' => 0,
-                'libelle' => $title,
-                'details' => $paragraphe,
-                'status' => 0,
-                'active' => 4,
-            ]);
-        }
+        $paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
 
         if(!empty($paiements) || $paiements->count() > 0){
 
