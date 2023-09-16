@@ -636,6 +636,7 @@ class ApiOfflineController extends Controller
 
         $paiements = Paiement::all();
 
+
         $paiements->each(function ($paiement) use ($clientId) {
             $paiement->client_id = $clientId;
             $paiement->methode_id = 2;
@@ -643,6 +644,8 @@ class ApiOfflineController extends Controller
             $paiement->timeout = 120;
             $paiement->ebilling_id = Carbon::now()->timestamp;
             $paiement->transaction_id = Str::random(7);  // ebilling_id
+            $paiement->expired_at = Carbon::now()->format('Y-m-d H:i:s');
+            $paiement->paid_at = Carbon::now()->format('Y-m-d H:i:s');
             $paiement->save();
         });
 
