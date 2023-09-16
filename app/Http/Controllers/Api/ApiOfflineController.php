@@ -631,10 +631,18 @@ class ApiOfflineController extends Controller
 
         $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
 
+        // Créez une instance de Faker
+        $faker = FakerFactory::create();
+
         $paiements = Paiement::all();
 
         $paiements->each(function ($paiement) use ($clientId) {
             $paiement->client_id = $clientId;
+            $paiement->methode_id = 2;
+            $paiement->operator = 'E-Billing';
+            $paiement->timeout = 120;
+            $paiement->ebilling_id = Carbon::now()->timestamp;
+            $paiement->transaction_id = Str::random(7);  // ebilling_id
             $paiement->save();
         });
 
