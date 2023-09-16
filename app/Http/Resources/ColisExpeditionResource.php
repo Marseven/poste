@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\ColisExpedition;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ColisExpeditionResource extends JsonResource
 {
