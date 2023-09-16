@@ -324,39 +324,6 @@ class ApiOfflineController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function appareils(Request $request)
-    {
-
-        // Get appareils
-        $appareils = Onesignal::orderBy('id', 'DESC')->get();
-
-        if(!empty($appareils) || $appareils->count() > 0){
-
-            return response([
-                'result' => true, 
-                'status' => 200,
-                'message' => 'Liste des appareils identifies !',
-                'nbre_appareils' => $appareils->count(),
-                'appareils' => OnesignalResource::collection($appareils),
-            ]);
-
-        }
-        return response([
-            'result' => false, 
-            'status' => 500,
-            'message' => 'Aucun appareil pour le moment !',
-            'nbre_appareils' => 0,
-            'appareils' => [],
-        ]);
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function messages(Request $request)
     {
 
@@ -710,6 +677,39 @@ class ApiOfflineController extends Controller
             'message' => 'Aucun utilisateur pour le moment !',
             'nbre_utilisateurs' => 0,
             'utilisateurs' => [],
+        ]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function appareils(Request $request, $id)
+    {
+
+        // Get appareils
+        $appareils = Onesignal::where('user_id', $id)->orderBy('id', 'DESC')->get();
+
+        if(!empty($appareils) || $appareils->count() > 0){
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Liste des appareils identifies !',
+                'nbre_appareils' => $appareils->count(),
+                'appareils' => OnesignalResource::collection($appareils),
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Aucun appareil pour le moment !',
+            'nbre_appareils' => 0,
+            'appareils' => [],
         ]);
 
     }
