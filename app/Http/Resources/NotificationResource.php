@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class NotificationResource extends JsonResource
 {
@@ -23,6 +24,9 @@ class NotificationResource extends JsonResource
         $expediteur = User::find($this->sender_id);
         $destinataire = User::find($this->receiver_id);
 
+        $date = Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:i:s');
+        $stringDate = Str::of($date)->toString();
+
         return [
             'id' => $this->id,
             'code' => $this->code,
@@ -39,7 +43,7 @@ class NotificationResource extends JsonResource
             'sender_id' => $this->sender_id,
             'receiver_id' => $this->receiver_id,
 
-            'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
+            'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->diffForHumans(),
         ];
     }
