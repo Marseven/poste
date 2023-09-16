@@ -643,6 +643,7 @@ class ApiOfflineController extends Controller
         // Générez des données factices
         $title = $faker->title;
         $paragraphe = $faker->paragraph;
+        $code = $faker->randomLetter;
 
         for ($i = 0; $i < 10; $i++) {
             // Placez ici le code de l'opération que vous souhaitez répéter 10 fois
@@ -650,7 +651,7 @@ class ApiOfflineController extends Controller
             NotificationMobile::create([
                 'sender_id' => 1,
                 'receiver_id' => 15,
-                'code ' => Carbon::now()->timestamp,
+                'code ' => $code,
                 'libelle' => $title,
                 'details' => $paragraphe,
                 'status' => 0,
@@ -664,7 +665,7 @@ class ApiOfflineController extends Controller
             NotificationMobile::create([
                 'sender_id' => 1,
                 'receiver_id' => 0,
-                'code ' => Carbon::now()->timestamp,
+                'code ' => $code,
                 'libelle' => $title,
                 'details' => $paragraphe,
                 'status' => 0,
