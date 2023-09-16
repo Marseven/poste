@@ -58,6 +58,8 @@ class ReservationResource extends JsonResource
 
             'client' => $client ? $client->name : 'Non defini',
             'agent' => $agent ? $agent->name : 'Non defini',
+
+            'player_id' => $this->player_id,
             
             'ville_origine_id' => $this->ville_origine_id,
             'ville_destination_id' => $this->ville_destination_id,
