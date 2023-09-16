@@ -45,8 +45,8 @@ class PaiementResource extends JsonResource
             'transaction_id' => $this->transaction_id,
             'operator' => $this->operator,
 
-            'expired_at' => Carbon::parse($this->expired_at)->diffForHumans(),
-            'paid_at' => Carbon::parse($this->paid_at)->diffForHumans(),
+            'expired_at' => Str::of(Carbon::parse($this->expired_at)->diffForHumans())->toString(),
+            'paid_at' => Str::of(Carbon::parse($this->paid_at)->diffForHumans())->toString(),
             
             'status' => $this->status,
             
