@@ -31,6 +31,9 @@ class ColisExpeditionResource extends JsonResource
         $expedition = Expedition::find($this->expedition_id);
         $reservation = Reservation::find($this->reservation_id);
 
+        $date = Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:i:s');
+        $stringDate = Str::of($date)->toString();
+
         return [
             'id' => $this->id,
             'code' => $this->code,
@@ -55,7 +58,7 @@ class ColisExpeditionResource extends JsonResource
             'agent_id' => $this->agent_id,
 
             'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
