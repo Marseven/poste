@@ -12,6 +12,7 @@ use App\Models\Agence;
 use App\Models\Ville;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ExpedieResource extends JsonResource
 {
