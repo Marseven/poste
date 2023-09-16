@@ -94,19 +94,19 @@ class ExpedieResource extends JsonResource
             'agent_id' => $this->agent_id,
             'client_id' => $this->client_id,
 
-            'ville_exp_id' => $this->ville_exp_id,
+            'ville_exp_id' => !empty($this->ville_exp_id) ? $this->ville_exp_id : 0,
             'agence_exp_id' => $this->agence_exp_id,
 
-            'ville_dest_id' => $this->ville_dest_id,
+            'ville_dest_id' => !empty($this->ville_dest_id) ? $this->ville_dest_id : 0,
             'agence_dest_id' => $this->agence_dest_id,
 
-            'mode_exp_id' => $this->mode_exp_id,
-            'delai_exp_id' => $this->delai_exp_id,
+            'mode_exp_id' => !empty($this->mode_exp_id) ? $this->mode_exp_id : 0,
+            'delai_exp_id' => !empty($this->delai_exp_id) ? $this->delai_exp_id : 0,
 
-            'methode_paiement_id' => $this->methode_paiement_id,
+            'methode_paiement_id' => !empty($this->methode_paiement_id) ? $this->methode_paiement_id : 0,
 
-            'reservation_id' => $this->reservation_id,
-            'etape_id' => $this->etape_id,
+            'reservation_id' => !empty($this->reservation_id) ? $this->reservation_id : 0,
+            'etape_id' => !empty($this->etape_id) ? $this->etape_id : 0,
 
             'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
