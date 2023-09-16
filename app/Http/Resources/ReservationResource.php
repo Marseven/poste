@@ -7,6 +7,7 @@ use App\Models\Ville;
 use App\Models\ModeExpedition;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ReservationResource extends JsonResource
 {
@@ -29,6 +30,9 @@ class ReservationResource extends JsonResource
         $ville_destination = Ville::find($this->ville_destination_id);
 
         $mode_expedition = ModeExpedition::find($this->mode_expedition_id);
+
+        $date = Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:i:s');
+        $stringDate = Str::of($date)->toString();
 
         return [
             'id' => $this->id,
@@ -67,7 +71,7 @@ class ReservationResource extends JsonResource
             'client_id' => $this->client_id,
 
             'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->translatedFormat('l jS F Y | H:m:s'),
+            'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
         ];
     }
