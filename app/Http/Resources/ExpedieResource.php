@@ -53,14 +53,14 @@ class ExpedieResource extends JsonResource
             'code' => $this->code,
             'reference' => $this->reference,
 
-            'ville_exp' => $ville_exp ? $ville_exp->libelle : 'Non defini',
-            'agence_exp' => $agence_exp ? $agence_exp->libelle : 'Non defini',
+            'ville_exp' => !empty($this->ville_exp) ? $ville_exp->libelle : 'Non defini',
+            'agence_exp' => !empty($this->agence_exp) ? $agence_exp->libelle : 'Non defini',
 
-            'ville_dest' => $ville_dest ? $ville_dest->libelle : 'Non defini',
-            'agence_dest' => $agence_dest ? $agence_dest->libelle : 'Non defini',
+            'ville_dest' => !empty($this->ville_dest) ? $ville_dest->libelle : 'Non defini',
+            'agence_dest' => !empty($this->agence_dest) ? $agence_dest->libelle : 'Non defini',
 
-            'mode_exp' => $mode_exp ? $mode_exp->libelle : 'Non defini',
-            'delai_exp' => $delai_exp ? $delai_exp->libelle : 'Non defini',
+            'mode_exp' => !empty($this->mode_exp) ? $mode_exp->libelle : 'Non defini',
+            'delai_exp' => !empty($this->delai_exp) ? $delai_exp->libelle : 'Non defini',
 
             'name_exp' => $this->name_exp,
             'phone_exp' => $this->phone_exp,
@@ -80,9 +80,9 @@ class ExpedieResource extends JsonResource
             'amount' => $this->amount,
             'nbre_colis' => !empty($this->nbre_colis) ? $this->nbre_colis : 0,
 
-            'methode_paiement' => $methode_paiement ? $methode_paiement->libelle : 'Non defini',
-            'reservation' => $reservation ? $reservation->code : 'Non defini',
-            'etape' => $etape ? $etape->libelle : 'Non defini',
+            'methode_paiement' => !empty($this->methode_paiement) ? $methode_paiement->libelle : 'Non defini',
+            'reservation' => !empty($this->reservation) ? $reservation->code : 'Non defini',
+            'etape' => !empty($this->etape) ? $etape->libelle : 'Non defini',
             
 
             'agent' => $agent ? $agent->name : 'Non defini',
@@ -106,7 +106,7 @@ class ExpedieResource extends JsonResource
             'methode_paiement_id' => !empty($this->methode_paiement_id) ? $this->methode_paiement_id : 0,
 
             'reservation_id' => !empty($this->reservation_id) ? $this->reservation_id : 0,
-            'etape_id' => !empty($this->etape_id) ? intval($this->etape_id) : 0,
+            'etape_id' => !empty($this->etape_id) ? $this->etape_id : 0,
 
             'created_at' => $stringDate,
             'updated_at' => Carbon::parse($this->updated_at)->translatedFormat('l jS F Y | H:m:s'),
