@@ -121,6 +121,15 @@
                                 <li><a href="#">A Propos</a></li>
                                 <li><a href="#">Services</a></li>
                                 <li><a href="#">Contact</a></li>
+                                <li>
+                                    @if (!isset($user))
+                                        <a class="btn btn-default mr-10 hover-up"
+                                            href="{{ route('login') }}">Connexion</a>
+                                    @else
+                                        <a class="btn btn-brand-1 mr-10 hover-up"
+                                            href="{{ route('adminHome') }}">Administration</a>
+                                    @endif
+                                </li>
                             </ul>
                         </nav>
                     </div>
