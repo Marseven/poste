@@ -46,6 +46,9 @@ class AdminController extends Controller
 
         $expeditions = Expedition::orderBy('id', 'DESC')->limit(10)->get();
         $paiements = Paiement::where('status', STATUT_PAID)->get();
+
+        $ca_exp = Paiement::selectRaw(" MONTH(created_at) as mo, YEAR(created_at) as ye, SUM(amount) as am")->groupBy('ye', 'mo')->orderBy('ye', 'asc')->orderBy('mo', 'asc')->where('status', STATUT_PAID)->get();
+
         $packages = Package::all();
 
         $exp_j = Expedition::whereDate('created_at', $today)->where('mode_exp_id', 2)->get();
@@ -96,6 +99,7 @@ class AdminController extends Controller
             'reservations',
             'reclamations',
             'ca',
+            'ca_exp',
         ));
     }
 
