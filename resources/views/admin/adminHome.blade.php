@@ -74,8 +74,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-danger"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_j_do->count() }}
@@ -97,8 +97,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp->count() }}
@@ -115,8 +115,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_pending->count() }}
@@ -133,8 +133,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_do->count() }}
@@ -446,67 +446,94 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>
-        if ($("#vertical-bar-chart-widget").length) {
-            var _ctx10 = $("#vertical-bar-chart-widget")[0].getContext("2d");
+        // if ($("#vertical-bar-chart-widget").length) {
+        //     var _ctx10 = $("#vertical-bar-chart-widget")[0].getContext("2d");
 
-            var _myChart4 = new chart_js_auto__WEBPACK_IMPORTED_MODULE_2__["default"](_ctx10, {
-                type: "bar",
-                data: {
-                    labels: ['Aou'],
-                    datasets: [{
-                        label: "CA Mensuel",
-                        barPercentage: 0.5,
-                        barThickness: 6,
-                        maxBarThickness: 8,
-                        minBarLength: 3,
-                        data: [1200],
-                        backgroundColor: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].primary()
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8)
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                font: {
-                                    size: 12
-                                },
-                                color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8)
-                            },
-                            grid: {
-                                display: false,
-                                drawBorder: false
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: {
-                                    size: "12"
-                                },
-                                color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8),
-                                callback: function callback(value, index, values) {
-                                    return value + " FCFA";
-                                }
-                            },
-                            grid: {
-                                color: $("html").hasClass("dark") ? _colors__WEBPACK_IMPORTED_MODULE_1__["default"]
-                                    .slate[500](0.3) : _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[300](),
-                                borderDash: [2, 2],
-                                drawBorder: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
+        //     var _myChart4 = new chart_js_auto__WEBPACK_IMPORTED_MODULE_2__["default"](_ctx10, {
+        //         type: "bar",
+        //         data: {
+        //             labels: ['Aou'],
+        //             datasets: [{
+        //                 label: "CA Mensuel",
+        //                 barPercentage: 0.5,
+        //                 barThickness: 6,
+        //                 maxBarThickness: 8,
+        //                 minBarLength: 3,
+        //                 data: [1200],
+        //                 backgroundColor: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].primary()
+        //             }]
+        //         },
+        //         options: {
+        //             maintainAspectRatio: false,
+        //             plugins: {
+        //                 legend: {
+        //                     labels: {
+        //                         color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8)
+        //                     }
+        //                 }
+        //             },
+        //             scales: {
+        //                 x: {
+        //                     ticks: {
+        //                         font: {
+        //                             size: 12
+        //                         },
+        //                         color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8)
+        //                     },
+        //                     grid: {
+        //                         display: false,
+        //                         drawBorder: false
+        //                     }
+        //                 },
+        //                 y: {
+        //                     ticks: {
+        //                         font: {
+        //                             size: "12"
+        //                         },
+        //                         color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8),
+        //                         callback: function callback(value, index, values) {
+        //                             return value + " FCFA";
+        //                         }
+        //                     },
+        //                     grid: {
+        //                         color: $("html").hasClass("dark") ? _colors__WEBPACK_IMPORTED_MODULE_1__["default"]
+        //                             .slate[500](0.3) : _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[300](),
+        //                         borderDash: [2, 2],
+        //                         drawBorder: false
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     });
+        // }
+
+        var ctx = document.getElementById('vertical-bar-chart-widget').getContext('2d');
+
+        // Définissez les données du graphique
+        var data = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], // Les étiquettes de l'axe X
+            datasets: [{
+                label: 'Ventes mensuelles',
+                data: [12, 19, 3, 5, 2], // Les données du graphique
+                borderColor: 'blue', // Couleur de la ligne
+                fill: false, // Remplissage désactivé pour un graphique de ligne
+            }, ],
+        };
+
+        // Configurez les options du graphique
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false, // Pour ajuster la taille du canevas
+        };
+
+        // Créez le graphique de ligne
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options,
+        });
     </script>
 
     {{-- @foreach ($ca_exp as $ca)
