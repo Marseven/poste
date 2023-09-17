@@ -213,7 +213,7 @@
 
                     </tbody>
                 </table>
-                @if ($reclamations->count() > 0)
+                @if ($reclamations->count() == 0)
                     <div class="flex items-center mb-2">
                         <div class="alert alert-pending show flex items-center mb-2" role="alert"> <i
                                 data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun élément pour le
