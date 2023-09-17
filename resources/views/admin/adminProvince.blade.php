@@ -108,7 +108,7 @@
                     </thead>
                     <tbody>
 
-                        @if ($provinces)
+                        @if ($provinces->count() > 0)
                             @foreach ($provinces as $province)
                                 <tr class="intro-x">
                                     <td class="w-40">
@@ -204,19 +204,17 @@
                                 </div>
                                 <!-- END: Delete Confirmation Modal -->
                             @endforeach
-                        @else
-                            <tr class="intro-x">
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                            </tr>
                         @endif
-
-
                     </tbody>
                 </table>
+                @if ($provinces->count() == 0)
+                    <div class="col-span-12 2xl:col-span-12">
+                        <div class="alert alert-pending alert-dismissible show flex items-center mb-2" role="alert"> <i
+                                data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun élément pour le
+                            moment
+                            ! </div>
+                    </div>
+                @endif
             </div>
             <!-- END: Data List -->
             <!-- BEGIN: Pagination -->
