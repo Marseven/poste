@@ -15,7 +15,8 @@
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-forfait" action="" method="GET" class="d-none">
+                        <form id="search-forfait" action="{{ route('adminSearchExpeditionList') }}" method="GET"
+                            class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">

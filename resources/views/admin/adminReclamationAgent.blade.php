@@ -182,7 +182,7 @@
                                                     </div>
 
                                                     <div class="col-6 mb-5">
-                                                        <h6 class="text-uppercase fs-5 ls-2">STATUT</h6>
+                                                        <h6 class="text-uppercase fs-5 ls-2 mb-5">STATUT</h6>
                                                         <p class="mb-0">
                                                             @if ($reclamation->status == 0)
                                                                 <span class="text-md px-1 bg-primary text-white mr-1"
