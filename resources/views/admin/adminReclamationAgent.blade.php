@@ -63,7 +63,7 @@
                                         {{ $reclamation->libelle }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms }}
+                                        {{ $reclamation->agent ? $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms : '' }}
                                     </td>
                                     <td class="text-center">
                                         @if ($reclamation->expedition_id != null)
