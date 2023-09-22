@@ -1489,7 +1489,7 @@ class ExpeditionContoller extends Controller
         $page_title = "Dépêches";
         $exp = "side-menu--active";
         $exp_sub = "side-menu__sub-open";
-        $exp3 = "side-menu--active";
+        $exp4 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;
