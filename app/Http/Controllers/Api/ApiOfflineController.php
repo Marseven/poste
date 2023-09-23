@@ -736,6 +736,142 @@ class ApiOfflineController extends Controller
 
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sync_colis(Request $request, $user_id)
+    {
+
+        // Get client by id
+        $client = User::find($user_id);
+
+        if($client){
+
+            $colis = new ColisExpedition();
+
+            // Data to save
+            $colis->code = $request->input('code');
+
+            $colis->service_exp_id = $request->input('service_exp_id');
+
+            $colis->libelle = $request->input('libelle');
+            $colis->description = $request->input('description');
+
+            $colis->type = $request->input('type');
+            $colis->poids = $request->input('poids');
+
+            $colis->amount = $request->input('amount');
+
+            $colis->reservation_id = $request->input('reservation_id');
+
+            $colis->client_id = $request->input('client_id');
+
+            $colis->active = 0;
+            $colis->status = 0;
+
+            if($colis->save()){
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Nouveau colis ajoute !',
+                    'colis' => ColisExpeditionResource::make($colis),
+                ]);
+
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de soumettre votre colis pour le moment !',
+                'reservation' => [],
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous de soumettre votre reservation !'
+        ]);
+    	
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sync_reservations(Request $request, $user_id)
+    {
+
+        // Get client by id
+        $client = User::find($user_id);
+
+        if($client){
+            
+            $reservation = new Reservation();
+
+            $reservation->code = $request->input('code');
+
+            $reservation->ville_origine_id = $request->input('ville_origine_id');
+            $reservation->ville_destination_id = $request->input('ville_destination_id');
+
+            $reservation->mode_expedition_id = $request->input('mode_expedition_id');
+            $reservation->mode_livraison = $request->input('mode_livraison');
+            $reservation->boite_postale = $request->input('boite_postale');
+            $reservation->adresse_livraison = $request->input('adresse_livraison');
+
+            $reservation->name_exp = $request->input('name_exp');
+            $reservation->email_exp = $request->input('email_exp');
+            $reservation->phone_exp = $request->input('phone_exp');
+
+            $reservation->name_dest = $request->input('name_dest');
+            $reservation->email_dest = $request->input('email_dest');
+            $reservation->phone_dest = $request->input('phone_dest');
+
+            //$reservation->nbre_colis = $request->input('nbre_colis');
+            $reservation->frais_poste = $request->input('mode_livraison') == "Oui" ? 1500.0 : 0.0;
+            $reservation->nbre_colis = 0;
+
+            $reservation->client_id = $request->input('client_id');
+
+            $reservation->status = $request->input('status');
+            $reservation->active = 0;
+
+            if($reservation->save()){
+
+                // Send notification
+                $idPlayer = $request->input('player_id');
+                $title = "Nouvelle Reservation";
+                $body = "Votre reservation a ete soumis avec succes";
+                $this->sendNotification($title, $body, $idPlayer);
+
+                return response([
+                    'result' => true, 
+                    'status' => 200,
+                    'message' => 'Reservation envoyée avec succès !',
+                    'reservation_id' => $reservation->id,
+                    'reservation' => ReservationResource::make($reservation)
+                ]);
+            }
+            return response([
+                'result' => false, 
+                'status' => 500,
+                'message' => 'Impossible de créer ce compte !',
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible pour vous d\'effectuer cette operation !'
+        ]);
+    	
+    }
+
 
 
 

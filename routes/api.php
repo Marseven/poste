@@ -52,6 +52,9 @@ Route::get('nos-reclamations/{id}', [App\Http\Controllers\Api\ApiOfflineControll
 Route::get('nos-paiements/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'paiements']);
 Route::get('nos-utilisateurs/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'utilisateurs']);
 Route::get('nos-appareils/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'appareils']);
+
+Route::get('sync-reservations/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'sync_reservations']);
+Route::get('sync-colis/{id}', [App\Http\Controllers\Api\ApiOfflineController::class, 'sync_colis']);
 /* Routing de offline */
 
 
