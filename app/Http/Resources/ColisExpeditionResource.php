@@ -40,7 +40,8 @@ class ColisExpeditionResource extends JsonResource
             'code' => $this->code,
             'libelle' => $this->libelle,
             'description' => $this->description,
-            'modele' => !empty($this->service) ? $this->service->code : 'Non defini',
+            'modele' => !empty($this->service) ? $this->service->libelle : 'Non defini',
+            'type' => $this->type,
             'poids' => $this->poids,
             'amount' => $this->amount,
 
