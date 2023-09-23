@@ -90,6 +90,42 @@ class ExpeditionContoller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function adminSearchExpeditionList(Request $request)
+    {
+
+        $app_name = "La Poste";
+        $page_title = "Expeditions";
+        $exp = "side-menu--active";
+        $exp_sub = "side-menu__sub-open";
+        $exp2 = "side-menu--active";
+
+        $expeditions = Expedition::where('code', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('name_exp', 'LIKE', '%' . $request->input('q') . '%')
+            ->orWhere('name_dest', 'LIKE', '%' . $request->input('q') . '%')
+            ->paginate(10);;
+        $methodes = MethodePaiement::all();
+
+
+        $admin = Auth::user();
+        $admin_id = Auth::user()->id;
+
+
+        return view('admin.adminExpeditionList', compact(
+            'page_title',
+            'app_name',
+            'expeditions',
+            'methodes',
+            'exp',
+            'exp_sub',
+            'exp2'
+        ));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function adminExpeditionJ(Request $request)
     {
 
@@ -1453,7 +1489,7 @@ class ExpeditionContoller extends Controller
         $page_title = "Dépêches";
         $exp = "side-menu--active";
         $exp_sub = "side-menu__sub-open";
-        $exp3 = "side-menu--active";
+        $exp4 = "side-menu--active";
 
         $admin = Auth::user();
         $admin_id = Auth::user()->id;

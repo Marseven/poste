@@ -1,5 +1,7 @@
 @extends('layouts.admin')
-
+@php
+    use App\Http\Controllers\Controller;
+@endphp
 @section('page-content')
 
     <div class="col-span-12 2xl:col-span-12">
@@ -72,8 +74,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-danger"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_j_do->count() }}
@@ -95,8 +97,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp->count() }}
@@ -113,8 +115,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-danger tooltip cursor-pointer" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_pending->count() }}
@@ -131,8 +133,8 @@
                                     <div class="flex">
                                         <i data-lucide="package" class="report-box__icon text-warning"></i>
                                         <!--div class="ml-auto">
-                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="12% Higher than last month"> 12% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div-->
                                     </div>
                                     <div class="text-3xl font-medium leading-8 mt-6">
                                         {{ $exp_do->count() }}
@@ -341,7 +343,7 @@
             <div class="col-span-12 lg:col-span-12 mt-8">
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">
-                        Rapport Paiement ({{ date('Y') }})
+                        Chiffre d'Affaire ({{ date('Y') }})
                     </h2>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
@@ -374,7 +376,7 @@
                         </thead>
                         <tbody>
 
-                            @if ($expeditions)
+                            @if ($expeditions->count() > 0)
                                 @foreach ($expeditions as $expedition)
                                     <tr class="intro-x">
                                         <td class="text-center bg-primary">
@@ -424,20 +426,134 @@
 
                                     </tr>
                                 @endforeach
-                            @else
-                                <tr class="intro-x">
-                                    <td class="text-center">ras</td>
-                                    <td class="text-center">ras</td>
-                                    <td class="text-center">ras</td>
-                                    <td class="text-center">ras</td>
-                                    <td class="text-center">ras</td>
-                                </tr>
                             @endif
                         </tbody>
                     </table>
+                    @if ($expeditions->count() == 0)
+                        <div class="col-span-12 2xl:col-span-12">
+                            <div class="alert alert-pending alert-dismissible show flex items-center mb-2" role="alert">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun élément pour le
+                                moment
+                                !
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- END: Weekly Top Products -->
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        // if ($("#vertical-bar-chart-widget").length) {
+        //     var _ctx10 = $("#vertical-bar-chart-widget")[0].getContext("2d");
+
+        //     var _myChart4 = new chart_js_auto__WEBPACK_IMPORTED_MODULE_2__["default"](_ctx10, {
+        //         type: "bar",
+        //         data: {
+        //             labels: ['Aou'],
+        //             datasets: [{
+        //                 label: "CA Mensuel",
+        //                 barPercentage: 0.5,
+        //                 barThickness: 6,
+        //                 maxBarThickness: 8,
+        //                 minBarLength: 3,
+        //                 data: [1200],
+        //                 backgroundColor: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].primary()
+        //             }]
+        //         },
+        //         options: {
+        //             maintainAspectRatio: false,
+        //             plugins: {
+        //                 legend: {
+        //                     labels: {
+        //                         color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8)
+        //                     }
+        //                 }
+        //             },
+        //             scales: {
+        //                 x: {
+        //                     ticks: {
+        //                         font: {
+        //                             size: 12
+        //                         },
+        //                         color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8)
+        //                     },
+        //                     grid: {
+        //                         display: false,
+        //                         drawBorder: false
+        //                     }
+        //                 },
+        //                 y: {
+        //                     ticks: {
+        //                         font: {
+        //                             size: "12"
+        //                         },
+        //                         color: _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[500](0.8),
+        //                         callback: function callback(value, index, values) {
+        //                             return value + " FCFA";
+        //                         }
+        //                     },
+        //                     grid: {
+        //                         color: $("html").hasClass("dark") ? _colors__WEBPACK_IMPORTED_MODULE_1__["default"]
+        //                             .slate[500](0.3) : _colors__WEBPACK_IMPORTED_MODULE_1__["default"].slate[300](),
+        //                         borderDash: [2, 2],
+        //                         drawBorder: false
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     });
+        // }
+
+        var ctx = document.getElementById('vertical-bar-chart-widget').getContext('2d');
+
+        // Définissez les données du graphique
+        var data = {
+            labels: [
+                @foreach ($ca_exp as $ca)
+                    "{{ Controller::month($ca->mo) }}",
+                @endforeach
+            ], // Les étiquettes de l'axe X
+            datasets: [{
+                label: "Chiffre d'affaire mensuel",
+                data: [
+                    @foreach ($ca_exp as $ca)
+                        {{ $ca->am }},
+                    @endforeach
+                ], // Les données du graphique
+                backgroundColor: 'rgba(30, 64, 175, 0.8)', // Code couleur avec transparence
+                borderColor: 'rgba(30, 64, 175, 1)',
+                borderWidth: 1,
+            }, ],
+        };
+
+        // Configurez les options du graphique
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false, // Pour ajuster la taille du canevas
+            scales: {
+                y: {
+                    beginAtZero: true, // L'axe Y commence à zéro
+                },
+            },
+        };
+
+        // Créez le graphique de ligne
+        var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options,
+        });
+    </script>
+
+    {{-- @foreach ($ca_exp as $ca)
+"{{ Controller::month($ca->mo) }}"
+@endforeach
+@foreach ($ca_exp as $ca)
+{{ $ca->am }}
+@endforeach --}}
+@endpush

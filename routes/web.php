@@ -122,6 +122,7 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
 
     /* Start Expedition */
     Route::get('expeditions', [ExpeditionContoller::class, 'adminExpeditionList'])->name('adminExpeditionList');
+    Route::get('recherche-expeditions', [ExpeditionContoller::class, 'adminSearchExpeditionList'])->name('adminSearchExpedition');
     Route::get('expeditions_jour', [ExpeditionContoller::class, 'adminExpeditionJ'])->name('adminExpeditionJ');
     Route::get('nouvelle-expedition', [ExpeditionContoller::class, 'adminNewExpedition'])->name('adminNewExpedition');
 

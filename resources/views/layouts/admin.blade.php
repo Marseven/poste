@@ -35,6 +35,338 @@
 <!-- END: Head -->
 
 <body class="py-5">
+    <!-- BEGIN: Mobile Menu -->
+    <div class="mobile-menu md:hidden">
+        <div class="mobile-menu-bar">
+            <a href="" class="flex mr-auto">
+                <img alt="Midone - HTML Admin Template" class="w-6"
+                    src="{{ URL::to('assets/dist/images/logos/icon_blanc.png') }}">
+            </a>
+            <a href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="bar-chart-2"
+                    class="w-8 h-8 text-white transform -rotate-90"></i> </a>
+        </div>
+        <div class="scrollable">
+            <a href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="x-circle"
+                    class="w-8 h-8 text-white transform -rotate-90"></i> </a>
+            <ul class="scrollable__content py-2">
+
+                <li>
+                    <a href="{{ route('adminHome') }}" class="menu">
+                        <div class="menu__icon"> <i data-lucide="home"></i> </div>
+                        <div class="menu__title">
+                            Tableau de bord
+                        </div>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="menu {{ $exp ?? '' }}">
+                        <div class="menu__icon"> <i data-lucide="truck"></i> </div>
+                        <div class="menu__title">
+                            Expéditions
+                            <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $exp_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminNewExpedition') }}" class="menu {{ $exp1 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Nouvelle expédition </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminExpeditionList') }}" class="menu {{ $exp2 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des expéditions </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminPackage') }}" class="menu {{ $exp3 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des Dépêches </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminReservationList') }}" class="menu {{ $exp4 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des Réservations </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav__devider my-6"></li>
+
+                <li>
+                    <a href="javascript:;" class="menu {{ $place ?? '' }}">
+                        <div class="menu__icon"> <i data-lucide="map-pin"></i> </div>
+                        <div class="menu__title">
+                            Bureaux de Poste
+                            <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $place_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminReseaux') }}" class="menu {{ $place1 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Réseaux </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminZones') }}" class="menu {{ $place2 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Zones </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminPays') }}" class="menu {{ $place3 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Pays </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminProvince') }}" class="menu {{ $place4 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Provinces </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminVille') }}" class="menu {{ $place5 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Villes </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminAgence') }}" class="menu {{ $place6 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title">Bureaux de Poste</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="menu {{ $transaction ?? '' }}">
+                        <div class="menu__icon"> <i data-lucide="credit-card"></i> </div>
+                        <div class="menu__title">
+                            Transactions
+                            <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $transaction_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminPaiement') }}" class="menu {{ $transaction1 ?? '' }}">
+                                <div class="menu__icon"><i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des paiements </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="menu {{ $reclamation ?? '' }}">
+                        <div class="menu__icon"> <i data-lucide="message-square"></i> </div>
+                        <div class="menu__title">
+                            Réclamations
+                            <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $reclamation_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminReclamationAgent') }}" class="menu {{ $reclamation1 ?? '' }}">
+                                <div class="menu__icon"><i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des réclamations Agent </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminReclamationClient') }}" class="menu {{ $reclamation2 ?? '' }}">
+                                <div class="menu__icon"><i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des réclamations Client </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav__devider my-6"></li>
+
+                <li>
+                    <a href="javascript:;" class="menu {{ $account ?? '' }}">
+                        <div class="menu__icon"> <i data-lucide="users"></i> </div>
+                        <div class="menu__title">
+                            Comptes
+                            <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $account_sub ?? '' }}">
+                        <li>
+                            <a href="{{ route('adminNewCompte') }}" class="menu {{ $account1 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Nouveau Compte </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('adminCompte') }}" class="menu {{ $account2 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                <div class="menu__title"> Liste des Comptes </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="menu {{ $setting ?? '' }}">
+                        <div class="menu__icon"> <i data-lucide="hard-drive"></i> </div>
+                        <div class="menu__title">
+                            Paramètres
+                            <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                        </div>
+                    </a>
+                    <ul class="{{ $setting_sub ?? '' }}">
+
+                        <li>
+                            <a href="javascript:;" class="menu {{ $setting1 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="hard-drive"></i> </div>
+                                <div class="menu__title">
+                                    Configuration
+                                    <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                                </div>
+                            </a>
+                            <ul class="{{ $setting_sub1 ?? '' }}">
+                                <li>
+                                    <a href="" class="menu {{ $setting11 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">General</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="menu {{ $setting12 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">SMS</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="menu {{ $setting13 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Whatsapp</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript:;" class="menu {{ $setting2 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="dollar-sign"></i> </div>
+                                <div class="menu__title">
+                                    Paiements
+                                    <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                                </div>
+                            </a>
+                            <ul class="{{ $setting_sub2 ?? '' }}">
+                                <li>
+                                    <a href="{{ route('adminMethode') }}" class="menu {{ $setting21 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Méthodes de paiement</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript:;" class="menu {{ $setting3 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="plus"></i> </div>
+                                <div class="menu__title">
+                                    Suppléments
+                                    <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                                </div>
+                            </a>
+                            <ul class="{{ $setting_sub3 ?? '' }}">
+                                <li>
+                                    <a href="{{ route('adminSociete') }}" class="menu {{ $setting31 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="home"></i> </div>
+                                        <div class="menu__title">Société</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript:;" class="menu {{ $setting4 ?? '' }}">
+                                <div class="menu__icon"> <i data-lucide="send"></i> </div>
+                                <div class="menu__title">
+                                    Expéditions
+                                    <div class="menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                                </div>
+                            </a>
+                            <ul class="{{ $setting_sub4 ?? '' }}">
+                                <li>
+                                    <a href="{{ route('adminService') }}" class="menu {{ $setting41 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Services</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('adminEtape') }}" class="menu {{ $setting42 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Étapes</div>
+                                    </a>
+                                </li>
+
+
+                                <li>
+                                    <a href="{{ route('adminDelai') }}" class="menu {{ $setting43 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Delais d'expédition</div>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('adminPrice') }}" class="menu {{ $setting44 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Tarif d'expédition</div>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('adminMode') }}" class="menu {{ $setting45 ?? '' }}">
+                                        <div class="menu__icon"> <i data-lucide="minus"></i> </div>
+                                        <div class="menu__title">Mode d'expédition</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{ route('adminMouchard') }}" class="menu">
+                        <div class="menu__icon"> <i data-lucide="command"></i> </div>
+                        <div class="menu__title">
+                            Log
+                            <div class="menu__sub-icon "> </div>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="nav__devider my-6"></li>
+
+                {{-- <li>
+                        <a href="" class="menu"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <div class="menu__icon"> <i data-lucide="log-out"></i> </div>
+                            <div class="menu__title"> Déconnexion </div>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li> --}}
+
+
+
+
+            </ul>
+        </div>
+    </div>
+    <!-- END: Mobile Menu -->
     <div class="flex mt-[4.7rem] md:mt-0">
         <!-- BEGIN: Side Menu -->
         <nav class="side-nav">
@@ -44,7 +376,6 @@
             </a>
             <div class="side-nav__devider my-6"></div>
             <ul>
-
                 <li>
                     <a href="{{ route('adminHome') }}" class="side-menu side-menu {{ $home ?? '' }}">
                         <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
@@ -53,8 +384,6 @@
                         </div>
                     </a>
                 </li>
-
-
 
                 <li>
                     <a href="javascript:;" class="side-menu {{ $exp ?? '' }}">
@@ -262,7 +591,8 @@
                             </a>
                             <ul class="{{ $setting_sub2 ?? '' }}">
                                 <li>
-                                    <a href="{{ route('adminMethode') }}" class="side-menu {{ $setting21 ?? '' }}">
+                                    <a href="{{ route('adminMethode') }}"
+                                        class="side-menu {{ $setting21 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                         <div class="side-menu__title">Méthodes de paiement</div>
                                     </a>
@@ -280,7 +610,8 @@
                             </a>
                             <ul class="{{ $setting_sub3 ?? '' }}">
                                 <li>
-                                    <a href="{{ route('adminSociete') }}" class="side-menu {{ $setting31 ?? '' }}">
+                                    <a href="{{ route('adminSociete') }}"
+                                        class="side-menu {{ $setting31 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
                                         <div class="side-menu__title">Société</div>
                                     </a>
@@ -298,7 +629,8 @@
                             </a>
                             <ul class="{{ $setting_sub4 ?? '' }}">
                                 <li>
-                                    <a href="{{ route('adminService') }}" class="side-menu {{ $setting41 ?? '' }}">
+                                    <a href="{{ route('adminService') }}"
+                                        class="side-menu {{ $setting41 ?? '' }}">
                                         <div class="side-menu__icon"> <i data-lucide="minus"></i> </div>
                                         <div class="side-menu__title">Services</div>
                                     </a>

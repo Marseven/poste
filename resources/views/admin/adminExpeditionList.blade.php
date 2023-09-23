@@ -15,12 +15,12 @@
 
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-slate-500">
-                        <form id="search-forfait" action="" method="GET" class="d-none">
+                        <form id="search-forfait" action="{{ route('adminSearchExpedition') }}" method="GET" class="d-none">
                             @csrf
                             <input type="text" name="q" class="form-control w-56 box pr-10"
                                 placeholder="Recherche...">
                             <a href=""
-                                onclick="event.preventDefault(); document.getElementById('search-Tarif').submit();">
+                                onclick="event.preventDefault(); document.getElementById('search-expedition').submit();">
                                 <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                             </a>
                         </form>
@@ -52,7 +52,7 @@
                     </thead>
                     <tbody>
                         <input type="hidden" id="id">
-                        @if ($expeditions)
+                        @if ($expeditions->count() > 0)
                             @foreach ($expeditions as $expedition)
                                 <tr class="intro-x">
                                     <td class="text-center bg-primary">
@@ -262,17 +262,17 @@
                                 </div> <!-- END: Modal Content -->
                                 <!-- END: Large Modal Content -->
                             @endforeach
-                        @else
-                            <tr class="intro-x">
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                            </tr>
                         @endif
                     </tbody>
                 </table>
+                @if ($expeditions->count() == 0)
+                    <div class="col-span-12 2xl:col-span-12">
+                        <div class="alert alert-pending alert-dismissible show flex items-center mb-2" role="alert"> <i
+                                data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun élément pour le
+                            moment
+                            ! </div>
+                    </div>
+                @endif
             </div>
             <!-- END: Data List -->
             <!-- BEGIN: Pagination -->

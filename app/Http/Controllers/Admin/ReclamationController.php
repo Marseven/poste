@@ -64,7 +64,7 @@ class ReclamationController extends Controller
 
         $q = $request->input('q');
 
-        $reclemations = Reclamation::where('agent_id', '<>', null)->where('code', 'LIKE', '%' . $request->input('q') . '%')
+        $reclamations = Reclamation::where('agent_id', '<>', null)->where('code', 'LIKE', '%' . $request->input('q') . '%')
             ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
 
@@ -132,7 +132,7 @@ class ReclamationController extends Controller
 
         $q = $request->input('q');
 
-        $methodes = Reclamation::where('client_id', '<>', null)->where('code', 'LIKE', '%' . $request->input('q') . '%')
+        $reclamations = Reclamation::where('client_id', '<>', null)->where('code', 'LIKE', '%' . $request->input('q') . '%')
             ->orWhere('libelle', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
 

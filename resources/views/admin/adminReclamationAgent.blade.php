@@ -50,7 +50,7 @@
                     </thead>
                     <tbody>
 
-                        @if ($reclamations)
+                        @if ($reclamations->count() > 0)
                             @foreach ($reclamations as $reclamation)
                                 @php
                                     $reclamation->load(['expedition', 'package', 'colis', 'agent']);
@@ -63,7 +63,7 @@
                                         {{ $reclamation->libelle }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms }}
+                                        {{ $reclamation->agent ? $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms : '' }}
                                     </td>
                                     <td class="text-center">
                                         @if ($reclamation->expedition_id != null)
@@ -71,7 +71,7 @@
                                         @elseif($reclamation->package_id != null)
                                             Package N° {{ $reclamation->package->code }}
                                         @else
-                                            Colis N° {{ $reclamation->colis->code }}
+                                            Colis N° {{ $reclamation->colis->code ?? '' }}
                                         @endif
                                     </td>
                                     <td class="w-40">
@@ -159,7 +159,7 @@
                                                     <div class="col-6 mb-5">
                                                         <h6 class="text-uppercase fs-5 ls-2">AUTEUR </h6>
                                                         <p class="mb-0">
-                                                            {{ $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms }}
+                                                            {{ $reclamation->agent ? $reclamation->agent->noms . ' ' . $reclamation->agent->prenoms : '' }}
                                                         </p>
                                                     </div>
 
@@ -177,12 +177,12 @@
                                                         @elseif($reclamation->package_id != null)
                                                             <p>Package N° {{ $reclamation->package->code }}</p>
                                                         @else
-                                                            <p>Colis N° {{ $reclamation->colis->code }}</p>
+                                                            <p>Colis N° {{ $reclamation->colis->code ?? '' }}</p>
                                                         @endif
                                                     </div>
 
                                                     <div class="col-6 mb-5">
-                                                        <h6 class="text-uppercase fs-5 ls-2">STATUT</h6>
+                                                        <h6 class="text-uppercase fs-5 ls-2 mb-5">STATUT</h6>
                                                         <p class="mb-0">
                                                             @if ($reclamation->status == 0)
                                                                 <span class="text-md px-1 bg-primary text-white mr-1"
@@ -209,20 +209,18 @@
                                 </div>
                                 <!-- END: Delete Confirmation Modal -->
                             @endforeach
-                        @else
-                            <tr class="intro-x">
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                                <td class="text-center">ras</td>
-                            </tr>
                         @endif
-
 
                     </tbody>
                 </table>
+                @if ($reclamations->count() == 0)
+                    <div class="col-span-12 2xl:col-span-12">
+                        <div class="alert alert-pending alert-dismissible show flex items-center mb-2" role="alert"> <i
+                                data-lucide="alert-triangle" class="w-6 h-6 mr-2"></i> Aucun élément pour le
+                            moment
+                            ! </div>
+                    </div>
+                @endif
             </div>
             <!-- END: Data List -->
             <!-- BEGIN: Pagination -->

@@ -86,21 +86,22 @@
                                 <li><a href="#">A Propos</a></li>
                                 <li><a href="#">Services</a></li>
                                 <li><a href="#">Contact</a></li>
+                                <li>
+                                    @if (!isset($user))
+                                        <a class="btn btn-default mr-10 hover-up"
+                                            href="{{ route('login') }}">Connexion</a>
+                                    @else
+                                        <a class="btn btn-brand-1 mr-10 hover-up"
+                                            href="{{ route('adminHome') }}">Administration</a>
+                                    @endif
+                                </li>
                             </ul>
                         </nav>
                         <div class="burger-icon burger-icon-white"><span class="burger-icon-top"></span><span
                                 class="burger-icon-mid"></span><span class="burger-icon-bottom"></span></div>
                     </div>
 
-                    @if (!isset($user))
-                        <div class="d-none d-sm-inline-block"><a class="btn btn-default mr-10 hover-up"
-                                href="{{ route('login') }}">Connexion</a>
-                        </div>
-                    @else
-                        <div class="d-none d-sm-inline-block"><a class="btn btn-brand-1 mr-10 hover-up"
-                                href="{{ route('adminHome') }}">Administration</a>
-                        </div>
-                    @endif
+
                 </div>
             </div>
         </div>
@@ -120,6 +121,15 @@
                                 <li><a href="#">A Propos</a></li>
                                 <li><a href="#">Services</a></li>
                                 <li><a href="#">Contact</a></li>
+                                <li>
+                                    @if (!isset($user))
+                                        <a class="btn btn-default mr-10 hover-up"
+                                            href="{{ route('login') }}">Connexion</a>
+                                    @else
+                                        <a class="btn btn-brand-1 mr-10 hover-up"
+                                            href="{{ route('adminHome') }}">Administration</a>
+                                    @endif
+                                </li>
                             </ul>
                         </nav>
                     </div>

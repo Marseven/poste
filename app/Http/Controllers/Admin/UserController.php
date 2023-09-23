@@ -383,17 +383,17 @@ class UserController extends Controller
 
         // Mouchard
         // $ip_adresse, $os_system, $os_navigator, $action_title, $action_system
-        $this->mouchard(
-            $this->getClientIPaddress($request),
-            $this->getOS(),
-            $this->getBrowser(),
+        SettingController::mouchard(
+            SettingController::getClientIPaddress($request),
+            SettingController::getOS(),
+            SettingController::getBrowser(),
             "Recherche Compte Par Mot-Cle - " . $request->input('q') . "*",
             "L'admin nommé " . Auth::user()->name . " a effectue une recherche de compte avec pour mot-cle
             " . $request->input('q') . " à la date du " .
                 Carbon::now()->translatedFormat('l jS F Y à H:i:s') . "
             avec l'adresse IP suivante : " .
-                $this->getClientIPaddress($request) . " le navigateur suivant : " . $this->getBrowser() . "
-            depuis la machine : " . $this->getDevice() . " ayant pour systeme d'exploitation : " . $this->getOS() . "."
+                SettingController::getClientIPaddress($request) . " le navigateur suivant : " . SettingController::getBrowser() . "
+            depuis la machine : " . SettingController::getDevice() . " ayant pour systeme d'exploitation : " . SettingController::getOS() . "."
 
         );
 
