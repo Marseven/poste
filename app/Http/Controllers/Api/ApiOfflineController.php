@@ -492,12 +492,6 @@ class ApiOfflineController extends Controller
      */
     public function expeditions(Request $request, $id)
     {
-        // Set colis
-        // Boucle de 1 à 20
-        for ($value = 1; $value <= 20; $value++) {
-            // Mettre à jour les enregistrements correspondants
-            ColisExpedition::where('client_id', $id)->update(['expedition_id' => $value]);
-        }
 
         // Get expeditions
         $expeditions = Expedition::where('client_id', $id)->orderBy('id', 'DESC')->get();
