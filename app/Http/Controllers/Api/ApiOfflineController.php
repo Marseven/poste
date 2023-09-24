@@ -895,10 +895,17 @@ class ApiOfflineController extends Controller
             // Get code of this expedition
             $code_expedition = $expedition->code;
 
+            // Send notification push
+            $title = "Expedtion - " . $expedition->code . " ** ";
+            $body = "Cher client, l'expedition ayant la reference " . $expedition->code . " a le statut suivant : " . $expedition->etape->libelle . " ";
+            $player_id = $request->input('player_id');
+            $this->sendNotification($title, $body, $player_id);
+
             return response([
                 'result' => true, 
                 'status' => 200,
                 'message' => 'Détails expedition !',
+                'code' => $code_expedition,
                 'expedition' => ExpedieResource::make($expedition), // When you get only one element and not a collection
             ]);
 

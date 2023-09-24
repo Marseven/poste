@@ -28,4 +28,9 @@ class Expedition extends Model
     {
         return $this->belongsTo(ModeExpedition::class, 'mode_exp_id');
     }
+
+    public function etape()
+    {
+        return $this->belongsTo(Etape::class, 'etape_id');
+    }
 }
