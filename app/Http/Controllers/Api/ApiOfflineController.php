@@ -878,7 +878,7 @@ class ApiOfflineController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function tracking_expedition(Request $request, $user_id)
+    public function tracking_expedition(Request $request)
     {
 
         // Get expedition by id or code
