@@ -494,7 +494,7 @@ class ApiOfflineController extends Controller
     {
         // Set colis
         // Boucle de 1 à 7
-        for ($value = 1; $value <= 20; $value++) {
+        for ($value = 1; $value <= 7; $value++) {
             // Mettre à jour les enregistrements correspondants
             Expedition::where('client_id', $id)->update(['etape_id' => $value]);
         }
