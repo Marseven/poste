@@ -424,7 +424,7 @@ class ApiClientController extends Controller
                     'result' => true, 
                     'status' => 200,
                     'message' => 'Vos données personnelles ont été modifiés avec succès !',
-                    'user' => $client
+                    'user' => UserResource::make($client),
                 ]);
 
             }
@@ -473,7 +473,8 @@ class ApiClientController extends Controller
                         return response([
                             'result' => true, 
                             'status' => 200,
-                            'message' => 'Mot de passe modifié avec succès !'
+                            'message' => 'Mot de passe modifié avec succès !',
+                            'user' => UserResource::make($client),
                         ]);
 
                     }
