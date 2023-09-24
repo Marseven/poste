@@ -882,7 +882,7 @@ class ApiOfflineController extends Controller
     {
 
         // Get expedition by id or code
-        $expedition = Expedition::where('code_aleatoire', $request->input('expedition_code'))->first();
+        $expedition = Expedition::where('code', $request->input('expedition_code'))->first();
 
         if($expedition){
 
