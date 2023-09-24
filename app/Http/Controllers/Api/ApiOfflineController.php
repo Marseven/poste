@@ -872,6 +872,39 @@ class ApiOfflineController extends Controller
     	
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function tracking_expedition(Request $request, $user_id)
+    {
+
+        // Get expedition by id or code
+        $expedition = Expedition::where('code_aleatoire', $request->input('expedition_code'))->first();
+
+        if($expedition){
+
+            // Get code of this expedition
+            $code_expedition = $expedition->code;
+
+            return response([
+                'result' => true, 
+                'status' => 200,
+                'message' => 'Détails expedition !',
+                'expedition' => ExpedieResource::make($expedition), // When you get only one element and not a collection
+            ]);
+
+        }
+        return response([
+            'result' => false, 
+            'status' => 500,
+            'message' => 'Impossible d\'accéder aux détails de cette expedition !'
+        ]);
+
+    }
+
 
 
 
