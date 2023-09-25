@@ -633,17 +633,17 @@ class ApiOfflineController extends Controller
     {
 
         // Get paiements
-        //$paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
+        $paiements = Paiement::where('client_id', $id)->orderBy('id', 'DESC')->get();
 
-        $clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
+        //$clientId = 15; // Remplacez 123 par l'ID du client que vous souhaitez attribuer
 
         // Créez une instance de Faker
-        $faker = FakerFactory::create();
+        //$faker = FakerFactory::create();
 
-        $paiements = Paiement::all();
+        //$paiements = Paiement::all();
 
 
-        $paiements->each(function ($paiement) use ($clientId) {
+        /*$paiements->each(function ($paiement) use ($clientId) {
             $paiement->client_id = $clientId;
             $paiement->methode_id = 2;
             $paiement->operator = 'E-Billing';
@@ -653,7 +653,7 @@ class ApiOfflineController extends Controller
             $paiement->expired_at = Carbon::now()->format('Y-m-d H:i:s');
             $paiement->paid_at = Carbon::now()->format('Y-m-d H:i:s');
             $paiement->save();
-        });
+        });*/
 
         if(!empty($paiements) || $paiements->count() > 0){
 
